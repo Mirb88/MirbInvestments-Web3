@@ -1,0 +1,28 @@
+{
+  "name": "MirbInvestments™",
+  "short_name": "MirbInvest",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#0D0D0D",
+  "background_color": "#0D0D0D",
+  "url_handlers": [
+    {
+      "origin": "https://www.mirb.investments"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
