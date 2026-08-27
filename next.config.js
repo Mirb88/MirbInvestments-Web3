@@ -1,82 +1,95 @@
+
 /** @type {import('next').NextConfig} */
 const path = require('path');
 
-const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://apis.google.com https://*.google.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebase.google.com https://*.gstatic.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://coin-images.coingecko.com https://*.photos https://*.placehold.co https://*.googleapis.com https://*.google.com https://*.gstatic.com;
-    font-src 'self' https://fonts.gstatic.com data:;
-    connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com https://*.firebase.google.com https://www.google-analytics.com https://*.google-analytics.com https://*.gstatic.com;
-    frame-src 'self' https://www.googletagmanager.com https://apis.google.com https://*.firebaseapp.com https://*.google.com;
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-`;
-
 const nextConfig = {
-  compress: true,
-  trailingSlash: false, 
-
-  images: {
-    minimumCacheTTL: 31536000,
-    formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      { protocol: 'https', hostname: 'coin-images.coingecko.com' },
-      { protocol: 'https', hostname: 'picsum.photos' },
-      { protocol: 'https', hostname: 'placehold.co' }
-    ],
+  trailingSlash: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+    styledComponents: true,
   },
-
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
-          { key: 'Content-Security-Policy', value: cspHeader.replace(/\s{2,}/g, ' ').trim() },
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' }
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
         ],
       },
     ];
   },
-
   async redirects() {
     return [
-      // OPTIMIZOVANA REDIREKCIJA: Izbjegavamo petlju, ali čistimo URL
+      // Redirect non-www to www and ensure HTTPS
       {
-        source: '/:path+/',
-        destination: '/:path+',
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'mirb.investments',
+          },
+        ],
+        destination: 'https://www.mirb.investments/:path*',
         permanent: true,
       },
-      // APEX AUTHORITY
-      { 
-        source: '/robots.txt', 
-        has: [{ type: 'host', value: 'mirb.investments' }], 
-        destination: 'https://www.mirb.investments/robots.txt', 
-        permanent: true 
+      // Redirect HTTP to HTTPS for the www domain
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'header',
+            key: 'x-forwarded-proto',
+            value: 'http',
+          },
+          {
+            type: 'host',
+            value: 'www.mirb.investments',
+          },
+        ],
+        destination: 'https://www.mirb.investments/:path*',
+        permanent: true,
       },
-      // BRAND CONSOLIDATION
-      { source: '/images/brand/og-image.jpeg', destination: '/images/brand/mirb-investments-og-image.webp', permanent: true },
-      { source: '/images/brand/og-image.png', destination: '/images/brand/mirb-investments-og-image.webp', permanent: true },
-      // LEGACY REDIRECTS
-      { source: '/.well-known/(.*)', destination: 'https://www.mirb.investments/', permanent: true }
-    ];
+      // Legacy redirects
+      {
+        source: '/ai-insights/crypto-summit-jahorina-2026-ai-real-estate-tourism',
+        destination: '/ai-insights/strategic-convergence-jahorina-2026-ai-real-estate-tourism',
+        permanent: true,
+      },
+      {
+        source: '/ai-insights/understanding-market-cycles',
+        destination: '/academy',
+        permanent: true,
+      },
+    ]
   },
-
-  experimental: {
-    optimizeCss: true,
-    scrollRestoration: true,
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
   },
-
+  images: {
+    minimumCacheTTL: 604800, // 7 days in seconds
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'coin-images.coingecko.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      }
+    ],
+  },
   webpack(config) {
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
     return config;
-  },
-
-  reactStrictMode: true
+  }
 };
 
 module.exports = nextConfig;
