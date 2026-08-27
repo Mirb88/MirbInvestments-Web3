@@ -1,0 +1,91 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check ownership
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // --- USER PROFILE (Secured) ---
+    match /users/{userId} {
+      // Only the authenticated owner can read or write their own profile data.
+      allow read, write: if isOwner(userId);
+    }
+    
+    // --- USER-SPECIFIC TRANSACTION DATA (Secured) ---
+    // All transaction documents contain a 'userId' field.
+    // The following rules ensure that a user can only create transactions for themselves,
+    // can only read their own transaction history, and cannot modify or delete them.
+
+    match /purchases/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/purchases/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+
+    match /fiatDeposits/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/fiatDeposits/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+    
+    match /cryptoDepositNotifications/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/cryptoDepositNotifications/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+
+    match /fiatWithdrawals/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/fiatWithdrawals/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+
+    match /cryptoWithdrawals/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/cryptoWithdrawals/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+
+    match /exchangeRequests/{docId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow list, get: if isOwner(get(/databases/$(database)/documents/exchangeRequests/$(docId)).data.userId);
+      allow update, delete: if false;
+    }
+
+    // --- USER MESSAGES (Secured) ---
+    match /userMessages/{messageId} {
+      allow get: if isOwner(resource.data.userId);
+      // Secure list queries by enforcing a filter on the userId.
+      allow list: if request.auth != null && request.query.where.size() == 1 && request.query.where[0].field == "userId" && request.query.where[0].op == "==" && request.query.where[0].value == request.auth.uid;
+      // Allow user to mark a message as read.
+      allow update: if isOwner(resource.data.userId) && request.resource.data.isRead == true && resource.data.isRead == false;
+      allow create, delete: if false;
+    }
+
+    // --- PUBLICLY WRITABLE COLLECTIONS (Limited Access) ---
+
+    match /supportRequests/{requestId} {
+      // Allow anyone to create a new support request.
+      allow create: if true;
+      // Disallow reading, updating, or deleting by clients.
+      allow read, update, delete: if false;
+    }
+
+    match /newsletterSubscriptions/{subscriptionId} {
+      // Allow anyone to create a new subscription.
+      allow create: if true;
+      // Disallow reading, updating, or deleting by clients.
+      allow read, update, delete: if false;
+    }
+    
+    // --- SEO METADATA (Publicly readable) ---
+    match /seoMetadata/{docId} {
+      // SEO data is public, but should ideally only be written by admin/server.
+      allow read: if true; 
+      allow write: if false; // Lock down writes from client-side
+    }
+  }
+}
