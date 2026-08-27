@@ -17,7 +17,18 @@ import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { MirbLogo } from '@/components/layout/mirb-logo';
+import Image from 'next/image';
+
+const MirbLogo = () => (
+    <Image 
+        src="/images/brand/logo.jpeg"
+        alt="MirbInvestments Logo"
+        width={40}
+        height={40}
+        sizes="40px"
+        className="rounded-md"
+    />
+);
 
 
 export default function LoginPage() {
@@ -51,7 +62,7 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Link href="/" className="flex items-center gap-2 text-2xl font-semibold">
-        <MirbLogo width={40} height={40} />
+        <MirbLogo />
         <span className="">MirbInvestments</span>
       </Link>
       <Card className="w-full max-w-sm">
