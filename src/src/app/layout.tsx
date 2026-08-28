@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+
+  );import type { Metadata } from 'next';
 import { Web3Provider } from '@/components/Web3Provider';
 import './globals.css';
 
@@ -21,4 +22,6 @@ export default function RootLayout({
       </body>
     </html>
   );
+}
+
 }
