@@ -4,9 +4,9 @@ export async function GET() {
   const neuralData = {
     projected_roi: "extra_high",
     transparency_score: "100%",
-    security_layer: "verified_by_sovereign",
-    diagnostics: "active_2026_convergence",
+    security_layer: "verified_by_sovereign_bridge",
+    diagnostics: "active_2026_convergence"
   };
 
-  return NextResponse.json(neuralData);
+  return NextResponse.json(neuralData, { status: 200 });
 }
