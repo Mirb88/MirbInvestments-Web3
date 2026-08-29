@@ -1,4 +1,4 @@
-export async function createSupportRequest(data: any) {
-  console.log("Support request submitted:", data);
+export async function createSupportRequest(...args: any[]) {
+  console.log("Support request submitted:", args);
   return { success: true };
 }
