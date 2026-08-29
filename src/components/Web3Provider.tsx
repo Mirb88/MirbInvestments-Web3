@@ -1,17 +1,27 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from '@/lib/web3';
-
-const queryClient = new QueryClient();
 
 interface Web3ProviderProps {
   children: ReactNode;
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
