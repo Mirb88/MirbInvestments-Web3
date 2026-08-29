@@ -2,33 +2,15 @@
 const path = require('path');
 
 const nextConfig = {
-  // Ako radite čisti statički export za IPFS deployment, odkomentarišite liniju ispod:
-  // output: 'export',
+  output: 'export',
   trailingSlash: false,
   reactStrictMode: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     styledComponents: true,
   },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
-      },
-    ];
-  },
   images: {
-    unoptimized: true, // Ključno za IPFS i decentralizovane gateway-e
+    unoptimized: true,
     minimumCacheTTL: 604800,
     remotePatterns: [
       {
