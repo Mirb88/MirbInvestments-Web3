@@ -2,14 +2,17 @@ import { createConfig, http } from 'wagmi';
 import { mainnet, polygon, arbitrum, bsc } from 'wagmi/chains';
 import { injected, walletConnect } from 'wagmi/connectors';
 
-// Inicijalizacija Web3 konfiguracije za MirbInvestments Sovereign Dominion
+const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '';
+
+export const SUPPORTED_CHAINS = [mainnet, polygon, arbitrum, bsc] as const;
+
 export const config = createConfig({
   chains: [mainnet, polygon, arbitrum, bsc],
   connectors: [
-    injected(), // Podrška za MetaMask, Trust Wallet, Coinbase Wallet
-    walletConnect({ 
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'mirbinvestments-web3-bridge' 
-    }),
+    injected(),
+    ...(walletConnectProjectId
+      ? [walletConnect({ projectId: walletConnectProjectId })]
+      : []),
   ],
   transports: {
     [mainnet.id]: http(),
@@ -18,5 +21,3 @@ export const config = createConfig({
     [bsc.id]: http(),
   },
 });
-
-export const SUPPORTED_CHAINS = [mainnet, polygon, arbitrum, bsc];
