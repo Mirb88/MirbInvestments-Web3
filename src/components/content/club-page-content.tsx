@@ -1,5 +1,10 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import {
   Card,
   CardContent,
@@ -9,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   CheckCircle,
   Gem,
@@ -16,16 +22,12 @@ import {
   ArrowRight,
   Layers,
 } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import { createSupportRequest } from '@/services/support';
 import { tiers, bronzeBenefits } from '@/lib/data';
-import Link from 'next/link';
-import Image from 'next/image';
 import { ROUTES } from '@/lib/routes';
 import { NeuralLoader } from '@/components/ui/neural-loader';
 
@@ -38,7 +40,7 @@ function ClubHeroImage() {
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
         className="object-cover object-center brightness-110 contrast-125"
-        priority={true}
+        priority
         quality={90}
         data-ai-hint="knowledge cube"
       />
@@ -91,12 +93,13 @@ export function ClubPageContent() {
       } else {
         throw new Error(result.error || 'An unknown error occurred.');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Could not submit your request. Please try again.';
       toast({
         variant: 'destructive',
         title: 'Request Failed',
-        description:
-          error.message || 'Could not submit your request. Please try again.',
+        description: errorMessage,
       });
     } finally {
       setIsLoading(null);
@@ -171,6 +174,7 @@ export function ClubPageContent() {
                   <Button
                     className="w-full"
                     size="lg"
+                    aria-label={`Request ${tier.name} membership`}
                     onClick={() => handleMembershipRequest(tier.id, tier.name)}
                     disabled={isLoading === tier.id}
                   >
