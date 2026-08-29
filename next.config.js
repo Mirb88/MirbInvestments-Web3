@@ -2,7 +2,7 @@
 const path = require('path');
 
 const nextConfig = {
-  // Postavite 'export' ako planirate direktan statički build za čisti IPFS deployment
+  // Ako radite čisti statički export za IPFS deployment, odkomentarišite liniju ispod:
   // output: 'export',
   trailingSlash: false,
   reactStrictMode: true,
@@ -27,49 +27,8 @@ const nextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'mirb.investments',
-          },
-        ],
-        destination: 'https://www.mirb.investments/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'header',
-            key: 'x-forwarded-proto',
-            value: 'http',
-          },
-          {
-            type: 'host',
-            value: 'www.mirb.investments',
-          },
-        ],
-        destination: 'https://www.mirb.investments/:path*',
-        permanent: true,
-      },
-      {
-        source: '/ai-insights/crypto-summit-jahorina-2026-ai-real-estate-tourism',
-        destination: '/ai-insights/strategic-convergence-jahorina-2026-ai-real-estate-tourism',
-        permanent: true,
-      },
-      {
-        source: '/ai-insights/understanding-market-cycles',
-        destination: '/academy',
-        permanent: true,
-      },
-    ];
-  },
   images: {
-    unoptimized: true, // Neophodno za decentralizovane/IPFS static gatway-e
+    unoptimized: true, // Ključno za IPFS i decentralizovane gateway-e
     minimumCacheTTL: 604800,
     remotePatterns: [
       {
