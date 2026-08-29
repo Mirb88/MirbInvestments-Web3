@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -12,7 +11,7 @@ import { Fingerprint } from 'lucide-react';
 import Image from 'next/image';
 
 const ClubSectionBanner = dynamic(
-  () => import('@/components/content/about/ClubSectionBanner').then((mod) => {
+  () => import('@/components/ClubSectionBanner').then((mod) => {
     if (!mod.default) throw new Error("MirbInvestments: ClubSectionBanner Module Missing!");
     return mod.default;
   }),
@@ -23,7 +22,7 @@ const ClubSectionBanner = dynamic(
 );
 
 const MissionSection = dynamic(
-  () => import('@/components/content/about/MissionSection').then((mod) => {
+  () => import('@/components/MissionSection').then((mod) => {
     if (!mod.default) throw new Error("MirbInvestments: MissionSection Module Missing!");
     return mod.default;
   }),
@@ -34,7 +33,7 @@ const MissionSection = dynamic(
 );
 
 const CoreFocusCards = dynamic(
-  () => import('@/components/content/about/CoreFocusCards').then((mod) => {
+  () => import('@/components/CoreFocusCards').then((mod) => {
     if (!mod.default) throw new Error("MirbInvestments: CoreFocusCards Module Missing!");
     return mod.default;
   }),
@@ -45,7 +44,7 @@ const CoreFocusCards = dynamic(
 );
 
 const ValidationSection = dynamic(
-  () => import('@/components/content/about/ValidationSection').then((mod) => {
+  () => import('@/components/ValidationSection').then((mod) => {
     if (!mod.default) throw new Error("MirbInvestments: ValidationSection Module Missing!");
     return mod.default;
   }),
@@ -170,4 +169,4 @@ export function AboutPageContent() {
       </div>
     </main>
   );
-    }
+}
