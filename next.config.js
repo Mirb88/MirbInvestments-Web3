@@ -1,9 +1,11 @@
-
 /** @type {import('next').NextConfig} */
 const path = require('path');
 
 const nextConfig = {
+  // Postavite 'export' ako planirate direktan statički build za čisti IPFS deployment
+  // output: 'export',
   trailingSlash: false,
+  reactStrictMode: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     styledComponents: true,
@@ -17,13 +19,16 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
         ],
       },
     ];
   },
   async redirects() {
     return [
-      // Redirect non-www to www and ensure HTTPS
       {
         source: '/:path*',
         has: [
@@ -35,7 +40,6 @@ const nextConfig = {
         destination: 'https://www.mirb.investments/:path*',
         permanent: true,
       },
-      // Redirect HTTP to HTTPS for the www domain
       {
         source: '/:path*',
         has: [
@@ -52,7 +56,6 @@ const nextConfig = {
         destination: 'https://www.mirb.investments/:path*',
         permanent: true,
       },
-      // Legacy redirects
       {
         source: '/ai-insights/crypto-summit-jahorina-2026-ai-real-estate-tourism',
         destination: '/ai-insights/strategic-convergence-jahorina-2026-ai-real-estate-tourism',
@@ -63,17 +66,11 @@ const nextConfig = {
         destination: '/academy',
         permanent: true,
       },
-    ]
-  },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+    ];
   },
   images: {
-    minimumCacheTTL: 604800, // 7 days in seconds
+    unoptimized: true, // Neophodno za decentralizovane/IPFS static gatway-e
+    minimumCacheTTL: 604800,
     remotePatterns: [
       {
         protocol: 'https',
@@ -83,13 +80,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-      }
+        pathname: '/**',
+      },
     ],
   },
   webpack(config) {
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
     return config;
-  }
+  },
 };
 
 module.exports = nextConfig;
