@@ -50,7 +50,7 @@ function ClubHeroImage() {
 }
 
 export function ClubPageContent() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export function ClubPageContent() {
   }, []);
 
   const handleMembershipRequest = async (tierId: string, tierName: string) => {
-    if (!user || !db) {
+    if (!user) {
       toast({
         variant: 'destructive',
         title: 'Authentication Required',
@@ -77,7 +77,7 @@ export function ClubPageContent() {
 
     setIsLoading(tierId);
     try {
-      const result = await createSupportRequest(db, {
+      const result = await createSupportRequest({
         name: user.displayName || 'N/A',
         email: user.email || 'N/A',
         subject: `Membership Request: ${tierName}`,
