@@ -77,12 +77,16 @@ export function ClubPageContent() {
 
     setIsLoading(tierId);
     try {
+      const userName = (user as { displayName?: string | null }).displayName || 'N/A';
+      const userEmail = (user as { email?: string | null }).email || 'N/A';
+      const userId = (user as { uid: string }).uid;
+
       const result = await createSupportRequest({
-        name: user.displayName || 'N/A',
-        email: user.email || 'N/A',
+        name: userName,
+        email: userEmail,
         subject: `Membership Request: ${tierName}`,
-        message: `User ${user.email} (ID: ${user.uid}) has requested to purchase the ${tierName}. Please contact them to arrange payment.`,
-        userId: user.uid,
+        message: `User ${userEmail} (ID: ${userId}) has requested to purchase the ${tierName}. Please contact them to arrange payment.`,
+        userId: userId,
       });
 
       if (result.success) {
