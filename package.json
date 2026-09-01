@@ -12,7 +12,6 @@
   "dependencies": {
     "@ai-sdk/groq": "latest",
     "@ai-sdk/react": "latest",
-    "@base-org/account": "0.0.4",
     "@builder.io/partytown": "^0.10.2",
     "@coinbase/wallet-sdk": "^4.2.1",
     "@hookform/resolvers": "^3.9.0",
