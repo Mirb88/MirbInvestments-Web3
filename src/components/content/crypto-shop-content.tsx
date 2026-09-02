@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
@@ -56,9 +56,10 @@ import { cn } from '@/lib/utils';
 import { usePortfolio } from '@/hooks/use-portfolio';
 
 const CryptoIcon = ({ symbol }: { symbol: string }) => {
-  const { cryptoData } = usePortfolio();
-  const coinData = cryptoData.find(
-    (c) => c.symbol.toUpperCase() === symbol.toUpperCase()
+  const { cryptoData } = usePortfolio() as any;
+  const cryptoList = Array.isArray(cryptoData) ? cryptoData : [];
+  const coinData = cryptoList.find(
+    (c: any) => c.symbol?.toUpperCase() === symbol.toUpperCase()
   );
 
   if (coinData?.image) {
@@ -520,24 +521,23 @@ function AiAdvisor({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleGetAdvice = async (
-    selectedGoal: 'growth' | 'gains' | 'stability'
-  ) => {
-    setGoal(selectedGoal);
-    onRecommendation(null);
-    setRecommendation(null);
-    setError(null);
-    setIsLoading(true);
+  const handleGetAdvice = useCallback(
+    async (selectedGoal: 'growth' | 'gains' | 'stability') => {
+      setGoal(selectedGoal);
+      onRecommendation(null);
+      setRecommendation(null);
+      setError(null);
+      setIsLoading(true);
 
-    parentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      parentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    const goalTextMap = {
-      growth: 'long-term growth',
-      gains: 'fast gains with some risk',
-      stability: 'stability and safety as a beginner',
-    };
+      const goalTextMap = {
+        growth: 'long-term growth',
+        gains: 'fast gains with some risk',
+        stability: 'stability and safety as a beginner',
+      };
 
-    const userPrompt = `You are an AI investment advisor for a crypto platform called MirbInvestments. Your goal is to recommend one of three crypto bundles to a user based on their investment goal. Be friendly and encouraging.
+      const userPrompt = `You are an AI investment advisor for a crypto platform called MirbInvestments. Your goal is to recommend one of three crypto bundles to a user based on their investment goal. Be friendly and encouraging.
 
 The available bundles are:
 1. **Starter Bundle (id: starter-30)**: Contains Bitcoin, Ethereum, and Arbitrum. Good for stability and a first step into crypto.
@@ -554,58 +554,60 @@ Analyze the user's goal and recommend the most suitable bundle.
 
 Provide your response as a JSON object with "recommendedBundleId" and "recommendationReason" keys. Only return the JSON object, nothing else.`;
 
-    try {
-      const systemPromptAdvisor = `You are a private banker for elite clients of MirbInvestments. Your speech is discreet, motivating, and focused on long-term wealth growth. Avoid financial advice that sounds like gambling; promote stability, security, and the 'Human-AI Synergy' philosophy.`;
+      try {
+        const systemPromptAdvisor = `You are a private banker for elite clients of MirbInvestments. Your speech is discreet, motivating, and focused on long-term wealth growth. Avoid financial advice that sounds like gambling; promote stability, security, and the 'Human-AI Synergy' philosophy.`;
 
-      const response = await fetch('/api/ai/proxy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [
-            { role: 'system', content: systemPromptAdvisor },
-            { role: 'user', content: userPrompt },
-          ],
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error || 'An error occurred fetching the recommendation.'
-        );
-      }
-
-      const result = await response.json();
-      const aiContent = result.content;
-
-      const jsonMatch = aiContent.match(/```json\n([\s\S]*?)\n```|({[\s\S]*})/);
-      if (!jsonMatch) {
-        throw new Error(
-          'The AI advisor returned an invalid response. Please try again.'
-        );
-      }
-
-      const jsonString = jsonMatch[1] || jsonMatch[2];
-      const parsed = JSON.parse(jsonString);
-
-      if (parsed.recommendedBundleId && parsed.recommendationReason) {
-        setRecommendation({
-          id: parsed.recommendedBundleId,
-          reason: parsed.recommendationReason,
+        const response = await fetch('/api/ai/proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              { role: 'system', content: systemPromptAdvisor },
+              { role: 'user', content: userPrompt },
+            ],
+          }),
         });
-      } else {
-        throw new Error('The AI advisor response was incomplete.');
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || 'An error occurred fetching the recommendation.'
+          );
+        }
+
+        const result = await response.json();
+        const aiContent = result.content;
+
+        const jsonMatch = aiContent.match(/```json\n([\s\S]*?)\n```|({[\s\S]*})/);
+        if (!jsonMatch) {
+          throw new Error(
+            'The AI advisor returned an invalid response. Please try again.'
+          );
+        }
+
+        const jsonString = jsonMatch[1] || jsonMatch[2];
+        const parsed = JSON.parse(jsonString);
+
+        if (parsed.recommendedBundleId && parsed.recommendationReason) {
+          setRecommendation({
+            id: parsed.recommendedBundleId,
+            reason: parsed.recommendationReason,
+          });
+        } else {
+          throw new Error('The AI advisor response was incomplete.');
+        }
+      } catch (e: unknown) {
+        const errorMessage =
+          e instanceof Error
+            ? e.message
+            : 'Failed to communicate with the AI advisor.';
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (e: unknown) {
-      const errorMessage =
-        e instanceof Error
-          ? e.message
-          : 'Failed to communicate with the AI advisor.';
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [onRecommendation]
+  );
 
   const handleShowBundle = () => {
     if (recommendation) {
@@ -702,8 +704,9 @@ function SingleCoinCard({
   price: number | undefined;
   onPurchase: (coin: CryptoCoin & { price: number }) => void;
 }) {
-  const { cryptoData } = usePortfolio();
-  const coinMarketData = cryptoData.find((c) => c.id === coin.id);
+  const { cryptoData } = usePortfolio() as any;
+  const cryptoList = Array.isArray(cryptoData) ? cryptoData : [];
+  const coinMarketData = cryptoList.find((c: any) => c.id === coin.id);
 
   return (
     <Card className="flex flex-col justify-between">
@@ -768,7 +771,7 @@ export function CryptoShopContent() {
   );
   const { user } = useAuth();
   const { toast } = useToast();
-  const { cryptoData } = usePortfolio();
+  const { cryptoData } = usePortfolio() as any;
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -779,10 +782,11 @@ export function CryptoShopContent() {
   }, [searchParams]);
 
   const cryptoPriceMap = useMemo(() => {
-    if (!cryptoData || !Array.isArray(cryptoData)) {
+    const cryptoList = Array.isArray(cryptoData) ? cryptoData : [];
+    if (cryptoList.length === 0) {
       return new Map();
     }
-    return new Map(cryptoData.map((c) => [c.id, c.current_price]));
+    return new Map(cryptoList.map((c: any) => [c.id, c.current_price]));
   }, [cryptoData]);
 
   const handlePurchaseClick = (bundle: CryptoBundle) => {
