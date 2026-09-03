@@ -50,6 +50,7 @@ import { cryptoBundles, buildersChoiceOptions } from '@/lib/data';
 import type { CryptoBundle, CryptoCoin } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
 import { createPurchase } from '@/services/purchase';
 import { CryptoMarquee } from '@/components/layout/crypto-marquee';
 import { cn } from '@/lib/utils';
@@ -92,7 +93,7 @@ function PurchaseSingleCoinModal({
   onClose: () => void;
 }) {
   const { toast } = useToast();
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [amountUSD, setAmountUSD] = useState('');
 
@@ -242,7 +243,7 @@ function PurchaseModal({
   onClose: () => void;
 }) {
   const { toast } = useToast();
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!bundle || !db) return null;
