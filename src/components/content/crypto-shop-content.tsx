@@ -103,7 +103,7 @@ function PurchaseSingleCoinModal({
     }
   }, [isOpen]);
 
-  if (!coin || !db) return null;
+  if (!coin) return null;
 
   const estimatedQuantity =
     parseFloat(amountUSD) > 0 && coin.price > 0
@@ -111,6 +111,15 @@ function PurchaseSingleCoinModal({
       : 0;
 
   const handleProceed = async () => {
+    if (!db) {
+      toast({
+        variant: 'destructive',
+        title: 'System Notice',
+        description: 'Database connection is not initialized.',
+      });
+      return;
+    }
+
     if (!user || !coin || !amountUSD || parseFloat(amountUSD) <= 0) {
       toast({
         variant: 'destructive',
@@ -246,9 +255,18 @@ function PurchaseModal({
   const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  if (!bundle || !db) return null;
+  if (!bundle) return null;
 
   const handleProceed = async () => {
+    if (!db) {
+      toast({
+        variant: 'destructive',
+        title: 'System Notice',
+        description: 'Database connection is not initialized.',
+      });
+      return;
+    }
+
     if (!user || !bundle) return;
     setIsProcessing(true);
     try {
