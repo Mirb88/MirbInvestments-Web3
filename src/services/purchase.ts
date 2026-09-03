@@ -1,4 +1,3 @@
-
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import type { Firestore } from 'firebase/firestore';
 import type { CryptoBundle, PurchasedAsset } from '@/lib/types';
@@ -26,7 +25,7 @@ async function getAssetsForBundle(bundle: CryptoBundle): Promise<PurchasedAsset[
         const assets: PurchasedAsset[] = bundle.coins.map(coin => ({
             id: coin.id,
             symbol: coin.symbol,
-            amount: 0, // Amount will be calculated by a backend process
+            amount: 0, 
             purchasePrice: priceData[coin.id]?.usd || 0
         }));
         
@@ -43,7 +42,11 @@ async function getAssetsForBundle(bundle: CryptoBundle): Promise<PurchasedAsset[
     }
 }
 
-export async function createPurchase(db: Firestore, userId: string, email: string | null, bundle: CryptoBundle) {
+export async function createPurchase(db: Firestore | null, userId: string, email: string | null, bundle: CryptoBundle) {
+  if (!db) {
+    return { success: false, error: 'Database instance is not initialized.' };
+  }
+  
   if (!userId || !email) {
     return { success: false, error: 'User must be authenticated to make a purchase.' };
   }
@@ -61,6 +64,7 @@ export async function createPurchase(db: Firestore, userId: string, email: strin
       createdAt: Timestamp.now(),
       assets: assetsForPurchase
     });
+    
     console.log('Document written with ID: ', docRef.id);
     return { success: true, id: docRef.id };
   } catch (e: any) {
