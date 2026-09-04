@@ -44,9 +44,8 @@ function CryptoWithdrawal() {
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Sigurno izvlačenje holdings niza sa višestepenim kastovanjem
+  // Safely extract the holdings array with strict type casting
   const holdings: Holding[] = ((portfolio as unknown) as { holdings?: Holding[] })?.holdings || [];
-
 
   const selectedHolding = useMemo(() => {
     return holdings.find((h) => h.symbol === selectedAssetSymbol);
@@ -84,7 +83,7 @@ function CryptoWithdrawal() {
 
     setIsProcessing(true);
     try {
-      const result = await createCryptoWithdrawalRequest(db, {
+      const result = await createCryptoWithdrawalRequest({
         userId: user.uid,
         userEmail: user.email || '',
         assetId: selectedHolding.id,
@@ -225,7 +224,7 @@ function FiatWithdrawal() {
 
     setIsProcessing(true);
     try {
-      const result = await createFiatWithdrawalRequest(db, {
+      const result = await createFiatWithdrawalRequest({
         userId: user.uid,
         userEmail: user.email || '',
         amount: parseFloat(amount),
