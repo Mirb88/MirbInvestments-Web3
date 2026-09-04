@@ -27,6 +27,13 @@ import { createCryptoWithdrawalRequest, createFiatWithdrawalRequest } from '@/se
 import { usePortfolio } from '@/hooks/use-portfolio';
 import { db } from '@/lib/firebase';
 
+interface Holding {
+  id: string;
+  symbol: string;
+  name: string;
+  quantity: number;
+}
+
 function CryptoWithdrawal() {
   const { user } = useAuth();
   const { portfolio } = usePortfolio();
@@ -37,8 +44,8 @@ function CryptoWithdrawal() {
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Sigurno izvlačenje holdings niza sa fallback opcijom na prazan niz
-  const holdings = portfolio?.holdings || [];
+  // Sigurno izvlačenje holdings niza sa eksplicitnim kastovanjem tipova
+  const holdings: Holding[] = (portfolio as { holdings?: Holding[] })?.holdings || [];
 
   const selectedHolding = useMemo(() => {
     return holdings.find((h) => h.symbol === selectedAssetSymbol);
