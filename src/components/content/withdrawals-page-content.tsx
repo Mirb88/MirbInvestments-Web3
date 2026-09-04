@@ -25,9 +25,10 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { createCryptoWithdrawalRequest, createFiatWithdrawalRequest } from '@/services/withdrawal';
 import { usePortfolio } from '@/hooks/use-portfolio';
+import { db } from '@/lib/firebase';
 
 function CryptoWithdrawal() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { portfolio } = usePortfolio();
   const { toast } = useToast();
 
@@ -190,7 +191,7 @@ function CryptoWithdrawal() {
 }
 
 function FiatWithdrawal() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
 
   const [currency, setCurrency] = useState('usd');
