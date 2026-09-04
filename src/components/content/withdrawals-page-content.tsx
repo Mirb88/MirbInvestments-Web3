@@ -44,8 +44,9 @@ function CryptoWithdrawal() {
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Sigurno izvlačenje holdings niza sa eksplicitnim kastovanjem tipova
-  const holdings: Holding[] = (portfolio as { holdings?: Holding[] })?.holdings || [];
+  // Sigurno izvlačenje holdings niza sa višestepenim kastovanjem
+  const holdings: Holding[] = ((portfolio as unknown) as { holdings?: Holding[] })?.holdings || [];
+
 
   const selectedHolding = useMemo(() => {
     return holdings.find((h) => h.symbol === selectedAssetSymbol);
