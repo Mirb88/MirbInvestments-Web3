@@ -73,7 +73,7 @@ const assets = [
 ];
 
 function ExchangeForm() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [exchangeType, setExchangeType] = useState<'buy' | 'sell'>('sell');
   const [asset, setAsset] = useState('');
