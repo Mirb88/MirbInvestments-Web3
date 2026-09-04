@@ -37,9 +37,12 @@ function CryptoWithdrawal() {
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Sigurno izvlačenje holdings niza sa fallback opcijom na prazan niz
+  const holdings = portfolio?.holdings || [];
+
   const selectedHolding = useMemo(() => {
-    return portfolio.holdings.find((h) => h.symbol === selectedAssetSymbol);
-  }, [selectedAssetSymbol, portfolio.holdings]);
+    return holdings.find((h) => h.symbol === selectedAssetSymbol);
+  }, [selectedAssetSymbol, holdings]);
   
   const selectedOption = useMemo(() => {
     return cryptoOptions.find((opt) => opt.symbol === selectedAssetSymbol);
@@ -101,13 +104,13 @@ function CryptoWithdrawal() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="crypto-asset-select">Asset to Withdraw</Label>
-        <Select value={selectedAssetSymbol} onValueChange={setSelectedAssetSymbol} disabled={portfolio.holdings.length === 0 || isProcessing}>
+        <Select value={selectedAssetSymbol} onValueChange={setSelectedAssetSymbol} disabled={holdings.length === 0 || isProcessing}>
           <SelectTrigger id="crypto-asset-select">
             <SelectValue placeholder="Select an asset from your portfolio" />
           </SelectTrigger>
           <SelectContent>
-            {portfolio.holdings.length > 0 ? (
-              portfolio.holdings.map((holding) => (
+            {holdings.length > 0 ? (
+              holdings.map((holding) => (
                 <SelectItem key={holding.id} value={holding.symbol}>
                   {holding.name} ({holding.quantity.toLocaleString('en-US', {
                     minimumFractionDigits: 2,
