@@ -103,7 +103,10 @@ function CryptoWithdrawal() {
         setAmount('');
         setAddress('');
       } else {
-        throw new Error(result.error || 'An unknown error occurred.');
+        const errorMsg = (result as unknown as { message?: string; error?: string }).message || 
+                         (result as unknown as { message?: string; error?: string }).error || 
+                         'An unknown error occurred.';
+        throw new Error(errorMsg);
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Submission failed. Please try again.';
@@ -248,7 +251,10 @@ function FiatWithdrawal() {
         setAccountNumber('');
         setSwiftBic('');
       } else {
-        throw new Error(result.error || 'An unknown error occurred.');
+        const errorMsg = (result as unknown as { message?: string; error?: string }).message || 
+                         (result as unknown as { message?: string; error?: string }).error || 
+                         'An unknown error occurred.';
+        throw new Error(errorMsg);
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Submission failed. Please try again.';
