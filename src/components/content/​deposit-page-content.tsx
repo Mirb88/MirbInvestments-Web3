@@ -29,9 +29,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
+interface AuthUser {
+  uid: string;
+  email?: string | null;
+}
 
 function CryptoDeposit() {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: AuthUser | null };
   const { toast } = useToast();
   
   // State for the deposit address selection
@@ -277,7 +281,7 @@ function FiatConfirmationModal({
 }
 
 function FiatDeposit() {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: AuthUser | null };
   const { toast } = useToast();
   const [currency, setCurrency] = useState('usd');
   const [amount, setAmount] = useState('');
