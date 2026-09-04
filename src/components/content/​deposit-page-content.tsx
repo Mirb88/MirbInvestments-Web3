@@ -23,6 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cryptoOptions } from '@/lib/data';
 import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
 import { createFiatDepositRequest, createCryptoDepositNotification } from '@/services/deposit';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -30,7 +31,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 
 function CryptoDeposit() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   
   // State for the deposit address selection
@@ -76,15 +77,12 @@ function CryptoDeposit() {
 
     setIsProcessing(true);
     try {
-      const result = await createCryptoDepositNotification(db, {
+      const result = await createCryptoDepositNotification({
         userId: user.uid,
         userEmail: email,
-        asset: selectedOption.label,
-        symbol: selectedOption.symbol,
-        network: selectedOption.network,
+        assetSymbol: selectedOption.symbol,
         amount: parseFloat(amountSent),
-        txHash: txHash || null,
-        notes: notes || null,
+        txHash: txHash || '',
       });
 
       if (result.success) {
@@ -279,7 +277,7 @@ function FiatConfirmationModal({
 }
 
 function FiatDeposit() {
-  const { user, db } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [currency, setCurrency] = useState('usd');
   const [amount, setAmount] = useState('');
@@ -301,7 +299,12 @@ function FiatDeposit() {
 
     setIsProcessing(true);
     try {
-        const result = await createFiatDepositRequest(db, user.uid, user.email, depositAmount, currency as 'usd');
+        const result = await createFiatDepositRequest({
+            userId: user.uid,
+            userEmail: user.email || '',
+            amount: depositAmount,
+            currency: currency,
+        });
         if (result.success) {
             setSubmittedData({ amount: depositAmount, currency });
             setIsModalOpen(true);
