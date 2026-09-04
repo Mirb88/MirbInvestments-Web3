@@ -120,7 +120,7 @@ function PurchaseSingleCoinModal({
       return;
     }
 
-    if (!user || !coin || !amountUSD || parseFloat(amountUSD) <= 0) {
+    if (!user || !amountUSD || parseFloat(amountUSD) <= 0) {
       toast({
         variant: 'destructive',
         title: 'Invalid Input',
@@ -140,8 +140,8 @@ function PurchaseSingleCoinModal({
 
       const result = await createPurchase(
         db,
-        user.uid,
-        user.email || 'N/A',
+        (user as any).uid,
+        (user as any).email || 'N/A',
         singleCoinBundle
       );
 
@@ -272,8 +272,8 @@ function PurchaseModal({
     try {
       const result = await createPurchase(
         db,
-        user.uid,
-        user.email || 'N/A',
+        (user as any).uid,
+        (user as any).email || 'N/A',
         bundle
       );
       if (result.success) {
