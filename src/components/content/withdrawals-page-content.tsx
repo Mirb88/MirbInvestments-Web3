@@ -34,8 +34,14 @@ interface Holding {
   quantity: number;
 }
 
+interface AuthUser {
+  uid: string;
+  email?: string | null;
+}
+
 function CryptoWithdrawal() {
   const { user } = useAuth();
+  const typedUser = user as unknown as AuthUser | null;
   const { portfolio } = usePortfolio();
   const { toast } = useToast();
 
@@ -63,7 +69,7 @@ function CryptoWithdrawal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !db) {
+    if (!typedUser || !db) {
       toast({ variant: 'destructive', title: 'Not Logged In', description: 'Please log in to submit a withdrawal request.' });
       return;
     }
@@ -84,8 +90,8 @@ function CryptoWithdrawal() {
     setIsProcessing(true);
     try {
       const result = await createCryptoWithdrawalRequest({
-        userId: user.uid,
-        userEmail: user.email || '',
+        userId: typedUser.uid,
+        userEmail: typedUser.email || '',
         assetId: selectedHolding.id,
         assetSymbol: selectedHolding.symbol,
         amount: withdrawalAmount,
@@ -202,6 +208,7 @@ function CryptoWithdrawal() {
 
 function FiatWithdrawal() {
   const { user } = useAuth();
+  const typedUser = user as unknown as AuthUser | null;
   const { toast } = useToast();
 
   const [currency, setCurrency] = useState('usd');
@@ -213,7 +220,7 @@ function FiatWithdrawal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !db) {
+    if (!typedUser || !db) {
       toast({ variant: 'destructive', title: 'Not Logged In', description: 'Please log in to submit a withdrawal request.' });
       return;
     }
@@ -225,8 +232,8 @@ function FiatWithdrawal() {
     setIsProcessing(true);
     try {
       const result = await createFiatWithdrawalRequest({
-        userId: user.uid,
-        userEmail: user.email || '',
+        userId: typedUser.uid,
+        userEmail: typedUser.email || '',
         amount: parseFloat(amount),
         currency: currency as 'usd',
         bankName,
