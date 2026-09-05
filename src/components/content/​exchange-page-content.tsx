@@ -253,7 +253,7 @@ function ExchangeForm() {
 }
 
 export function ExchangePageContent() {
-  const { loading } = useAuth();
+  const { isLoading } = useAuth();
 
   if (loading) {
     return (
