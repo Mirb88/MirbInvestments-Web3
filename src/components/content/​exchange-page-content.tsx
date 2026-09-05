@@ -82,7 +82,7 @@ function ExchangeForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !db) {
+    if (!user) {
       toast({
         variant: 'destructive',
         title: 'Authentication Required',
