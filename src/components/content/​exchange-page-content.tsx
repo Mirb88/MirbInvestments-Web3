@@ -100,9 +100,10 @@ function ExchangeForm() {
     }
     setIsLoading(true);
     try {
+      const currentUser = user as any;
       const result = await createExchangeRequest({
-        userId: user.uid,
-        useremail: user.email || 'N/A',
+        userId: currentUser.uid,
+        useremail: currentUser.email || 'N/A',
         exchangeType,
         asset,
         amount: parseFloat(amount),
