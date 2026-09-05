@@ -104,7 +104,7 @@ function ExchangeForm() {
       const result = await createExchangeRequest({
         userId: currentUser.uid,
         userEmail: currentUser.email || 'N/A',
-        type: exchangeType, // Zamijenjeno sa 'type' umjesto 'exchangeType' prema tipu servisa
+        type: exchangeType,
         asset,
         amount: parseFloat(amount),
       } as any);
@@ -255,7 +255,7 @@ function ExchangeForm() {
 export function ExchangePageContent() {
   const { isLoading } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container mx-auto flex h-[calc(100vh-10rem)] flex-col items-center justify-center">
         <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
