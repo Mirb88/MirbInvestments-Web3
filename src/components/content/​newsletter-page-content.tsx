@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Mail, CheckCircle, Newspaper, LoaderCircle, LucideIcon } from 'lucide-react';
 import { subscribeToNewsletter } from '@/services/newsletter';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
 
 interface BenefitItem {
   icon: LucideIcon;
@@ -39,12 +39,12 @@ export function NewsletterPageContent() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { db } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email) {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
       toast({
         variant: 'destructive',
         title: 'Email Required',
@@ -53,19 +53,10 @@ export function NewsletterPageContent() {
       return;
     }
 
-    if (!db) {
-      toast({
-        variant: 'destructive',
-        title: 'Connection Error',
-        description: 'Cannot connect to the newsletter service. Please try again later.',
-      });
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const result = await subscribeToNewsletter(db, email);
+      const result = await subscribeToNewsletter(db, trimmedEmail);
       if (result.success) {
         toast({
           title: 'Subscription Confirmed. Welcome to the Inner Circle.',
