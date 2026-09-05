@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Mail, CheckCircle, Newspaper, LoaderCircle, LucideIcon } from 'lucide-react';
 import { subscribeToNewsletter } from '@/services/newsletter';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 
 interface BenefitItem {
   icon: LucideIcon;
@@ -56,7 +55,7 @@ export function NewsletterPageContent() {
     setIsLoading(true);
 
     try {
-      const result = await subscribeToNewsletter(db, trimmedEmail);
+      const result = await subscribeToNewsletter({ email: trimmedEmail });
       if (result.success) {
         toast({
           title: 'Subscription Confirmed. Welcome to the Inner Circle.',
