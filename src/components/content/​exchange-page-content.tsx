@@ -103,7 +103,7 @@ function ExchangeForm() {
       const currentUser = user as any;
       const result = await createExchangeRequest({
         userId: currentUser.uid,
-        useremail: currentUser.email || 'N/A',
+        userEmail: currentUser.email || 'N/A',
         exchangeType,
         asset,
         amount: parseFloat(amount),
