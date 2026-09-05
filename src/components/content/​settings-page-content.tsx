@@ -69,6 +69,9 @@ function ChangePasswordSection() {
         title: 'Password Updated Successfully',
         description: 'You will be logged out for security reasons. Please log in again with your new password.',
       });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update password.';
       setError(errorMessage);
@@ -79,9 +82,6 @@ function ChangePasswordSection() {
       });
     } finally {
       setIsLoading(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
     }
   };
 
@@ -152,7 +152,7 @@ function DangerZoneSection() {
 
   const handleDeleteAccountRequest = async () => {
     if (!user || !db) {
-      toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
+      toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in with an active database connection.' });
       return;
     }
 
@@ -171,7 +171,7 @@ function DangerZoneSection() {
         description: 'Your request has been received. The account will be permanently deleted within 48 hours. If you wish to cancel this request, please contact our support team within 8 hours.',
         duration: 10000, 
       });
-    } catch (error: unknown) {
+    } catch {
       toast({
         variant: 'destructive',
         title: 'Request Failed',
@@ -241,7 +241,7 @@ export function SettingsPageContent() {
     );
   }
   
-  const usdtBalance = portfolio.holdings.find(h => h.symbol.toUpperCase() === 'USDT')?.quantity || 0;
+  const usdtBalance = portfolio?.holdings?.find(h => h.symbol.toUpperCase() === 'USDT')?.quantity || 0;
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-12 md:px-6">
