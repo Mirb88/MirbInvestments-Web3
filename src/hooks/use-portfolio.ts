@@ -1,3 +1,17 @@
+export interface Holding {
+  symbol: string;
+  quantity: number;
+}
+
+export interface Portfolio {
+  holdings: Holding[];
+}
+
 export function usePortfolio() {
-  return { portfolio: null, isLoading: false };
+  // Ovdje vratite odgovarajući portfolio state ili mock podatke
+  const portfolio: Portfolio = {
+    holdings: [],
+  };
+
+  return { portfolio };
 }
