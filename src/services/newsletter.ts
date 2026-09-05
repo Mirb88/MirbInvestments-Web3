@@ -1,5 +1,5 @@
 import { collection, addDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; // Prilagodite putanju do vaše firebase instance ako je drugačija
+import { db } from '@/lib/firebase';
 
 export interface NewsletterSubscriptionParams {
   email: string;
@@ -13,10 +13,13 @@ export async function subscribeToNewsletter(params: NewsletterSubscriptionParams
     return { success: false, error: 'Please enter a valid email address.' };
   }
 
+  if (!db) {
+    return { success: false, error: 'Database connection is not available.' };
+  }
+
   try {
     const subscriptionsRef = collection(db, 'newsletterSubscriptions');
     
-    // Check if the email is already subscribed
     const q = query(subscriptionsRef, where('email', '==', emailTrimmed));
     const querySnapshot = await getDocs(q);
     
@@ -24,7 +27,6 @@ export async function subscribeToNewsletter(params: NewsletterSubscriptionParams
       return { success: false, error: 'This email is already subscribed.' };
     }
 
-    // Add the new subscription document
     const docRef = await addDoc(subscriptionsRef, {
       email: emailTrimmed,
       userId: params.userId || null,
