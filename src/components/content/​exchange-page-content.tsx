@@ -104,10 +104,10 @@ function ExchangeForm() {
       const result = await createExchangeRequest({
         userId: currentUser.uid,
         userEmail: currentUser.email || 'N/A',
-        exchangeType,
+        type: exchangeType, // Zamijenjeno sa 'type' umjesto 'exchangeType' prema tipu servisa
         asset,
         amount: parseFloat(amount),
-      });
+      } as any);
 
       if (result.success) {
         toast({
