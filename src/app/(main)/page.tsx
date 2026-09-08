@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import HomePageContent from '@/components/content/home-page-content';
+import { HomePageContent } from '@/components/content/home-page-content';
 import { ROUTES } from '@/lib/routes';
 
+// Definišemo kanonski URL uz obavezno poštovanje www standarda
 const canonicalUrl = `https://www.mirb.investments${ROUTES?.HOME || '/'}`;
 
 export const metadata: Metadata = {
@@ -54,5 +55,17 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  // Sigurnosni provajder za prikaz sadržaja početne stranice
+  if (typeof HomePageContent !== 'function') {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-[#EDF2F4]">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold tracking-wider text-[#F0B90B]">MIRBINVESTMENTS</h1>
+          <p className="mt-2 text-sm text-gray-400">Architecture of Intelligent Capital — Initializing Systems...</p>
+        </div>
+      </main>
+    );
+  }
+
   return <HomePageContent />;
 }
