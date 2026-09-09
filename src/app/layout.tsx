@@ -142,7 +142,7 @@ const OrganizationSchema = () => {
 
 export default function RootLayout({
   children,
-}, Readonly<{
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
@@ -152,7 +152,7 @@ export default function RootLayout({
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-white', inter.variable)}>
           <OrganizationSchema />
           <ClientProviders>
-            <Header /> {/* <-- Postavljeno ovdje unutar provajdera da osigura stabilan Web3 state */}
+            <Header />
             <main className="flex-1">
               {children}
             </main>
@@ -166,3 +166,4 @@ export default function RootLayout({
     </html>
   );
 }
+
