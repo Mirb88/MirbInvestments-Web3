@@ -42,7 +42,6 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import React, { useState } from 'react';
-import { Separator } from '../ui/separator';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { usePortfolio } from '@/hooks/use-portfolio';
@@ -68,7 +67,6 @@ const navItems = [
 
 export function Header() {
   const pathname = usePathname();
-  // Sigurno preuzimanje funkcije za odjavu (podržava logout ili signOut iz auth konteksta)
   const auth = useAuth() as any;
   const user = auth?.user;
   const signOut = auth?.signOut || auth?.logout;
@@ -125,7 +123,9 @@ export function Header() {
               onClick={() => setIsSheetOpen(false)}
               className="flex items-center gap-3 text-lg font-bold"
             >
-              <MirbLogo width={36} height={36} />
+              <div className="w-9 h-9 flex items-center justify-center">
+                <MirbLogo />
+              </div>
               <span className="tracking-wider text-white">MirbInvestments™</span>
             </Link>
           </div>
@@ -183,7 +183,9 @@ export function Header() {
           className="mr-2 transition-colors hover:opacity-80"
         >
           <div className="flex items-center gap-2.5">
-            <MirbLogo width={32} height={32} />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <MirbLogo />
+            </div>
             <span className="text-sm font-bold tracking-wide text-white">MirbInvestments™</span>
           </div>
         </Link>
