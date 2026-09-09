@@ -68,7 +68,11 @@ const navItems = [
 
 export function Header() {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  // Sigurno preuzimanje funkcije za odjavu (podržava logout ili signOut iz auth konteksta)
+  const auth = useAuth() as any;
+  const user = auth?.user;
+  const signOut = auth?.signOut || auth?.logout;
+
   const { portfolio } = usePortfolio();
   const { unreadCount } = useMessages();
   const router = useRouter();
@@ -76,7 +80,9 @@ export function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleSignOut = async () => {
-    await signOut();
+    if (signOut) {
+      await signOut();
+    }
     toast({
       title: 'Logout Successful',
       description: 'You have been successfully signed out.',
@@ -204,7 +210,7 @@ export function Header() {
       <div className="flex items-center gap-3 ml-auto">
         {user ? (
           <div className="flex items-center gap-3">
-            {/* USDT Balance Badge Container matching screenshot style */}
+            {/* USDT Balance Badge Container */}
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/60 shadow-inner">
               <DollarSign className="h-4 w-4 text-[#2FE93D]" />
               <span className="font-bold text-sm text-white tracking-wide">{usdtBalance.toFixed(2)}</span>
