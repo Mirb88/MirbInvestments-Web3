@@ -103,6 +103,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
+    // Enterprise Fallback: Spriječava rušenje tokom SSR-a i statičkog build-a na Vercelu
+    if (typeof window === 'undefined') {
+      return {
+        user: null,
+        loading: true,
+        auth: null,
+        db: null,
+        signInWithEmail: async () => { throw new Error('Auth not initialized during SSR'); },
+        signUpWithEmail: async () => { throw new Error('Auth not initialized during SSR'); },
+        updateUserPassword: async () => { throw new Error('Auth not initialized during SSR'); },
+        signOut: async () => {},
+      } as unknown as AuthContextType;
+    }
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
