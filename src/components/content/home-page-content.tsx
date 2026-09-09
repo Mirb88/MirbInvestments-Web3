@@ -214,7 +214,7 @@ export function HomePageContent() {
             <motion.h1
               variants={heroVariants}
               custom={1}
-              className="text-5xl font-black tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl text-white leading-[1.05]"
+              className="text-4xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl text-white leading-[1.1]"
               style={{ textShadow: '0 4px 30px rgba(0,0,0,0.9)' }}
             >
               <span className="block text-primary drop-shadow-lg mb-2">MirbInvestments™</span>
