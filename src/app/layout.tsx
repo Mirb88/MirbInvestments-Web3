@@ -2,14 +2,29 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Header } from '@/components/layout/header';
 import { Web3Provider } from '@/components/Web3Provider';
-// Pretpostavljena putanja za PortfolioProvider – ukoliko se nalazi na drugoj putanji, prilagodite je
-import { PortfolioProvider } from '@/context/PortfolioContext'; 
+
+// In-file Portfolio Context fallback da spriječimo module-not-found greške
+const PortfolioContext = createContext<{ portfolio: any; setPortfolio: (p: any) => void }>({
+  portfolio: null,
+  setPortfolio: () => {},
+});
+
+export const usePortfolio = () => useContext(PortfolioContext);
+
+function PortfolioProvider({ children }: { children: React.ReactNode }) {
+  const [portfolio, setPortfolio] = React.useState(null);
+  return (
+    <PortfolioContext.Provider value={{ portfolio, setPortfolio }}>
+      {children}
+    </PortfolioContext.Provider>
+  );
+}
 
 const inter = Inter({
   subsets: ['latin'],
