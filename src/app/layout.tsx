@@ -8,6 +8,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Header } from '@/components/layout/header';
 import { Web3Provider } from '@/components/Web3Provider';
+// Pretpostavljena putanja za PortfolioProvider – ukoliko se nalazi na drugoj putanji, prilagodite je
+import { PortfolioProvider } from '@/context/PortfolioContext'; 
 
 const inter = Inter({
   subsets: ['latin'],
@@ -150,10 +152,12 @@ export default function RootLayout({
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-white', inter.variable)}>
         <OrganizationSchema />
         <Web3Provider>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
+          <PortfolioProvider>
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+          </PortfolioProvider>
         </Web3Provider>
         <Analytics />
         <SpeedInsights />
