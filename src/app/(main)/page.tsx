@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import { HomePageContent } from '@/components/content/home-page-content';
 import { ROUTES } from '@/lib/routes';
 
-// Primjena dinamičkog renderovanja po potrebi Web3 infrastrukture
-export const dynamic = 'force-dynamic';
-
 // Definišemo kanonski URL uz obavezno poštovanje www standarda bez trailing slasha
 const canonicalUrl = `https://www.mirb.investments${ROUTES?.HOME || ''}`;
 
