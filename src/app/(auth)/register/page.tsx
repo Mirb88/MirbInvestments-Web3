@@ -19,7 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MirbLogo } from '@/components/layout/mirb-logo';
 
 export default function RegisterPage() {
-  const { signUpWithEmail } = useAuth();
+  const { signUpWithEmail, signUpWithEmailAndPassword } = useAuth() as any;
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
@@ -44,7 +44,14 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     try {
-      await signUpWithEmail(email, password);
+      // Podržava oba naziva funkcije iz hook-a radi apsolutne kompatibilnosti
+      const registerFn = signUpWithEmail || signUpWithEmailAndPassword;
+      if (registerFn) {
+        await registerFn(email, password, email.split('@')[0]);
+      } else {
+        throw new Error('Registration method is not available.');
+      }
+
       toast({
         title: 'Account Created',
         description: 'Welcome to MirbInvestments. Initializing your institutional profile.',
@@ -66,7 +73,7 @@ export default function RegisterPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#0D0D0D] px-4 py-8 text-[#EDF2F4]">
       <div className="mb-6 flex flex-col items-center gap-3">
         <Link href="/" className="flex items-center gap-3 text-2xl font-bold tracking-wider text-[#EDF2F4]">
-          <MirbLogo width={42} height={42} />
+          <MirbLogo />
           <span>MirbInvestments</span>
         </Link>
         <p className="text-xs tracking-widest text-[#F0B90B] uppercase">Architecture of Intelligent Capital</p>
