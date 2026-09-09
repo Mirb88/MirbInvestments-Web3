@@ -1,15 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { ClientProviders } from '@/components/layout/client-providers';
-import { ElitePerformanceGuard } from '@/components/utils/elite-performance-guard';
-import { Header } from '@/components/layout/header'; // <-- Uvezen Header
+import { Header } from '@/components/layout/header';
+import { Web3Provider } from '@/components/Web3Provider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -150,15 +148,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-white', inter.variable)}>
-          <OrganizationSchema />
-          <ClientProviders>
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-          </ClientProviders>
-        <Toaster />
-        <ElitePerformanceGuard />
+        <OrganizationSchema />
+        <Web3Provider>
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+        </Web3Provider>
         <Analytics />
         <SpeedInsights />
         {gaId !== 'G-XXXXXXXXXX' && <GoogleAnalytics gaId={gaId} />}
@@ -166,4 +162,3 @@ export default function RootLayout({
     </html>
   );
 }
-
