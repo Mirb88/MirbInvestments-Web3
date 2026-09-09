@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import { HomePageContent } from '@/components/content/home-page-content';
 import { ROUTES } from '@/lib/routes';
 
-// Definišemo kanonski URL uz obavezno poštovanje www standarda
-const canonicalUrl = `https://www.mirb.investments${ROUTES?.HOME || '/'}`;
+// Primjena dinamičkog renderovanja po potrebi Web3 infrastrukture
+export const dynamic = 'force-dynamic';
+
+// Definišemo kanonski URL uz obavezno poštovanje www standarda bez trailing slasha
+const canonicalUrl = `https://www.mirb.investments${ROUTES?.HOME || ''}`;
 
 export const metadata: Metadata = {
   title: 'MirbInvestments | Architecture of Intelligent Capital 2026',
