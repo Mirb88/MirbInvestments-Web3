@@ -23,8 +23,10 @@ export const viewport: Viewport = {
 
 export const revalidate = 3600;
 
+const PRODUCTION_URL = 'https://mirb-investments-web3-git-main-mirbs-projects.vercel.app';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.mirb.investments'),
+  metadataBase: new URL(PRODUCTION_URL),
   alternates: {
     canonical: '/',
   },
@@ -109,8 +111,8 @@ const OrganizationSchema = () => {
     "@type": "Organization",
     "name": "MirbInvestments™",
     "alternateName": "Mirb Investments",
-    "url": "https://www.mirb.investments",
-    "logo": "https://www.mirb.investments/images/brand/logo.webp",
+    "url": PRODUCTION_URL,
+    "logo": `${PRODUCTION_URL}/images/brand/logo.webp`,
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+387603527846",
@@ -121,7 +123,7 @@ const OrganizationSchema = () => {
     "sameAs": [
       "https://twitter.com/mirbinvestments",
       "https://www.linkedin.com/company/mirbinvestments",
-      "https://www.mirb.investments",
+      PRODUCTION_URL,
       "https://mirbinvestments.crypto.ud.me"
     ],
     "brand": {
