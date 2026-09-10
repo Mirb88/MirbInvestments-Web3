@@ -309,7 +309,8 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
 export const usePortfolio = () => {
   const context = useContext(PortfolioContext);
-  if (context === undefined) {
+  // Umjesto bacanja greške, vraćamo bezbjedan fallback objekat
+  if (!context) {
     return {
       portfolio: initialPortfolioState,
       purchaseHistory: [],
