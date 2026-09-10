@@ -12,7 +12,6 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 export const usePortfolio = () => {
   const context = useContext(PortfolioContext);
   if (!context) {
-    // Bezbjedan fallback za sistemske rute poput _not-found
     return { portfolio: null, setPortfolio: () => {} };
   }
   return context;
@@ -23,6 +22,6 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   return (
     <PortfolioContext.Provider value={{ portfolio, setPortfolio }}>
       {children}
-    </PortfolioContext.PortfolioProvider>
+    </PortfolioContext.Provider>
   );
 }
