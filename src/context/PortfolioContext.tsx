@@ -9,14 +9,23 @@ interface PortfolioContextType {
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
-export const usePortfolio = () => {
+ export const usePortfolio = () => {
   const context = useContext(PortfolioContext);
-  // Absolutni fallback koji sprečava bilo kakvo bacanje izuzetaka na sistem rutesima
-  if (!context) {
-    return { portfolio: null, setPortfolio: () => {} };
+  // Elitni fallback koji štiti build proces od rušenja na sistem stranicama van provajdera
+  if (context === undefined) {
+    return {
+      portfolio: initialPortfolioState,
+      purchaseHistory: [],
+      depositHistory: [],
+      withdrawalHistory: [],
+      cryptoData: [],
+      isLoading: false,
+      pricesError: null,
+    };
   }
   return context;
 };
+
 
 export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const [portfolio, setPortfolio] = useState<any>(null);
