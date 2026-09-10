@@ -11,6 +11,7 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 
 export const usePortfolio = () => {
   const context = useContext(PortfolioContext);
+  // Bezbjedan povrat u slucaju da se pozove van provajdera (npr. u _not-found)
   if (!context) {
     return { portfolio: null, setPortfolio: () => {} };
   }
