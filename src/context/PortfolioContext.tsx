@@ -6,8 +6,9 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useMemo,
 } from 'react';
-import { useAuth } from './use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import type { PortfolioHolding, PurchaseHistoryItem, CryptoData, WithdrawalHistoryItem, DepositHistoryItem, CryptoDepositNotification } from '@/lib/types';
 import { buildersChoiceOptions, allCoinIdsForPortfolio } from '@/lib/data';
 import { collection, query, where, Timestamp, getDocs, onSnapshot } from 'firebase/firestore';
@@ -65,13 +66,18 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   const isLoading = isPricesLoading || isTransactionsLoading;
   
   useEffect(() => {
+    let isMounted = true;
     async function fetchCryptoData() {
         const { data, error } = await getCryptoData(allCoinIdsForPortfolio);
+        if (!isMounted) return;
         if (data) setCryptoData(data);
         if (error) setPricesError(error);
         setIsPricesLoading(false);
     }
     fetchCryptoData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
    useEffect(() => {
@@ -196,7 +202,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     ].sort((a, b) => (a.createdAt?.getTime() || 0) - (b.createdAt?.getTime() || 0));
 
     allTransactionsSorted.forEach(tx => {
-      const isCompleted = completedStatuses.includes(tx.status.toLowerCase());
+      const isCompleted = completedStatuses.includes(tx.status?.toLowerCase() || '');
 
       if (tx.type === 'deposit' && isCompleted) {
         const deposit = tx as any;
@@ -237,10 +243,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       } else if (tx.type === 'withdrawal') {
           const withdrawal = tx as WithdrawalHistoryItem;
           if (isCompleted) {
-            const valueAtWithdrawal = withdrawal.valueAtWithdrawal || withdrawal.amount;
+            const valueAtWithdrawal = (withdrawal as any).valueAtWithdrawal || withdrawal.amount;
             totalInitialInvestment -= valueAtWithdrawal;
           }
-          const isPendingOrCompleted = !['failed', 'rejected'].includes(tx.status.toLowerCase());
+          const isPendingOrCompleted = !['failed', 'rejected'].includes(tx.status?.toLowerCase() || '');
           if (isPendingOrCompleted) {
               const isFiat = 'currency' in withdrawal;
               const symbol = isFiat ? 'usdt' : (withdrawal.assetSymbol || '').toLowerCase();
@@ -288,7 +294,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setPortfolio({ holdings: sortedHoldings, totalValue, totalInitialInvestment, totalGainLoss });
   }, [user, transactions, cryptoData, isLoading]);
   
-  const value = {
+  const value = useMemo(() => ({
     portfolio,
     purchaseHistory: [...transactions.purchases].sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)),
     depositHistory: [...transactions.deposits].sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)),
@@ -296,7 +302,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     cryptoData,
     isLoading,
     pricesError,
-  };
+  }), [portfolio, transactions, cryptoData, isLoading, pricesError]);
 
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;
 }
