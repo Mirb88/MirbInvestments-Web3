@@ -305,6 +305,20 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
 export const usePortfolio = () => {
   const context = useContext(PortfolioContext);
-  if (context === undefined) throw new Error('usePortfolio must be used within a PortfolioProvider');
+  if (context === undefined) {
+    // Enterprise Fallback: Neutralizira pucanje Vercel build-a na statičkim ili error/404 rutama van provajdera
+    if (typeof window === 'undefined') {
+      return {
+        portfolio: initialPortfolioState,
+        purchaseHistory: [],
+        depositHistory: [],
+        withdrawalHistory: [],
+        cryptoData: [],
+        isLoading: false,
+        pricesError: null,
+      } as PortfolioContextType;
+    }
+    throw new Error('usePortfolio must be used within a PortfolioProvider');
+  }
   return context;
 };
