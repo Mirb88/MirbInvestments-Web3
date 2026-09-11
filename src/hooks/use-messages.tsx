@@ -63,7 +63,7 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
 
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const createdAtDate = (data.createdAt as Timestamp).toDate();
+          const createdAtDate = (data.createdAt as Timestamp)?.toDate() || new Date();
           
           userMessages.push({
             id: doc.id,
@@ -130,6 +130,15 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
 export const useMessages = () => {
   const context = useContext(MessagesContext);
   if (context === undefined) {
+    // Enterprise Fallback: Neutralizira pucanje Vercel build-a na statičkim ili 404 rutama van provajdera
+    if (typeof window === 'undefined') {
+      return {
+        messages: [],
+        unreadCount: 0,
+        isLoading: false,
+        markAllAsRead: async () => {},
+      } as MessagesContextType;
+    }
     throw new Error('useMessages must be used within a MessagesProvider');
   }
   return context;
