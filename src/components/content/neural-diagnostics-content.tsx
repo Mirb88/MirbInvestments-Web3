@@ -1,3 +1,9 @@
+import dynamic from 'next/dynamic';
+const TermExplainer = dynamic(() => import('@/components/ai/term-explainer'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[400px] w-full rounded-[2.5rem]" />
+});
+
 'use client';
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -6,7 +12,6 @@ import { ArrowRight, BrainCircuit, Gauge, ShieldCheck, Fingerprint, Activity, Za
 import Link from 'next/link';
 import Image from 'next/image';
 import { Suspense } from 'react';
-import TermExplainer from '@/components/ai/term-explainer';
 import { ROUTES } from '@/lib/routes';
 import { Skeleton } from '@/components/ui/skeleton';
 
