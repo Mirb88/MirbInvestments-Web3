@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+'use client';
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
