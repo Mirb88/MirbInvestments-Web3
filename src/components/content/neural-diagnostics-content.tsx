@@ -1,11 +1,9 @@
+'use client';
 import dynamic from 'next/dynamic';
 const TermExplainer = dynamic(() => import('@/components/ai/term-explainer'), {
   ssr: false,
   loading: () => <Skeleton className="h-[400px] w-full rounded-[2.5rem]" />
 });
-
-'use client';
-
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BrainCircuit, Gauge, ShieldCheck, Fingerprint, Activity, Zap } from 'lucide-react';
