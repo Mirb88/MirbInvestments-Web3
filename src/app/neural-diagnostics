@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { ROUTES } from '@/lib/routes';
 import NeuralDiagnosticsContent from '@/components/content/neural-diagnostics-content';
+import ClientOnlyWrapper from '@/components/ClientOnlyWrapper';
 
 const pageTitle = 'Neural Diagnostics for Wealth Management | MirbInvestments';
 const pageDescription = "Experience institutional-grade clarity with Neural Diagnostics. Our proprietary engine provides the Architecture of Truth for elite portfolios.";
-const canonicalUrl = `https://www.mirb.investments${ROUTES?.NEURAL_DIAGNOSTICS || '/neural-diagnostics'}`;
+// Usklađeno sa Web3 mirbinvestments.crypto standardom bez trailing slasha
+const canonicalUrl = `https://mirbinvestments.crypto${ROUTES?.NEURAL_DIAGNOSTICS || '/neural-diagnostics'}`;
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -28,5 +30,9 @@ export const metadata: Metadata = {
 };
 
 export default function NeuralDiagnosticsPage() {
-  return <NeuralDiagnosticsContent />;
+  return (
+    <ClientOnlyWrapper>
+      <NeuralDiagnosticsContent />
+    </ClientOnlyWrapper>
+  );
 }
