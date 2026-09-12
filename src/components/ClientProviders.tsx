@@ -1,15 +1,19 @@
 'use client';
 
-import React from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useEffect } from 'react';
+import { Web3Provider } from '@/components/Web3Provider';
+import { PortfolioProvider } from '@/context/PortfolioContext';
+import { AuthProvider } from '@/context/AuthContext';
 
-// Dinamički uvozimo kompletne provajdere (Auth, Web3, Portfolio) sa isključenim SSR-om
-// kako bismo spriječili greške tokom prerendera i hidratacije na Vercelu.
-const AppProviders = dynamic(
-  () => import('@/components/layout/app-providers').then((mod) => mod.AppProviders),
-  { 
-    ssr: false,
-    loading: () => (
+export default function ClientProviders({ children }: { children: React.ReactNode }) {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return (
       <div style={{ 
         display: 'flex', 
         flexDirection: 'column',
@@ -25,10 +29,16 @@ const AppProviders = dynamic(
         <div style={{ marginBottom: '8px' }}>// MIRBINVESTMENTS SYSTEM CORE</div>
         <div>Inicijalizacija Neuralnih Protokola...</div>
       </div>
-    )
+    );
   }
-);
 
-export default function ClientProviders({ children }: { children: React.ReactNode }) {
-  return <AppProviders>{children}</AppProviders>;
+  return (
+    <AuthProvider>
+      <Web3Provider>
+        <PortfolioProvider>
+          {children}
+        </PortfolioProvider>
+      </Web3Provider>
+    </AuthProvider>
+  );
 }
