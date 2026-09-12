@@ -16,26 +16,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedAuth = localStorage.getItem('mirb_auth_state');
-    if (storedAuth) {
-      try {
+    try {
+      const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('mirb_auth_state') : null;
+      if (storedAuth) {
         setUser(JSON.parse(storedAuth));
-      } catch (e) {
-        console.error('Failed to parse auth state', e);
       }
+    } catch (e) {
+      console.error('Failed to parse auth state', e);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   const login = (address?: string) => {
     const authData = { address: address || '0x_elite_node', isAuthenticated: true, role: 'VIP_STRATEGIST' };
     setUser(authData);
-    localStorage.setItem('mirb_auth_state', JSON.stringify(authData));
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('mirb_auth_state', JSON.stringify(authData));
+      }
+    } catch (e) {
+      console.error('Failed to save auth state', e);
+    }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('mirb_auth_state');
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('mirb_auth_state');
+      }
+    } catch (e) {
+      console.error('Failed to remove auth state', e);
+    }
   };
 
   return (
