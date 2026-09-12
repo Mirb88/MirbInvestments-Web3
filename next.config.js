@@ -2,7 +2,6 @@
 const path = require('path');
 
 const nextConfig = {
-  // Uklonjen statički izvoz da se spriječe greške sa klijentskim stanjem i rutama
   trailingSlash: false,
   reactStrictMode: true,
   compiler: {
@@ -25,8 +24,19 @@ const nextConfig = {
       },
     ],
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+
+    // Dodatni fallback za Web3 biblioteke kako bi se spriječila upozorenja i greške sa nedostajućim mobilnim paketima
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@react-native-async-storage/async-storage': false,
+      'pino-pretty': false,
+      net: false,
+      tls: false,
+      fs: false,
+    };
+
     return config;
   },
 };
