@@ -6,9 +6,7 @@ import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { Web3Provider } from '@/components/Web3Provider';
-import { PortfolioProvider } from '@/context/PortfolioContext';
-import { AuthProvider } from '@/context/AuthContext';
+import ClientProviders from '@/components/ClientProviders';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -152,13 +150,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-white', inter.variable)}>
         <OrganizationSchema />
-        <AuthProvider>
-          <Web3Provider>
-            <PortfolioProvider>
-              {children}
-            </PortfolioProvider>
-          </Web3Provider>
-        </AuthProvider>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
         <Analytics />
         <SpeedInsights />
         {gaId !== 'G-XXXXXXXXXX' && <GoogleAnalytics gaId={gaId} />}
