@@ -2,7 +2,7 @@
 const path = require('path');
 
 const nextConfig = {
-  output: 'export',
+  // Uklonjen statički izvoz da se spriječe greške sa klijentskim stanjem i rutama
   trailingSlash: false,
   reactStrictMode: true,
   compiler: {
