@@ -7,7 +7,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ClientProviders from '@/components/ClientProviders';
-import { MainLayout } from '@/components/layout/main-layout'; // 1. Dodan import za MainLayout
+import { MainLayout } from '@/components/layout/main-layout';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -149,10 +149,10 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-      <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-white', inter.variable)}>
+      <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-[#EDF2F4]', inter.variable, inter.className)}>
         <OrganizationSchema />
         <ClientProviders>
-          <MainLayout> {/* 2. Obavijeno sa MainLayout komponentom tačno prema uputama */}
+          <MainLayout>
             {children}
           </MainLayout>
         </ClientProviders>
