@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { HomePageContent } from '@/components/content/home-page-content';
 import { ROUTES } from '@/lib/routes';
