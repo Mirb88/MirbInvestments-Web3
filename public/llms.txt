@@ -1,0 +1,18 @@
+# MirbInvestments-Web3
+
+> MirbInvestments-Web3 is an advanced digital platform integrating Web3 financial tools, artificial intelligence analytics, and real estate investment strategies.
+
+## Overview
+- **Platform Name:** MirbInvestments-Web3
+- **Primary Domain:** https://mirb-investments-web3.vercel.app/
+- **Core Technologies:** Next.js 15, TypeScript, Tailwind CSS, Vercel Edge Hosting, Web3 decentralized protocols.
+- **Key Features:** Crypto package curation, real-time AI neural diagnostics for risk assessment, tokenized asset portfolios, and decentralized investment funnels.
+
+## Core Sections & Architecture
+- **Home (/)**: Main entry point, platform architecture dashboard, and strategic overview.
+- **Register (/register):** Secure onboarding funnel for prospective platform members and investors.
+- **Neural Diagnostics:** Real-time market sentiment tracking and predictive crypto analytics.
+
+## Documentation & Discovery
+- **Sitemap:** https://mirb-investments-web3.vercel.app/sitemap.xml
+- **Robots Policy:** https://mirb-investments-web3.vercel.app/robots.txt
