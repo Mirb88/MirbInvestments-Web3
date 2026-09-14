@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { HomePageContent } from '@/components/content/home-page-content';
 import { ROUTES } from '@/lib/routes';
 import ClientOnlyWrapper from '@/components/ClientOnlyWrapper';
@@ -59,7 +60,30 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <ClientOnlyWrapper>
+      {/* Glavni sadržaj platforme */}
       <HomePageContent />
+
+      {/* Elegantna Web3 pristupna traka za Login i Register */}
+      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#141414]/90 backdrop-blur-md border border-[#2FE93D]/30 px-5 py-3 rounded-2xl shadow-2xl shadow-[#2FE93D]/10">
+        <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-pulse" />
+        <span className="text-xs uppercase tracking-wider text-[#EDF2F4]/80 font-medium hidden sm:inline">
+          Access Portal:
+        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/login"
+            className="px-4 py-1.5 rounded-lg bg-[#0D0D0D] border border-[#EDF2F4]/20 text-[#EDF2F4] text-xs font-bold uppercase tracking-wider hover:border-[#2FE93D] hover:text-[#2FE93D] transition-all"
+          >
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="px-4 py-1.5 rounded-lg bg-[#2FE93D] text-[#0D0D0D] text-xs font-bold uppercase tracking-wider hover:bg-[#25b830] transition-all shadow-md shadow-[#2FE93D]/20"
+          >
+            Register
+          </Link>
+        </div>
+      </div>
     </ClientOnlyWrapper>
   );
 }
