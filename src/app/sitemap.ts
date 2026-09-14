@@ -2,7 +2,6 @@ import { MetadataRoute } from 'next';
 import { aiInsights } from '@/lib/data';
 import { ROUTES } from '@/lib/routes';
 
-// Postavljamo tačan Vercel domen koji se koristi za aktivnu platformu
 const BASE_URL = 'https://mirb-investments-web3.vercel.app';
 
 const routePriorities: { [key: string]: number } = {
@@ -71,7 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     }));
     
-  const jahorinaPages = Object.entries(jahorinaSluzgs = jahorinaSlugs).map(([lang, slug]) => ({
+  const jahorinaPages = Object.entries(jahorinaSlugs).map(([lang, slug]) => ({
     url: `${BASE_URL}${slug}`,
     lastModified,
     changeFrequency: 'daily' as const,
