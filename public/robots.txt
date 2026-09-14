@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mirb-investments-web3.vercel.app/sitemap.xml
