@@ -1,9 +1,10 @@
 export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ROUTES } from '@/lib/routes';
 
-const canonicalUrl = `https://mirbinvestments.crypto${ROUTES?.HOME || ''}`;
+const PRODUCTION_URL = 'https://mirbinvestments.crypto';
+const canonicalUrl = `${PRODUCTION_URL}/`;
 
 export const metadata: Metadata = {
   title: 'MirbInvestments | Architecture of Intelligent Capital 2026',
