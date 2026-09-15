@@ -1,58 +1,4 @@
 export const dynamic = 'force-dynamic';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ROUTES } from '@/lib/routes';
-
-const canonicalUrl = `https://mirbinvestments.crypto${ROUTES?.HOME || ''}`;
-
-export const metadata: Metadata = {
-  title: 'MirbInvestments | Architecture of Intelligent Capital 2026',
-  description: 'Elite Reputational Architecture for visionaries. Secure institutional-grade clarity with AI-driven strategic intuition and ethical wealth management.',
-  keywords: [
-    'MirbInvestments', 
-    'Reputational Architecture', 
-    'Intelligent Capital', 
-    'AI Investment Synergy', 
-    'Elite Financial Sovereignty', 
-    'Strategic Convergence 2026', 
-    'Family Office Tech'
-  ],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: canonicalUrl,
-  },
-  openGraph: {
-    title: 'MirbInvestments | The Architecture of Truth',
-    description: 'Enter the circle that shapes what comes next. Institutional-grade clarity for elite portfolios.',
-    url: canonicalUrl,
-    siteName: 'MirbInvestments',
-    images: [
-      {
-        url: '/images/brand/mirb-investments-og-image.webp',
-        width: 1200,
-        height: 630,
-        alt: 'MirbInvestments - The Architecture of Truth',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'MirbInvestments | Elite Financial Synergy',
-    description: 'Where strategic wisdom meets neural intelligence. Join the most reputationally defining club of our time.',
-    images: ['/images/brand/mirb-investments-og-image.webp'],
-  },
-};
 
 export default function Page() {
   return (
@@ -83,19 +29,19 @@ export default function Page() {
 
         {/* Akcioni tasteri za pristup sistemu */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Link
+          <a
             href="/register"
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-sm tracking-wider uppercase transition-all duration-300 hover:bg-[#25b830] hover:shadow-lg hover:shadow-[#2FE93D]/20 text-center"
           >
             Otvorite nalog (Register)
-          </Link>
+          </a>
           
-          <Link
+          <a
             href="/login"
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#141414] border border-[#EDF2F4]/20 text-[#EDF2F4] font-bold text-sm tracking-wider uppercase transition-all duration-300 hover:border-[#2FE93D] hover:text-[#2FE93D] text-center"
           >
             Prijava sistema (Login)
-          </Link>
+          </a>
         </div>
 
         {/* Status u podnožju */}
