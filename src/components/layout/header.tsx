@@ -42,7 +42,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import React, { useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { usePortfolio } from '@/hooks/use-portfolio';
 import { useMessages } from '@/hooks/use-messages';
