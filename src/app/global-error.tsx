@@ -2,67 +2,53 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect } from 'react';
-import { ServerCrash, RefreshCw, Home } from 'lucide-react';
-import Link from 'next/link';
-
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
+  error: Error & { digest?: string; stack?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Bezbedno logovanje neuralne dijagnostike
-    console.error('MirbInvestments Diagnostics Exception:', error);
-  }, [error]);
-
   return (
     <html lang="en">
-      <body className="bg-[#0D0D0D] text-[#EDF2F4] antialiased">
-        <div className="min-h-screen flex flex-col items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-8 text-center shadow-2xl shadow-black/50">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-[#2FE93D]/15 border border-[#2FE93D]/30 flex items-center justify-center text-[#2FE93D]">
-                <ServerCrash className="h-8 w-8" />
-              </div>
+      <body className="bg-[#0D0D0D] text-white p-6 font-mono antialiased">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="border-b border-red-500/30 pb-4">
+            <span className="text-red-500 text-xs tracking-widest uppercase font-bold">
+              // MirbInvestments Diagnostic Mode Active
+            </span>
+            <h1 className="text-3xl font-extrabold text-red-400 mt-1">
+              Critical Runtime Exception Detected
+            </h1>
+          </div>
+          
+          <div className="bg-red-950/30 border border-red-500/50 p-5 rounded-2xl space-y-2 shadow-2xl">
+            <p className="text-red-400 font-bold text-sm">Error Message:</p>
+            <div className="bg-black/80 text-white p-4 rounded-xl text-sm border border-red-500/20 overflow-x-auto">
+              {error?.message || 'Unknown runtime error message.'}
             </div>
-            
-            <div className="space-y-3 mb-8">
-              <span className="text-[#2FE93D] font-mono text-xs tracking-widest uppercase">
-                // System Exception Handled
-              </span>
-              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-white">
-                Neural Protocol Interrupted
-              </h1>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                An unexpected boundary anomaly occurred within the application node. Re-synapse the node to restore institutional-grade connectivity.
-              </p>
-              {error?.digest && (
-                <p className="text-xs font-mono text-gray-500 mt-2 bg-[#0D0D0D] py-1 px-2 rounded border border-white/5 inline-block">
-                  Digest ID: {error.digest}
-                </p>
-              )}
-            </div>
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => reset()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-sm transition-all hover:bg-[#25b830] shadow-lg shadow-[#2FE93D]/20 cursor-pointer"
-              >
-                <RefreshCw className="h-4 w-4" />
-                Re-sync Node
-              </button>
-              
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold text-sm transition-all hover:bg-white/10"
-              >
-                <Home className="h-4 w-4" />
-                Return to Core
-              </Link>
+          {error?.digest && (
+            <div className="bg-[#141414] border border-white/10 p-4 rounded-xl">
+              <p className="text-gray-400 text-xs">Digest ID: <span className="text-[#F0B90B] font-bold">{error.digest}</span></p>
             </div>
+          )}
+
+          <div className="bg-[#141414] border border-white/10 p-5 rounded-2xl space-y-3 shadow-2xl">
+            <p className="text-gray-300 font-bold text-sm">Exact Stack Trace (File / Line Source):</p>
+            <pre className="text-xs text-red-300 bg-black/90 p-4 rounded-xl overflow-x-auto whitespace-pre-wrap leading-relaxed border border-white/5">
+              {error?.stack || 'No stack trace available for this exception.'}
+            </pre>
+          </div>
+
+          <div className="pt-2 flex gap-4">
+            <button
+              onClick={() => reset()}
+              className="px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-sm cursor-pointer hover:bg-[#25b830] transition-all shadow-lg shadow-[#2FE93D]/20"
+            >
+              Pokušaj ponovnog pokretanja (Reset)
+            </button>
           </div>
         </div>
       </body>
