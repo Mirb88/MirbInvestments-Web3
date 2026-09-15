@@ -8,14 +8,14 @@ import { MainLayout } from '@/components/layout/main-layout';
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
-      <Web3Provider>
+    <Web3Provider>
+      <AuthProvider>
         <PortfolioProvider>
           <MainLayout>
             {children}
           </MainLayout>
         </PortfolioProvider>
-      </Web3Provider>
-    </AuthProvider>
+      </AuthProvider>
+    </Web3Provider>
   );
 }
