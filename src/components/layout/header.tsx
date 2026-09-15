@@ -42,7 +42,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import React, { useState } from 'react';
-import import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { usePortfolio } from '@/hooks/use-portfolio';
 import { useMessages } from '@/hooks/use-messages';
@@ -95,7 +95,7 @@ export function Header() {
     return user?.email ? user.email.split('@')[0] : 'Mirton';
   };
   
-  const usdtBalance = portfolio?.holdings?.find(h => h.symbol.toUpperCase() === 'USDT')?.quantity || 50.00;
+  const usdtBalance = portfolio?.holdings?.find(h => h.symbol?.toUpperCase() === 'USDT')?.quantity || 50.00;
 
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-white/10 bg-[#0D0D0D]/80 px-4 backdrop-blur-xl md:px-6">
