@@ -1,16 +1,14 @@
 export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
-// Primer uvezivanja glavnog layout-a i klijentskih provajdera ukoliko su vam potrebni na home stranici:
-// import MainLayout from '@/components/layout/main-layout';
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      {/* Pozadinski svetlosni efekti u vašem prepoznatljivom stilu */}
+      {/* Pozadinski svetlosni efekti */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#2FE93D]/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-4xl w-full text-center z-10 space-y-8">
+      <div className="max-w-4xl w-full text-center z-10 space-y-8 py-12">
         {/* Simbol platforme */}
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#141414] border border-[#2FE93D]/40 shadow-2xl shadow-[#2FE93D]/20 mb-2">
           <svg className="w-10 h-10 text-[#2FE93D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
