@@ -1,64 +1,13 @@
 export const dynamic = 'force-dynamic';
 
-import type { Metadata } from 'next';
 import Link from 'next/link';
-
-const PRODUCTION_URL = 'https://mirbinvestments.crypto';
-const canonicalUrl = `${PRODUCTION_URL}/`;
-
-export const metadata: Metadata = {
-  title: 'MirbInvestments | Architecture of Intelligent Capital 2026',
-  description: 'Elite Reputational Architecture for visionaries. Secure institutional-grade clarity with AI-driven strategic intuition and ethical wealth management.',
-  keywords: [
-    'MirbInvestments', 
-    'Reputational Architecture', 
-    'Intelligent Capital', 
-    'AI Investment Synergy', 
-    'Elite Financial Sovereignty', 
-    'Strategic Convergence 2026', 
-    'Family Office Tech'
-  ],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: canonicalUrl,
-  },
-  openGraph: {
-    title: 'MirbInvestments | The Architecture of Truth',
-    description: 'Enter the circle that shapes what comes next. Institutional-grade clarity for elite portfolios.',
-    url: canonicalUrl,
-    siteName: 'MirbInvestments',
-    images: [
-      {
-        url: '/images/brand/mirb-investments-og-image.webp',
-        width: 1200,
-        height: 630,
-        alt: 'MirbInvestments - The Architecture of Truth',
-      },
-    ],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'MirbInvestments | Elite Financial Synergy',
-    description: 'Where strategic wisdom meets neural intelligence. Join the most reputationally defining club of our time.',
-    images: ['/images/brand/mirb-investments-og-image.webp'],
-  },
-};
+// Primer uvezivanja glavnog layout-a i klijentskih provajdera ukoliko su vam potrebni na home stranici:
+// import MainLayout from '@/components/layout/main-layout';
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      {/* Pozadinski svetlosni efekti */}
+      {/* Pozadinski svetlosni efekti u vašem prepoznatljivom stilu */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#2FE93D]/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-4xl w-full text-center z-10 space-y-8">
