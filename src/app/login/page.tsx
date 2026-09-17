@@ -53,9 +53,11 @@ export default function LoginPage() {
       {/* Top Branding Header */}
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href={ROUTES.HOME} className="flex items-center gap-2">
-          <MirbLogo width={36} height={36} />
-          <span className="font-bold tracking-wider text-white">MirbInvestments</span>
-        </Link>
+  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
+    <ShieldCheck className="h-5 w-5" />
+  </div>
+  <span className="font-bold tracking-wider text-white">MirbInvestments</span>
+</Link>
       </div>
 
       <motion.div 
