@@ -1,12 +1,9 @@
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 import Link from 'next/link';
-import { headers } from 'next/headers';
 
-export default async function Page() {
-  // Forsira dinamičko učitavanje sa servera bez statičkog keširanja
-  await headers();
-
+export default function Page() {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center px-4 relative overflow-hidden">
       {/* Pozadinski svetlosni efekti */}
