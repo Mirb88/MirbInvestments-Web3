@@ -2,8 +2,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default function Page() {
+function HomeContent() {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center px-4 relative overflow-hidden">
       {/* Pozadinski svetlosni efekti */}
@@ -60,5 +61,13 @@ export default function Page() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center">Učitavanje neuralne infrastrukture...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
