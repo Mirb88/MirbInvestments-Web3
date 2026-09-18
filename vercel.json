@@ -2,7 +2,7 @@
   "installCommand": "npm install --legacy-peer-deps",
   "regions": ["fra1"],
   "functions": {
-    "src/app/**/*.ts": {
+    "src/app/**/*.{ts,tsx}": {
       "maxDuration": 120
     }
   },
