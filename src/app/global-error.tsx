@@ -14,12 +14,14 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Bezbedno logovanje neuralne dijagnostike
     console.error('MirbInvestments Diagnostics Exception:', error);
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
+      <head>
+        <title>System Exception | MirbInvestments™</title>
+      </head>
       <body className="bg-[#0D0D0D] text-[#EDF2F4] antialiased">
         <div className="min-h-screen flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-8 text-center shadow-2xl shadow-black/50">
