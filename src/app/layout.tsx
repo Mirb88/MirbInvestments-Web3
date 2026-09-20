@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 export const revalidate = 3600;
 
-const PRODUCTION_URL = 'https://mirb-investments-web3-git-main-mirbs-projects.vercel.app';
+const PRODUCTION_URL = 'https://www.mirbinvestments.com'; // Standardizovano na www bez trailing slasha
 
 export const metadata: Metadata = {
   metadataBase: new URL(PRODUCTION_URL),
