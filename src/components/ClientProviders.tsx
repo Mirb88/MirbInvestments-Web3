@@ -4,16 +4,17 @@ import React from 'react';
 import { Web3Provider } from '@/components/Web3Provider';
 import { PortfolioProvider } from '@/context/PortfolioContext';
 import { AuthProvider } from '@/context/AuthContext';
-import { MainLayout } from '@/components/layout/main-layout';
 
-export default function ClientProviders({ children }: { children: React.ReactNode }) {
+interface ClientProvidersProps {
+  children: React.ReactNode;
+}
+
+export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <Web3Provider>
       <AuthProvider>
         <PortfolioProvider>
-          <MainLayout>
-            {children}
-          </MainLayout>
+          {children}
         </PortfolioProvider>
       </AuthProvider>
     </Web3Provider>
