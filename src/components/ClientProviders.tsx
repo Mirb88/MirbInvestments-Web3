@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { PortfolioProvider } from '@/context/PortfolioContext';
 import { AuthProvider } from '@/context/AuthContext';
+import { PortfolioProvider } from '@/context/PortfolioContext';
 import dynamic from 'next/dynamic';
 
 const Web3ProviderDynamic = dynamic(
@@ -70,13 +70,13 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
           </div>
         }
       >
-        <Web3ProviderDynamic>
-          <AuthProvider>
+        <AuthProvider>
+          <Web3ProviderDynamic>
             <PortfolioProvider>
               {children}
             </PortfolioProvider>
-          </AuthProvider>
-        </Web3ProviderDynamic>
+          </Web3ProviderDynamic>
+        </AuthProvider>
       </React.Suspense>
     </ErrorBoundary>
   );
