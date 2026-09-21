@@ -1,9 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Web3Provider } from '@/components/Web3Provider';
 import { PortfolioProvider } from '@/context/PortfolioContext';
 import { AuthProvider } from '@/context/AuthContext';
+import dynamic from 'next/dynamic';
+
+// Dinamički uvoz Web3 provajdera sa isključenim SSR-om sprječava bilo kakvo pucanje na serveru
+const Web3ProviderDynamic = dynamic(
+  () => import('@/components/Web3Provider').then((mod) => mod.Web3Provider),
+  { ssr: false }
+);
 
 interface ClientProvidersProps {
   children: React.ReactNode;
@@ -16,7 +22,7 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
     setIsMounted(true);
   }, []);
 
-  // Dok se klijent ne montira u potpunosti, prikazujemo naš prepoznatljivi neuralni loader
+  // Dok se klijent ne montira u potpunosti, prikazujemo naš neuralni loader
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-[#0D0D0D] flex flex-col items-center justify-center">
@@ -38,13 +44,13 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
         </div>
       }
     >
-      <Web3Provider>
+      <Web3ProviderDynamic>
         <AuthProvider>
           <PortfolioProvider>
             {children}
           </PortfolioProvider>
         </AuthProvider>
-      </Web3Provider>
+      </Web3ProviderDynamic>
     </React.Suspense>
   );
 }
