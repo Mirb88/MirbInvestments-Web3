@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   }
 }
 
-export default function ClientProviders({ children }: ClientProvidersProps) {
+export default function ClientProviders({ children }: { children: React.ReactNode }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -80,8 +80,4 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
       </React.Suspense>
     </ErrorBoundary>
   );
-}
-
-interface ClientProvidersProps {
-  children: React.ReactNode;
 }
