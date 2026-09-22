@@ -71,11 +71,11 @@ export default function ClientProviders({ children }: { children: React.ReactNod
         }
       >
         <AuthProvider>
-          <Web3ProviderDynamic>
-            <PortfolioProvider>
+          <PortfolioProvider>
+            <Web3ProviderDynamic>
               {children}
-            </PortfolioProvider>
-          </Web3ProviderDynamic>
+            </Web3ProviderDynamic>
+          </PortfolioProvider>
         </AuthProvider>
       </React.Suspense>
     </ErrorBoundary>
