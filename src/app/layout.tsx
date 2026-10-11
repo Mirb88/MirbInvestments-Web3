@@ -152,13 +152,13 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-[#EDF2F4]', inter.variable, inter.className)}>
         <OrganizationSchema />
-        <ClientProviders>
-          <AuthProvider>
+        <AuthProvider>
+          <ClientProviders>
             <MainLayout>
               {children}
             </MainLayout>
-          </AuthProvider>
-        </ClientProviders>
+          </ClientProviders>
+        </AuthProvider>
         <Analytics />
         <SpeedInsights />
         {gaId !== 'G-XXXXXXXXXX' && <GoogleAnalytics gaId={gaId} />}
