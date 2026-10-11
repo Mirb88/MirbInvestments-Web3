@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/context/AuthContext';
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -153,7 +154,7 @@ export default function RootLayout({
         <OrganizationSchema />
         <ClientProviders>
           <MainLayout>
-            {children}
+            <AuthProvider>{children}</AuthProvider>
           </MainLayout>
         </ClientProviders>
         <Analytics />
