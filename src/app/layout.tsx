@@ -153,9 +153,11 @@ export default function RootLayout({
       <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-[#EDF2F4]', inter.variable, inter.className)}>
         <OrganizationSchema />
         <ClientProviders>
-          <MainLayout>
-            <AuthProvider>{children}</AuthProvider>
-          </MainLayout>
+          <AuthProvider>
+            <MainLayout>
+              {children}
+            </MainLayout>
+          </AuthProvider>
         </ClientProviders>
         <Analytics />
         <SpeedInsights />
