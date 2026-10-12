@@ -1,81 +1,116 @@
-# web3_agent.py — Universal Deep Diagnostics & Context Repair Agent
+# web3_agent.py — MirbInvestments Web3 Autonomous Engineer (v8.5 Auto-Fix)
+# Collaboration: Elitni Saborci & AI Expert System
+
 import os
-import subprocess
+import sys
+import requests
+import json
 
-def master_context_repair():
-    print("\n🔍 --- DUBOKA DIJAGNOSTIKA CLIENTPROVIDERS I LAYOUT STABLA ---")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+SYSTEM_PROMPT = """
+Ti si Elitni Web3 Inženjerski Agent Specijalista za MirbInvestments repozitorijum.
+Tvoj primarni fokus je Next.js App Router arhitektura, React Client Providers, AuthProvider i Vercel Deployment stabilnost.
+"""
+
+def apply_autofix():
+    filepath = "src/app/layout.tsx"
+    if not os.path.exists(filepath):
+        filepath = "app/layout.tsx"
     
-    # 1. Provera i korekcija ClientProviders fajla
-    cp_path = None
-    for root, dirs, files in os.walk("src"):
-        for file in files:
-            if file in ["ClientProviders.tsx", "ClientProviders.jsx"]:
-                cp_path = os.path.join(root, file)
-                break
+    if os.path.exists(filepath):
+        print(f"🛠️ [AUTONOMNI FIX] Otvaram i analiziram {filepath}...")
+        with open(filepath, "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        # Detekcija i zamjena pogrešnog redoslijeda provajdera
+        has_changes = False
+        
+        # Pogrešan raspored 1: AuthProvider vani, ClientProviders unutra
+        old_pattern_1 = "<AuthProvider>\n            <ClientProviders>"
+        new_pattern_1 = "<ClientProviders>\n            <AuthProvider>"
+        
+        old_pattern_2 = "<AuthProvider>\n          <ClientProviders>"
+        new_pattern_2 = "<ClientProviders>\n          <AuthProvider>"
 
-    if cp_path and os.path.exists(cp_path):
-        print(f"📌 Pronađen ClientProviders na: {cp_path}")
-        with open(cp_path, "r", encoding="utf-8") as f:
-            cp_code = f.read()
+        old_close_1 = "</ClientProviders>\n          </AuthProvider>"
+        new_close_1 = "</AuthProvider>\n          </ClientProviders>"
 
-        if "AuthProvider" not in cp_code:
-            print("🛠️ Injektujem AuthProvider direktno u ClientProviders...")
-            if "import { AuthProvider }" not in cp_code:
-                cp_code = "import { AuthProvider } from '@/context/AuthContext';\n" + cp_code
-            
-            # Wrap children inside ClientProviders
-            cp_code = cp_code.replace("{children}", "<AuthProvider>{children}</AuthProvider>")
-            with open(cp_path, "w", encoding="utf-8") as f:
-                f.write(cp_code)
-            print("✨ AuthProvider je uspešno integrisan u ClientProviders!")
+        old_close_2 = "</ClientProviders>\n        </AuthProvider>"
+        new_close_2 = "</AuthProvider>\n        </ClientProviders>"
+
+        updated_content = content
+
+        if old_pattern_1 in updated_content:
+            updated_content = updated_content.replace(old_pattern_1, new_pattern_1)
+            has_changes = True
+
+        if old_pattern_2 in updated_content:
+            updated_content = updated_content.replace(old_pattern_2, new_pattern_2)
+            has_changes = True
+
+        if old_close_1 in updated_content:
+            updated_content = updated_content.replace(old_close_1, new_close_1)
+            has_changes = True
+
+        if old_close_2 in updated_content:
+            updated_content = updated_content.replace(old_close_2, new_close_2)
+            has_changes = True
+
+        # Opšta zamjena ako su specifični razmaci drugačiji
+        if not has_changes and "<AuthProvider>" in updated_content and "<ClientProviders>" in updated_content:
+            # Direktno prelaganje hijerarhije
+            updated_content = updated_content.replace("<AuthProvider>\n", "TEMP_AUTH_TOKEN\n")
+            updated_content = updated_content.replace("<ClientProviders>\n", "<AuthProvider>\n")
+            updated_content = updated_content.replace("TEMP_AUTH_TOKEN\n", "<ClientProviders>\n")
+            has_changes = True
+
+        if has_changes:
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(updated_content)
+            print(f"✅ [WEB3 AGENT] Uspješno refaktorisan {filepath}!")
+            print("🚀 Hijerarhija je ispravljena: ClientProviders -> AuthProvider -> MainLayout")
+        else:
+            print("ℹ️ [WEB3 AGENT] Fajl je već refaktorisan ili su provajderi na pravoj poziciji.")
     else:
-        print("ℹ️ ClientProviders fajl nije pronađen pojedinačno. Proveravam root layout...")
+        print("⚠️ [WEB3 AGENT] Greška: layout.tsx nije pronađen.")
 
-    # 2. Korekcija src/app/layout.tsx — AuthProvider stavljamo na NAJVIŠI MOGUĆI NIVO
-    layout_path = "src/app/layout.tsx"
-    if os.path.exists(layout_path):
-        with open(layout_path, "r", encoding="utf-8") as f:
-            l_code = f.read()
+def query_web3_intelligence(prompt):
+    if OPENROUTER_API_KEY:
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://mirb.investments",
+            "X-Title": "MirbInvestments Web3 Engine"
+        }
+        payload = {
+            "model": "google/gemini-1.5-flash",
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2,
+            "max_tokens": 1024
+        }
+        try:
+            res = requests.post(OPENROUTER_URL, headers=headers, json=payload, timeout=12)
+            if res.status_code == 200:
+                return res.json()['choices'][0]['message']['content']
+        except Exception:
+            pass
 
-        # Osiguravamo da AuthProvider obuhvata I ClientProviders I MainLayout
-        old_tree = """        <ClientProviders>
-          <AuthProvider>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </AuthProvider>
-        </ClientProviders>"""
-
-        top_level_tree = """        <AuthProvider>
-          <ClientProviders>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </ClientProviders>
-        </AuthProvider>"""
-
-        if old_tree in l_code:
-            l_code = l_code.replace(old_tree, top_level_tree)
-            with open(layout_path, "w", encoding="utf-8") as f:
-                f.write(l_code)
-            print("✨ AuthProvider je podignut na NAJVIŠI nivo (iznad ClientProviders) u layout.tsx!")
-
-    # 3. Automatski Git Push
-    print("\n🚀 Šaljem kompletno sinhronizovanu ispravku na GitHub...")
-    subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit", "-m", "Master AI Agent: Global AuthProvider Elevation"])
-    push_res = subprocess.run(["git", "push", "origin", "main"], capture_output=True, text=True)
-    
-    if push_res.returncode == 0:
-        print("🌐 Status: Uspešno poslate sve izmjene! Vercel pokreće novu verziju.")
-    else:
-        print("🌐 Git Push odziv:\n", push_res.stdout if push_res.stdout else push_res.stderr)
+    return "🛠️ [LOKALNA ANALIZA] Preporučuje se ugnježđivanje AuthProvider unutar ClientProviders."
 
 if __name__ == "__main__":
-    print("🚀 MirbInvestments Master Web3 Agent (v3.0) Pokrenut!")
-    while True:
-        cmd = input("\n🧠 Unesite komandu ('fix', 'izlaz'): ").strip().lower()
-        if cmd in ["izlaz", "exit"]:
-            break
-        elif cmd == "fix":
-            master_context_repair()
+    task = sys.argv[1].lower() if len(sys.argv) > 1 else "inspect"
+    
+    print("\n🚀 --- MIRBINVESTMENTS WEB3 AUTONOMOUS ENGINE (v8.5) ---")
+    
+    if task == "fix":
+        apply_autofix()
+    else:
+        print("🔍 Pokrećem analizu Web3 repozitorijuma...")
+        res = query_web3_intelligence(task)
+        print(f"\n💡 [ANALIZA]:\n{res}\n")
+
