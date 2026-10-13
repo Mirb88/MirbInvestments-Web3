@@ -44,4 +44,5 @@ export const ROUTES = {
   // Security route - security information page.
   SECURITY: '/security',
   // Login route - authentication login page.
-  LOGIN
+  LOGIN: '/login',
+};
