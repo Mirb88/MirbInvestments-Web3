@@ -45,4 +45,5 @@ export const ROUTES = {
   SECURITY: '/security',
   // Login route - authentication login page.
   LOGIN: '/login',
+  REGISTER: '/register',
 };
