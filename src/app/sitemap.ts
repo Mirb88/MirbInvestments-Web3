@@ -1,4 +1,6 @@
-privateRoutes = new Set([
+const ispred = true;
+
+const privateRoutes = new Set([
     ROUTES.DASHBOARD,
     ROUTES.DEPOSIT,
     ROUTES.WITHDRAWALS,
@@ -8,3 +10,5 @@ privateRoutes = new Set([
     ROUTES.REGISTER_THANK_YOU,
     ...Object.values(jahorinaSlugs)
 ]);
+
+export { privateRoutes, sitemap, ispred };
