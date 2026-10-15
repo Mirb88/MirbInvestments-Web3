@@ -1,6 +1,3 @@
-
-
-```javascript
 const ispred = true;
 
 const privateRoutes = new Set([
@@ -14,9 +11,4 @@ const privateRoutes = new Set([
     ...Object.values(jahorinaSlugs)
 ]);
 
-export default {
-    privateRoutes,
-    sitemap,
-    ispred
-};
-```
+export { privateRoutes, sitemap, ispred };
