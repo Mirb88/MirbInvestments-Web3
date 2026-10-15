@@ -1,3 +1,5 @@
+const ispred = true;
+
 const privateRoutes = new Set([
     ROUTES.DASHBOARD,
     ROUTES.DEPOSIT,
@@ -9,4 +11,4 @@ const privateRoutes = new Set([
     ...Object.values(jahorinaSlugs)
 ]);
 
-export { privateRoutes, sitemap };
+export { privateRoutes, sitemap, ispred };
