@@ -1,14 +1,21 @@
-const ispred = true;
+import { MetadataRoute } from 'next';
 
-const privateRoutes = new Set([
-    ROUTES.DASHBOARD,
-    ROUTES.DEPOSIT,
-    ROUTES.WITHDRAWALS,
-    ROUTES.SETTINGS,
-    ROUTES.LOGIN,
-    ROUTES.REGISTER,
-    ROUTES.REGISTER_THANK_YOU,
-    ...Object.values(jahorinaSlugs)
-]);
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://mirb.investments';
 
-export { privateRoutes, sitemap, ispred };
+  // Osnovne rute
+  const routes = [
+    '',
+    '/academy',
+    '/business-members',
+    '/neural-diagnostics',
+    '/real-estate',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: route === '' ? 1.0 : 0.8,
+  }));
+
+  return routes;
+}
