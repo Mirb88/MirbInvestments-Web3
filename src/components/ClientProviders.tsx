@@ -62,22 +62,22 @@ export default function ClientProviders({ children }: { children: React.ReactNod
   }
 
   return (
-    <ErrorBoundary>
-      <React.Suspense
-        fallback={
-          <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
-            <div className="w-6 h-6 rounded-full border-2 border-[#2FE93D]/20 border-t-[#2FE93D] animate-spin" />
-          </div>
-        }
-      >
-        <AuthProvider>
-          <PortfolioProvider>
+    <AuthProvider>
+      <PortfolioProvider>
+        <ErrorBoundary>
+          <React.Suspense
+            fallback={
+              <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full border-2 border-[#2FE93D]/20 border-t-[#2FE93D] animate-spin" />
+              </div>
+            }
+          >
             <Web3ProviderDynamic>
               {children}
             </Web3ProviderDynamic>
-          </PortfolioProvider>
-        </AuthProvider>
-      </React.Suspense>
-    </ErrorBoundary>
+          </React.Suspense>
+        </ErrorBoundary>
+      </PortfolioProvider>
+    </AuthProvider>
   );
 }
