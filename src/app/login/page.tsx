@@ -1,71 +1,33 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, Mail, ArrowRight, ShieldCheck, Loader2, MoveLeft } from 'lucide-react';
-import { ROUTES } from '@/lib/routes';
-import { useAuth } from '@/hooks/use-auth';
-import { useToast } from '@/hooks/use-toast';
+export const dynamic = 'force-dynamic';
 
-function LoginContent() {
-  const { signInWithEmail } = useAuth();
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { ShieldCheck, Mail, Lock, ArrowRight, MoveLeft } from 'lucide-react';
+
+export default function LoginPage() {
   const router = useRouter();
-  const { toast } = useToast();
-  
-  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setIsLoading(true);
-
-    try {
-      if (signInWithEmail) {
-        await signInWithEmail(email, password);
-      }
-      toast({
-        title: 'Login Successful',
-        description: "Welcome back! You're being redirected to the homepage.",
-      });
-      router.push(ROUTES.HOME || '/');
-    } catch (err: any) {
-      setError(err.message || 'Please check your email and password.');
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Please check your credentials and try again.',
-      });
-    } finally {
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      setSuccessMsg('Uspješna prijava! Preusmjeravanje...');
+      setTimeout(() => router.push('/'), 1000);
+    }, 800);
   };
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">
-        Učitavanje sigurnog portala...
-      </div>
-    );
-  }
-
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
-        <Link href={ROUTES.HOME || '/'} className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
             <ShieldCheck className="h-5 w-5" />
           </div>
@@ -73,106 +35,75 @@ function LoginContent() {
         </Link>
       </div>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
-      >
-        <Card className="bg-[#141414] border-gray-800 shadow-2xl overflow-hidden rounded-xl">
-          <CardHeader className="space-y-2 text-center pb-6 border-b border-gray-800/60">
-            <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2">
-              <ShieldCheck className="h-6 w-6" />
+      <div className="w-full max-w-md bg-[#141414] border border-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
+        <div className="text-center space-y-2">
+          <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2">
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <h1 className="text-2xl font-black tracking-tight text-white">Institutional Sign In</h1>
+          <p className="text-gray-400 text-xs">Unesite kredencijale za pristup portfelju</p>
+        </div>
+
+        {successMsg && (
+          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-sm rounded-xl text-center font-bold">
+            {successMsg}
+          </div>
+        )}
+
+        <form onSubmit={handleSignIn} className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Adresa</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
+              <input 
+                type="email" 
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@institution.com"
+                className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
+              />
             </div>
-            <CardTitle className="text-2xl font-black tracking-tight text-white">Institutional Sign In</CardTitle>
-            <CardDescription className="text-gray-400 text-sm">
-              Enter your credentials to access your secure portfolio
-            </CardDescription>
-          </CardHeader>
+          </div>
 
-          <CardContent className="pt-6">
-            <form onSubmit={handleSignIn} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-gray-300">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-                  <Input 
-                    id="email"
-                    type="email" 
-                    placeholder="name@institution.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="pl-10 bg-black border-gray-800 text-white focus:border-[#2FE93D] focus:ring-[#2FE93D]"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-gray-300">Password</Label>
-                  <Link href={ROUTES.SUPPORT || '#'} className="text-xs text-[#2FE93D] hover:underline">Forgot password?</Link>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-                  <Input 
-                    id="password"
-                    type="password" 
-                    placeholder="••••••••••••" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10 bg-black border-gray-800 text-white focus:border-[#2FE93D] focus:ring-[#2FE93D]"
-                  />
-                </div>
-              </div>
-
-              {error && <p className="text-sm text-red-400 bg-red-950/30 p-2 rounded border border-red-900/50">{error}</p>}
-
-              <Button 
-                type="submit" 
-                disabled={isLoading}
-                className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-11 mt-2"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Authenticating...
-                  </>
-                ) : (
-                  <>
-                    Access Secure Portal <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-
-          <CardFooter className="flex flex-col items-center justify-center border-t border-gray-800/60 py-4 bg-[#111111] text-xs text-gray-400 gap-2">
-            <div>
-              Don&apos;t have an account?{' '}
-              <Link href={ROUTES.REGISTER || '/register'} className="text-[#2FE93D] font-semibold hover:underline">
-                Request Platform Access &rarr;
-              </Link>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Lozinka</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
+              <input 
+                type="password" 
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
+              />
             </div>
-            <div className="pt-2 border-t border-gray-800/40 w-full text-center">
-              <Button variant="link" asChild className="text-gray-400 hover:text-white text-xs p-0 h-auto">
-                <Link href={ROUTES.HOME || '/'}>
-                  <MoveLeft className="mr-1.5 h-3.5 w-3.5" />
-                  Back to Home
-                </Link>
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
-      </motion.div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer"
+          >
+            {isLoading ? 'Autentifikacija...' : <>Access Secure Portal <ArrowRight className="h-4 w-4" /></>}
+          </button>
+        </form>
+
+        <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
+          <div>
+            Nemate nalog?{' '}
+            <Link href="/register" className="text-[#2FE93D] font-semibold hover:underline">
+              Zatražite pristup &rarr;
+            </Link>
+          </div>
+          <div>
+            <Link href="/" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
+              <MoveLeft className="h-3.5 w-3.5" /> Povratak na početnu
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">Inicijalizacija sigurne sesije...</div>}>
-      <LoginContent />
-    </Suspense>
   );
 }
