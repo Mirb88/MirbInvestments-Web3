@@ -6,26 +6,40 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ShieldCheck, Mail, Lock, ArrowRight, MoveLeft } from 'lucide-react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setSuccessMsg('Authentication Successful! Accessing Portal...');
+      setTimeout(() => router.push('/'), 1200);
+    } catch (err: any) {
+      console.error('Login error:', err);
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('Invalid email or password.');
+      } else {
+        setError('Authentication failed. Please verify your credentials.');
+      }
+    } finally {
       setIsLoading(false);
-      setSuccessMsg('Authentication Successful! Redirecting...');
-      setTimeout(() => router.push('/'), 1000);
-    }, 800);
+    }
   };
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
@@ -43,6 +57,12 @@ export default function LoginPage() {
           <h1 className="text-2xl font-black tracking-tight text-white">Institutional Sign In</h1>
           <p className="text-gray-400 text-xs">Enter your credentials to access your secure portfolio</p>
         </div>
+
+        {error && (
+          <div className="p-3 bg-red-950/50 border border-red-900 text-red-400 text-xs rounded-xl text-center">
+            {error}
+          </div>
+        )}
 
         {successMsg && (
           <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-xs rounded-xl text-center font-bold">

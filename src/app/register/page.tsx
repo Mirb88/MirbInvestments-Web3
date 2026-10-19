@@ -5,7 +5,10 @@ export const dynamic = 'force-dynamic';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, Mail, Lock, UserPlus, ArrowRight, MoveLeft } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, UserPlus, ArrowRight, MoveLeft, User } from 'lucide-react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,23 +20,63 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
     }
-    setError('');
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
+
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      // 1. Kreiranje korisnika u Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // 2. Postavljanje Display Name-a u Auth
+      await updateProfile(user, {
+        displayName: fullName,
+      });
+
+      // 3. Upis profilnih podataka u Firestore bazu (/users/userId)
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        fullName: fullName,
+        email: email,
+        role: 'investor',
+        createdAt: new Date().toISOString(),
+        status: 'active'
+      });
+
+      setSuccessMsg('Account created successfully in Firebase! Redirecting...');
+      setTimeout(() => router.push('/login'), 1500);
+
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('This email address is already registered.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Invalid email address format.');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Password is too weak.');
+      } else {
+        setError(err.message || 'Failed to create account. Please try again.');
+      }
+    } finally {
       setIsLoading(false);
-      setSuccessMsg('Profile Created Successfully! Redirecting...');
-      setTimeout(() => router.push('/'), 1000);
-    }, 800);
+    }
   };
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
@@ -49,7 +92,7 @@ export default function RegisterPage() {
             <UserPlus className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Request Access</h1>
-          <p className="text-gray-400 text-xs">Create your account to join the elite Web3 capital network</p>
+          <p className="text-gray-400 text-xs">Create your live Firebase profile to join the Web3 network</p>
         </div>
 
         {error && (
@@ -67,14 +110,17 @@ export default function RegisterPage() {
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Full Name</label>
-            <input 
-              type="text" 
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Sovereign Investor"
-              className="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
-            />
+            <div className="relative">
+              <User className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
+              <input 
+                type="text" 
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Sovereign Investor"
+                className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
+              />
+            </div>
           </div>
 
           <div>
