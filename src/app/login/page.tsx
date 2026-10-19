@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -9,20 +9,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Mail, ArrowRight, ShieldCheck, Loader2, MoveLeft } from 'lucide-react';
-import { MirbLogo } from '@/components/layout/mirb-logo';
 import { ROUTES } from '@/lib/routes';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 
-export default function LoginPage() {
+function LoginContent() {
   const { signInWithEmail } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   
+  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,12 +34,14 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await signInWithEmail(email, password);
+      if (signInWithEmail) {
+        await signInWithEmail(email, password);
+      }
       toast({
         title: 'Login Successful',
         description: "Welcome back! You're being redirected to the homepage.",
       });
-      router.push(ROUTES.HOME);
+      router.push(ROUTES.HOME || '/');
     } catch (err: any) {
       setError(err.message || 'Please check your email and password.');
       toast({
@@ -48,16 +54,23 @@ export default function LoginPage() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">
+        Učitavanje sigurnog portala...
+      </div>
+    );
+  }
+
   return (
     <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
-      {/* Top Branding Header */}
       <div className="absolute top-8 left-8 flex items-center gap-3">
-        <Link href={ROUTES.HOME} className="flex items-center gap-2">
-  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
-    <ShieldCheck className="h-5 w-5" />
-  </div>
-  <span className="font-bold tracking-wider text-white">MirbInvestments</span>
-</Link>
+        <Link href={ROUTES.HOME || '/'} className="flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <span className="font-bold tracking-wider text-white">MirbInvestments</span>
+        </Link>
       </div>
 
       <motion.div 
@@ -98,7 +111,7 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-gray-300">Password</Label>
-                  <Link href={ROUTES.SUPPORT} className="text-xs text-[#2FE93D] hover:underline">Forgot password?</Link>
+                  <Link href={ROUTES.SUPPORT || '#'} className="text-xs text-[#2FE93D] hover:underline">Forgot password?</Link>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
@@ -137,13 +150,13 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col items-center justify-center border-t border-gray-800/60 py-4 bg-[#111111] text-xs text-gray-400 gap-2">
             <div>
               Don&apos;t have an account?{' '}
-              <Link href={ROUTES.REGISTER} className="text-[#2FE93D] font-semibold hover:underline">
+              <Link href={ROUTES.REGISTER || '/register'} className="text-[#2FE93D] font-semibold hover:underline">
                 Request Platform Access &rarr;
               </Link>
             </div>
             <div className="pt-2 border-t border-gray-800/40 w-full text-center">
               <Button variant="link" asChild className="text-gray-400 hover:text-white text-xs p-0 h-auto">
-                <Link href={ROUTES.HOME}>
+                <Link href={ROUTES.HOME || '/'}>
                   <MoveLeft className="mr-1.5 h-3.5 w-3.5" />
                   Back to Home
                 </Link>
@@ -153,5 +166,13 @@ export default function LoginPage() {
         </Card>
       </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">Inicijalizacija sigurne sesije...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
