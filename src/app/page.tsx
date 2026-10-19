@@ -12,7 +12,7 @@ function HomeContent() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex flex-col items-center justify-center font-mono space-y-4">
+      <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex flex-col items-center justify-center font-mono space-y-4">
         <div className="text-3xl animate-bounce">⚡</div>
         <div className="text-sm tracking-widest uppercase">Inicijalizacija MirbInvestments Ekosistema...</div>
       </div>

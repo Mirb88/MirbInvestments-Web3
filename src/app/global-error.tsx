@@ -16,7 +16,7 @@ export default function ErrorBoundary({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center p-4 antialiased">
+    <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] flex flex-col items-center justify-center p-4 antialiased">
       <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-8 text-center shadow-2xl shadow-black/50">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 rounded-2xl bg-[#2FE93D]/15 border border-[#2FE93D]/30 flex items-center justify-center text-[#2FE93D]">

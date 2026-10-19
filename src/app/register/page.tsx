@@ -70,7 +70,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0D0D0D] px-4 py-8 text-[#EDF2F4]">
+    <div suppressHydrationWarning={true} className="flex min-h-screen flex-col items-center justify-center bg-[#0D0D0D] px-4 py-8 text-[#EDF2F4]">
       <div className="mb-6 flex flex-col items-center gap-3">
         <Link href="/" className="flex items-center gap-3 text-2xl font-bold tracking-wider text-[#EDF2F4]">
           <MirbLogo />
