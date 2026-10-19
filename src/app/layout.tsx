@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 
 export const revalidate = 3600;
 
-const PRODUCTION_URL = 'https://www.mirbinvestments.com'; // Standardizovano na www bez trailing slasha
+const PRODUCTION_URL = 'https://www.mirbinvestments.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(PRODUCTION_URL),
@@ -150,7 +150,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-      <body className={cn('min-h-screen antialiased flex flex-col bg-[#0D0D0D] text-[#EDF2F4]', inter.variable, inter.className)}>
+      <body className={cn('min-h-screen w-full antialiased flex flex-col bg-[#0D0D0D] text-[#EDF2F4]', inter.variable, inter.className)}>
         <OrganizationSchema />
         <ClientProviders>
           <AuthProvider>
