@@ -34,6 +34,11 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!db) {
+      setError('Database initialization error. Please try again later.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -42,9 +47,11 @@ export default function RegisterPage() {
       const user = userCredential.user;
 
       // 2. Postavljanje Display Name-a u Auth
-      await updateProfile(user, {
-        displayName: fullName,
-      });
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: fullName,
+        });
+      }
 
       // 3. Upis profilnih podataka u Firestore bazu (/users/userId)
       await setDoc(doc(db, 'users', user.uid), {
