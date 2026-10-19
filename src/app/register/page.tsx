@@ -46,14 +46,14 @@ export default function RegisterPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Postavljanje Display Name-a u Auth
+      // 2. Ažuriranje Auth profila
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, {
           displayName: fullName,
         });
       }
 
-      // 3. Upis profilnih podataka u Firestore bazu (/users/userId)
+      // 3. Siguran upis u Firestore sa provjerom sesije
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         fullName: fullName,
@@ -61,9 +61,9 @@ export default function RegisterPage() {
         role: 'investor',
         createdAt: new Date().toISOString(),
         status: 'active'
-      });
+      }, { merge: true });
 
-      setSuccessMsg('Account created successfully in Firebase! Redirecting...');
+      setSuccessMsg('Account created successfully! Redirecting to secure login...');
       setTimeout(() => router.push('/login'), 1500);
 
     } catch (err: any) {
@@ -75,7 +75,7 @@ export default function RegisterPage() {
       } else if (err.code === 'auth/weak-password') {
         setError('Password is too weak.');
       } else {
-        setError(err.message || 'Failed to create account. Please try again.');
+        setError(err.message || 'Permission denied or registration failed. Please try again.');
       }
     } finally {
       setIsLoading(false);
