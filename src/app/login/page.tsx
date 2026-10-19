@@ -19,7 +19,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setSuccessMsg('Uspješna prijava! Preusmjeravanje...');
+      setSuccessMsg('Authentication Successful! Redirecting...');
       setTimeout(() => router.push('/'), 1000);
     }, 800);
   };
@@ -41,18 +41,18 @@ export default function LoginPage() {
             <ShieldCheck className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Institutional Sign In</h1>
-          <p className="text-gray-400 text-xs">Unesite kredencijale za pristup portfelju</p>
+          <p className="text-gray-400 text-xs">Enter your credentials to access your secure portfolio</p>
         </div>
 
         {successMsg && (
-          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-sm rounded-xl text-center font-bold">
+          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-xs rounded-xl text-center font-bold">
             {successMsg}
           </div>
         )}
 
         <form onSubmit={handleSignIn} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Adresa</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -67,7 +67,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Lozinka</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -86,20 +86,20 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer"
           >
-            {isLoading ? 'Autentifikacija...' : <>Access Secure Portal <ArrowRight className="h-4 w-4" /></>}
+            {isLoading ? 'Authenticating...' : <>Access Secure Portal <ArrowRight className="h-4 w-4" /></>}
           </button>
         </form>
 
         <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
           <div>
-            Nemate nalog?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="text-[#2FE93D] font-semibold hover:underline">
-              Zatražite pristup &rarr;
+              Request Platform Access &rarr;
             </Link>
           </div>
           <div>
             <Link href="/" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
-              <MoveLeft className="h-3.5 w-3.5" /> Povratak na početnu
+              <MoveLeft className="h-3.5 w-3.5" /> Return to Home
             </Link>
           </div>
         </div>

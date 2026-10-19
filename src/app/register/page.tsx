@@ -9,6 +9,7 @@ import { ShieldCheck, Mail, Lock, UserPlus, ArrowRight, MoveLeft } from 'lucide-
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,14 +20,14 @@ export default function RegisterPage() {
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError('Lozinke se ne podudaraju.');
+      setError('Passwords do not match.');
       return;
     }
     setError('');
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setSuccessMsg('Profil uspješno kreiran! Preusmjeravanje...');
+      setSuccessMsg('Profile Created Successfully! Redirecting...');
       setTimeout(() => router.push('/'), 1000);
     }, 800);
   };
@@ -48,24 +49,36 @@ export default function RegisterPage() {
             <UserPlus className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Request Access</h1>
-          <p className="text-gray-400 text-xs">Kreirajte nalog za pristup Web3 mreži</p>
+          <p className="text-gray-400 text-xs">Create your account to join the elite Web3 capital network</p>
         </div>
 
         {error && (
-          <div className="p-3 bg-red-950/50 border border-red-900 text-red-400 text-sm rounded-xl text-center">
+          <div className="p-3 bg-red-950/50 border border-red-900 text-red-400 text-xs rounded-xl text-center">
             {error}
           </div>
         )}
 
         {successMsg && (
-          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-sm rounded-xl text-center font-bold">
+          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-xs rounded-xl text-center font-bold">
             {successMsg}
           </div>
         )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Adresa</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Full Name</label>
+            <input 
+              type="text" 
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Sovereign Investor"
+              className="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -80,7 +93,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Lozinka</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -95,7 +108,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Potvrdite Lozinku</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Confirm Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -114,20 +127,20 @@ export default function RegisterPage() {
             disabled={isLoading}
             className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer"
           >
-            {isLoading ? 'Kreiranje profila...' : <>Complete Registration <ArrowRight className="h-4 w-4" /></>}
+            {isLoading ? 'Creating Profile...' : <>Complete Registration <ArrowRight className="h-4 w-4" /></>}
           </button>
         </form>
 
         <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
           <div>
-            Već imate nalog?{' '}
+            Already have an active profile?{' '}
             <Link href="/login" className="text-[#2FE93D] font-semibold hover:underline">
-              Prijavite se &rarr;
+              Sign In &rarr;
             </Link>
           </div>
           <div>
             <Link href="/" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
-              <MoveLeft className="h-3.5 w-3.5" /> Povratak na početnu
+              <MoveLeft className="h-3.5 w-3.5" /> Return to Home
             </Link>
           </div>
         </div>
