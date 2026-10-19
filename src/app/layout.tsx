@@ -7,7 +7,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ClientProviders from '@/components/ClientProviders';
-import { AuthProvider } from '@/context/AuthContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -154,11 +153,9 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <OrganizationSchema />
-        <Suspense fallback={<div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">Učitavanje provajdera...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-[#0D0D0D] text-[#2FE93D] flex items-center justify-center font-mono">Učitavanje ekosistema...</div>}>
           <ClientProviders>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            {children}
           </ClientProviders>
         </Suspense>
         <Analytics />
