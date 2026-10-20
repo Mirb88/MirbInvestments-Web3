@@ -4,36 +4,41 @@ export const dynamic = 'force-dynamic';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ShieldCheck, Mail, Lock, ArrowRight, MoveLeft } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, LogIn, ArrowRight, MoveLeft } from 'lucide-react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 export default function LoginPage() {
-  const router = useRouter();
+  const [isMounted, setIsMounted] = (0, import('react').useState)(false);
+  (0, import('react').useEffect)(() => { setIsMounted(true); }, []);
+  if (!isMounted) return null;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
+      // 1. Firebase Auth Prijava
       await signInWithEmailAndPassword(auth, email, password);
-      setSuccessMsg('Authentication Successful! Accessing Portal...');
-      setTimeout(() => router.push('/'), 1200);
+
+      // 2. Tvrdo preusmjeravanje radi osvježavanja AuthContext-a
+      window.location.href = '/dashboard';
+
     } catch (err: any) {
       console.error('Login error:', err);
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        setError('Invalid email or password.');
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Invalid email or password credentials.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Invalid email format.');
       } else {
-        setError('Authentication failed. Please verify your credentials.');
+        setError(err.message || 'Failed to sign in. Please try again.');
       }
-    } finally {
       setIsLoading(false);
     }
   };
@@ -52,7 +57,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-[#141414] border border-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2">
-            <ShieldCheck className="h-6 w-6" />
+            <LogIn className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Institutional Sign In</h1>
           <p className="text-gray-400 text-xs">Enter your credentials to access your secure portfolio</p>
@@ -64,13 +69,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        {successMsg && (
-          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-xs rounded-xl text-center font-bold">
-            {successMsg}
-          </div>
-        )}
-
-        <form onSubmit={handleSignIn} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Address</label>
             <div className="relative">
