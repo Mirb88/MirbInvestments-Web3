@@ -24,12 +24,8 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1. Firebase Auth Prijava
       await signInWithEmailAndPassword(auth, email, password);
-
-      // 2. Tvrdo preusmjeravanje radi osvježavanja AuthContext-a
       window.location.href = '/dashboard';
-
     } catch (err: any) {
       console.error('Login error:', err);
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
