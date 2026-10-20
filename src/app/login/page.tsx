@@ -8,6 +8,7 @@ import { ShieldCheck, Mail, Lock, LogIn, ArrowRight, MoveLeft } from 'lucide-rea
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
+// MirbInvestments Web3 Core Login - Engine v16.2.1
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
