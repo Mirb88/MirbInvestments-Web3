@@ -14,7 +14,6 @@ import {
   LifeBuoy,
   DollarSign,
   Handshake,
-  Mail,
   BookOpen,
   Repeat,
   Zap,
@@ -46,30 +45,31 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { usePortfolio } from '@/hooks/use-portfolio';
 import { useMessages } from '@/hooks/use-messages';
-import { Badge } from '../ui/badge';
-import { ScrollArea } from '../ui/scroll-area';
-import { MirbLogo } from './mirb-logo';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { MirbLogo } from '@/components/mirb-logo';
 import { ROUTES } from '@/lib/routes';
+import { auth } from '@/lib/firebase';
+import { signOut as firebaseSignOut } from 'firebase/auth';
 
 const navItems = [
-  { href: ROUTES.INVESTMENT_GUIDE, label: 'Odyssey', icon: Compass },
-  { href: ROUTES.INVEST, label: 'Invest', icon: Landmark },
-  { href: ROUTES.CRYPTO_SHOP, label: 'Crypto Shop', icon: ShoppingCart },
-  { href: ROUTES.CLUB, label: 'Club', icon: Zap },
-  { href: ROUTES.EXCHANGE, label: 'Exchange', icon: Repeat },
-  { href: ROUTES.ACADEMY, label: 'Academy', icon: BookOpen },
-  { href: ROUTES.AI_INSIGHTS, label: 'AI Insights', icon: Lightbulb },
-  { href: ROUTES.NEURAL_DIAGNOSTICS, label: 'Neural Diagnostics', icon: BrainCircuit },
-  { href: ROUTES.ABOUT, label: 'About Us', icon: Info },
-  { href: ROUTES.TRUSTED_PARTNERS, label: 'Partners', icon: Handshake },
-  { href: ROUTES.NEWSLETTER, label: 'Newsletter', icon: Newspaper },
+  { href: ROUTES.INVESTMENT_GUIDE || '/odyssey', label: 'Odyssey', icon: Compass },
+  { href: ROUTES.INVEST || '/invest', label: 'Invest', icon: Landmark },
+  { href: ROUTES.CRYPTO_SHOP || '/crypto-shop', label: 'Crypto Shop', icon: ShoppingCart },
+  { href: ROUTES.CLUB || '/club', label: 'Club', icon: Zap },
+  { href: ROUTES.EXCHANGE || '/exchange', label: 'Exchange', icon: Repeat },
+  { href: ROUTES.ACADEMY || '/academy', label: 'Academy', icon: BookOpen },
+  { href: ROUTES.AI_INSIGHTS || '/ai-insights', label: 'AI Insights', icon: Lightbulb },
+  { href: ROUTES.NEURAL_DIAGNOSTICS || '/neural-diagnostics', label: 'Neural Diagnostics', icon: BrainCircuit },
+  { href: ROUTES.ABOUT || '/about', label: 'About Us', icon: Info },
+  { href: ROUTES.TRUSTED_PARTNERS || '/partners', label: 'Partners', icon: Handshake },
+  { href: ROUTES.NEWSLETTER || '/newsletter', label: 'Newsletter', icon: Newspaper },
 ];
 
 export function Header() {
   const pathname = usePathname();
-  const auth = useAuth() as any;
-  const user = auth?.user;
-  const signOut = auth?.signOut || auth?.logout;
+  const authContext = useAuth() as any;
+  const user = authContext?.user;
 
   const { portfolio } = usePortfolio();
   const { unreadCount } = useMessages();
@@ -78,24 +78,30 @@ export function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleSignOut = async () => {
-    if (signOut) {
-      await signOut();
+    try {
+      if (authContext?.signOut) {
+        await authContext.signOut();
+      } else {
+        await firebaseSignOut(auth);
+      }
+      toast({
+        title: 'Logout Successful',
+        description: 'You have been successfully signed out from MirbInvestments.',
+      });
+      router.push(ROUTES.LOGIN || '/login');
+    } catch (err) {
+      console.error('Sign out error:', err);
     }
-    toast({
-      title: 'Logout Successful',
-      description: 'You have been successfully signed out.',
-    });
-    router.push(ROUTES.LOGIN);
   };
 
   const getFirstName = () => {
     if (user?.displayName) {
       return user.displayName.split(' ')[0];
     }
-    return user?.email ? user.email.split('@')[0] : 'Mirton';
+    return user?.email ? user.email.split('@')[0] : 'Investor';
   };
   
-  const usdtBalance = portfolio?.holdings?.find(h => h.symbol?.toUpperCase() === 'USDT')?.quantity || 50.00;
+  const usdtBalance = portfolio?.holdings?.find(h => h.symbol?.toUpperCase() === 'USDT')?.quantity || 0.00;
 
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-white/10 bg-[#0D0D0D]/80 px-4 backdrop-blur-xl md:px-6">
@@ -119,7 +125,7 @@ export function Header() {
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
           <div className="p-6 border-b border-white/10">
             <Link
-              href={ROUTES.HOME}
+              href={ROUTES.HOME || '/'}
               onClick={() => setIsSheetOpen(false)}
               className="flex items-center gap-3 text-lg font-bold"
             >
@@ -165,10 +171,10 @@ export function Header() {
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="outline" asChild className="border-white/20 text-white hover:bg-white/10">
-                  <Link href={ROUTES.LOGIN} onClick={() => setIsSheetOpen(false)}>Login</Link>
+                  <Link href={ROUTES.LOGIN || '/login'} onClick={() => setIsSheetOpen(false)}>Login</Link>
                 </Button>
                 <Button asChild className="bg-[#2FE93D] text-black font-bold hover:bg-[#28d336]">
-                  <Link href={ROUTES.REGISTER} onClick={() => setIsSheetOpen(false)}>Sign Up</Link>
+                  <Link href={ROUTES.REGISTER || '/register'} onClick={() => setIsSheetOpen(false)}>Sign Up</Link>
                 </Button>
               </div>
             )}
@@ -179,7 +185,7 @@ export function Header() {
       {/* Desktop Logo & Navigation */}
       <nav className="hidden font-medium md:flex md:items-center md:gap-4 lg:gap-6">
         <Link
-          href={ROUTES.HOME}
+          href={ROUTES.HOME || '/'}
           className="mr-2 transition-colors hover:opacity-80"
         >
           <div className="flex items-center gap-2.5">
@@ -243,21 +249,21 @@ export function Header() {
                 </DropdownMenuLabel>
                 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2.5">
+                  <Link href={ROUTES.DASHBOARD || '/dashboard'} className="flex items-center gap-2.5">
                     <LayoutDashboard className="h-4 w-4 text-[#2FE93D]" />
                     Dashboard
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.DEPOSIT} className="flex items-center gap-2.5">
+                  <Link href={ROUTES.DEPOSIT || '/deposit'} className="flex items-center gap-2.5">
                     <ArrowDownToLine className="h-4 w-4 text-[#2FE93D]" />
                     Deposit
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.WITHDRAWALS} className="flex items-center gap-2.5">
+                  <Link href={ROUTES.WITHDRAWALS || '/withdrawals'} className="flex items-center gap-2.5">
                     <ArrowUpFromLine className="h-4 w-4 text-[#2FE93D]" />
                     Withdrawals
                   </Link>
@@ -266,7 +272,7 @@ export function Header() {
                 <DropdownMenuSeparator className="bg-white/10 my-1" />
 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.MESSAGES} className="flex items-center justify-between w-full">
+                  <Link href={ROUTES.MESSAGES || '/messages'} className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2.5">
                       <Mail className="h-4 w-4 text-[#2FE93D]" />
                       My Messages
@@ -278,14 +284,14 @@ export function Header() {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.SETTINGS} className="flex items-center gap-2.5">
+                  <Link href={ROUTES.SETTINGS || '/settings'} className="flex items-center gap-2.5">
                     <Settings className="h-4 w-4 text-[#2FE93D]" />
                     My Account
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.SUPPORT} className="flex items-center gap-2.5">
+                  <Link href={ROUTES.SUPPORT || '/support'} className="flex items-center gap-2.5">
                     <LifeBuoy className="h-4 w-4 text-[#2FE93D]" />
                     Support
                   </Link>
@@ -306,10 +312,10 @@ export function Header() {
         ) : (
           <div className="flex items-center gap-2">
             <Button variant="ghost" asChild className="text-gray-300 hover:text-white hover:bg-white/10 text-sm font-semibold">
-              <Link href={ROUTES.LOGIN}>Login</Link>
+              <Link href={ROUTES.LOGIN || '/login'}>Login</Link>
             </Button>
             <Button asChild className="bg-[#2FE93D] text-black font-bold hover:bg-[#28d336] text-sm shadow-[0_0_20px_rgba(47,233,61,0.2)]">
-              <Link href={ROUTES.REGISTER}>Sign Up</Link>
+              <Link href={ROUTES.REGISTER || '/register'}>Sign Up</Link>
             </Button>
           </div>
         )}
@@ -317,3 +323,5 @@ export function Header() {
     </header>
   );
 }
+
+export default Header;
