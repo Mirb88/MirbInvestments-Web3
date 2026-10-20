@@ -22,6 +22,8 @@ import {
   BrainCircuit,
   Settings,
   Compass,
+  ShieldCheck,
+  Mail,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -47,10 +49,17 @@ import { usePortfolio } from '@/hooks/use-portfolio';
 import { useMessages } from '@/hooks/use-messages';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MirbLogo } from '@/components/mirb-logo';
 import { ROUTES } from '@/lib/routes';
 import { auth } from '@/lib/firebase';
 import { signOut as firebaseSignOut } from 'firebase/auth';
+
+function MirbLogoInline() {
+  return (
+    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30 shadow-[0_0_10px_rgba(47,233,61,0.2)]">
+      <ShieldCheck className="h-5 w-5" />
+    </div>
+  );
+}
 
 const navItems = [
   { href: ROUTES.INVESTMENT_GUIDE || '/odyssey', label: 'Odyssey', icon: Compass },
@@ -101,11 +110,11 @@ export function Header() {
     return user?.email ? user.email.split('@')[0] : 'Investor';
   };
   
-  const usdtBalance = portfolio?.holdings?.find(h => h.symbol?.toUpperCase() === 'USDT')?.quantity || 0.00;
+  const usdtBalance = portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity || 0.00;
 
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-white/10 bg-[#0D0D0D]/80 px-4 backdrop-blur-xl md:px-6">
-      {/* Mobile Navigation Trigger (Left) */}
+      {/* Mobile Navigation Trigger */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button 
@@ -129,9 +138,7 @@ export function Header() {
               onClick={() => setIsSheetOpen(false)}
               className="flex items-center gap-3 text-lg font-bold"
             >
-              <div className="w-9 h-9 flex items-center justify-center">
-                <MirbLogo />
-              </div>
+              <MirbLogoInline />
               <span className="tracking-wider text-white">MirbInvestments™</span>
             </Link>
           </div>
@@ -182,16 +189,14 @@ export function Header() {
         </SheetContent>
       </Sheet>
 
-      {/* Desktop Logo & Navigation */}
+      {/* Desktop Navigation */}
       <nav className="hidden font-medium md:flex md:items-center md:gap-4 lg:gap-6">
         <Link
           href={ROUTES.HOME || '/'}
           className="mr-2 transition-colors hover:opacity-80"
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 flex items-center justify-center">
-              <MirbLogo />
-            </div>
+            <MirbLogoInline />
             <span className="text-sm font-bold tracking-wide text-white">MirbInvestments™</span>
           </div>
         </Link>
@@ -214,18 +219,16 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Right side of header (Auth, Balance, Profile Dropdown) */}
+      {/* Right Side */}
       <div className="flex items-center gap-3 ml-auto">
         {user ? (
           <div className="flex items-center gap-3">
-            {/* USDT Balance Badge Container */}
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/60 shadow-inner">
               <DollarSign className="h-4 w-4 text-[#2FE93D]" />
               <span className="font-bold text-sm text-white tracking-wide">{usdtBalance.toFixed(2)}</span>
               <span className="text-xs font-medium text-gray-400">USDT</span>
             </div>
 
-            {/* Profile Dropdown Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
