@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
+      <div suppressHydrationWarning={true} className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
         <div className="flex items-center gap-3">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2FE93D] border-t-transparent" />
           <span className="text-sm font-semibold tracking-wider text-gray-400">Učitavanje Portala...</span>
