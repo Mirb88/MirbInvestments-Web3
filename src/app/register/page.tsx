@@ -2,27 +2,40 @@
 
 export const dynamic = 'force-dynamic';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ShieldCheck, Mail, Lock, UserPlus, ArrowRight, MoveLeft, User } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, UserPlus, ArrowRight, MoveLeft } from 'lucide-react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 
 export default function RegisterPage() {
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
+        <div className="flex items-center gap-3">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2FE93D] border-t-transparent" />
+          <span className="text-sm font-semibold tracking-wider text-gray-400">Loading Portal...</span>
+        </div>
+      </div>
+    );
+  }
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(null);
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
@@ -30,60 +43,55 @@ export default function RegisterPage() {
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+      setError('Password must be at least 6 characters.');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // 1. Kreiranje korisnika u Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Ažuriranje naziva profila
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, {
-          displayName: fullName,
-        });
+      if (fullName && user) {
+        await updateProfile(user, { displayName: fullName });
       }
 
-      // 3. Upis u Firestore ako je baza inicijalizovana
-      if (db) {
-        await setDoc(doc(db, 'users', user.uid), {
-          uid: user.uid,
-          fullName: fullName,
-          email: email,
-          role: 'investor',
-          createdAt: new Date().toISOString(),
-          status: 'active'
-        }, { merge: true });
+      try {
+        if (db && user) {
+          await setDoc(doc(db, 'users', user.uid), {
+            uid: user.uid,
+            displayName: fullName,
+            email: email,
+            role: 'investor',
+            createdAt: new Date().toISOString(),
+          });
+        }
+      } catch (dbErr) {
+        console.warn('Firestore write warning:', dbErr);
       }
 
-      setSuccessMsg('Investor profile created successfully! Redirecting to login...');
-      setTimeout(() => router.push('/login'), 1500);
-
+      window.location.href = '/';
     } catch (err: any) {
       console.error('Registration error:', err);
       if (err.code === 'auth/email-already-in-use') {
-        setError('This email address is already registered on MirbInvestments.');
+        setError('This email address is already registered.');
       } else if (err.code === 'auth/invalid-email') {
         setError('Invalid email address format.');
       } else if (err.code === 'auth/weak-password') {
-        setError('Password should be at least 6 characters long.');
+        setError('Password is too weak.');
       } else {
-        setError(err.message || 'Registration failed. Please try again.');
+        setError(err?.message || 'Failed to create account. Please try again.');
       }
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30 shadow-[0_0_10px_rgba(47,233,61,0.2)]">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <span className="font-bold tracking-wider text-white">MirbInvestments</span>
@@ -92,7 +100,7 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md bg-[#141414] border border-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
         <div className="text-center space-y-2">
-          <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2">
+          <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2 border border-[#2FE93D]/20">
             <UserPlus className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Request Access</h1>
@@ -102,12 +110,6 @@ export default function RegisterPage() {
         {error && (
           <div className="p-3 bg-red-950/50 border border-red-900 text-red-400 text-xs rounded-xl text-center">
             {error}
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="p-3 bg-[#2FE93D]/20 border border-[#2FE93D] text-[#2FE93D] text-xs rounded-xl text-center font-bold">
-            {successMsg}
           </div>
         )}
 
@@ -121,7 +123,7 @@ export default function RegisterPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Sovereign Investor"
+                placeholder="E.g. John Doe"
                 className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
               />
             </div>
@@ -136,7 +138,7 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@mirb.investments"
+                placeholder="kriptoproces@outlook.com"
                 className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
               />
             </div>
@@ -175,15 +177,15 @@ export default function RegisterPage() {
           <button 
             type="submit" 
             disabled={isLoading}
-            className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer"
+            className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer shadow-[0_0_20px_rgba(47,233,61,0.2)]"
           >
-            {isLoading ? 'Creating Profile...' : <>Complete Registration <ArrowRight className="h-4 w-4" /></>}
+            {isLoading ? 'Creating Account...' : <>Complete Registration <ArrowRight className="h-4 w-4" /></>}
           </button>
         </form>
 
         <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
           <div>
-            Already have an active profile?{' '}
+            Already have an account?{' '}
             <Link href="/login" className="text-[#2FE93D] font-semibold hover:underline">
               Sign In &rarr;
             </Link>

@@ -5,10 +5,8 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Mail, Lock, LogIn, ArrowRight, MoveLeft } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { ROUTES } from '@/lib/routes';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function LoginPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,10 +14,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const authContext = useAuth() as any;
-  const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     setIsMounted(true);
@@ -30,7 +24,7 @@ export default function LoginPage() {
       <div className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
         <div className="flex items-center gap-3">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2FE93D] border-t-transparent" />
-          <span className="text-sm font-semibold tracking-wider text-gray-400">Loading Secure Portal...</span>
+          <span className="text-sm font-semibold tracking-wider text-gray-400">Loading Portal...</span>
         </div>
       </div>
     );
@@ -42,32 +36,17 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      if (authContext && authContext.signInWithEmail) {
-        await authContext.signInWithEmail(email, password);
-      } else if (authContext && authContext.login) {
-        await authContext.login(email, password);
-      } else {
-        const { signInWithEmailAndPassword } = await import('firebase/auth');
-        const { auth } = await import('@/lib/firebase');
-        await signInWithEmailAndPassword(auth, email, password);
-      }
-
-      toast({
-        title: 'Login Successful',
-        description: "Welcome back! Redirecting to ecosystem portal...",
-      });
-
-      const targetRoute = ROUTES?.HOME || '/';
-      window.location.href = targetRoute;
-
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = '/';
     } catch (err: any) {
       console.error('Login error:', err);
-      setError(err?.message || 'Login failed. Please check your credentials.');
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Please check your email and password.',
-      });
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Invalid email or password credentials.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Invalid email format.');
+      } else {
+        setError(err?.message || 'Login failed. Please check your credentials.');
+      }
       setIsLoading(false);
     }
   };
@@ -75,7 +54,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
-        <Link href={ROUTES?.HOME || '/'} className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30 shadow-[0_0_10px_rgba(47,233,61,0.2)]">
             <ShieldCheck className="h-5 w-5" />
           </div>
@@ -141,12 +120,12 @@ export default function LoginPage() {
         <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
           <div>
             Don&apos;t have an account?{' '}
-            <Link href={ROUTES?.REGISTER || '/register'} className="text-[#2FE93D] font-semibold hover:underline">
+            <Link href="/register" className="text-[#2FE93D] font-semibold hover:underline">
               Request Platform Access &rarr;
             </Link>
           </div>
           <div>
-            <Link href={ROUTES?.HOME || '/'} className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
               <MoveLeft className="h-3.5 w-3.5" /> Return to Home
             </Link>
           </div>
