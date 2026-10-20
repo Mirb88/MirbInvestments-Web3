@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Mail, Lock, User, UserPlus, ArrowRight, MoveLeft } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, UserPlus, ArrowRight, MoveLeft, CheckCircle2 } from 'lucide-react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function RegisterPage() {
       <div className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
         <div className="flex items-center gap-3">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2FE93D] border-t-transparent" />
-          <span className="text-sm font-semibold tracking-wider text-gray-400">Loading Portal...</span>
+          <span className="text-sm font-semibold tracking-wider text-gray-400">Učitavanje Portala...</span>
         </div>
       </div>
     );
@@ -36,14 +37,15 @@ export default function RegisterPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMsg(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Lozinke se ne podudaraju.');
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError('Lozinka mora imati najmanje 6 karaktera.');
       return;
     }
 
@@ -68,20 +70,25 @@ export default function RegisterPage() {
           });
         }
       } catch (dbErr) {
-        console.warn('Firestore write warning:', dbErr);
+        console.warn('Firestore fallback warning:', dbErr);
       }
 
-      window.location.href = '/';
+      setSuccessMsg('Nalog je uspješno kreiran! Automatsko preusmjeravanje na portal...');
+
+      setTimeout(() => {
+        window.location.assign('/');
+      }, 1200);
+
     } catch (err: any) {
       console.error('Registration error:', err);
       if (err.code === 'auth/email-already-in-use') {
-        setError('This email address is already registered.');
+        setError('Ova email adresa je već registrovana u sistemu.');
       } else if (err.code === 'auth/invalid-email') {
-        setError('Invalid email address format.');
+        setError('Format email adrese nije ispravan.');
       } else if (err.code === 'auth/weak-password') {
-        setError('Password is too weak.');
+        setError('Lozinka je previše slaba.');
       } else {
-        setError(err?.message || 'Failed to create account. Please try again.');
+        setError(err?.message || 'Greška pri kreiranju naloga. Pokušajte ponovo.');
       }
       setIsLoading(false);
     }
@@ -103,8 +110,8 @@ export default function RegisterPage() {
           <div className="mx-auto inline-flex p-3 rounded-full bg-[#2FE93D]/10 text-[#2FE93D] mb-2 border border-[#2FE93D]/20">
             <UserPlus className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-white">Request Access</h1>
-          <p className="text-gray-400 text-xs">Create your official MirbInvestments investor account</p>
+          <h1 className="text-2xl font-black tracking-tight text-white">Zatražite Pristup</h1>
+          <p className="text-gray-400 text-xs">Kreirajte zvanični MirbInvestments investicioni nalog</p>
         </div>
 
         {error && (
@@ -113,9 +120,15 @@ export default function RegisterPage() {
           </div>
         )}
 
+        {successMsg && (
+          <div className="p-3 bg-[#2FE93D]/10 border border-[#2FE93D]/40 text-[#2FE93D] text-xs rounded-xl text-center flex items-center justify-center gap-2 font-semibold animate-pulse">
+            <CheckCircle2 className="h-4 w-4" /> {successMsg}
+          </div>
+        )}
+
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Full Name</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Ime i Prezime</label>
             <div className="relative">
               <User className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -123,14 +136,14 @@ export default function RegisterPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="E.g. John Doe"
+                placeholder="Npr. Marko Marković"
                 className="w-full pl-10 bg-black border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Address</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Email Adresa</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -145,7 +158,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Password</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Lozinka</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -160,7 +173,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Confirm Password</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Potvrda Lozinke</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-4 w-4 text-gray-500" />
               <input 
@@ -179,20 +192,20 @@ export default function RegisterPage() {
             disabled={isLoading}
             className="w-full bg-[#2FE93D] font-bold text-[#0D0D0D] hover:bg-[#28d336] transition-all h-12 rounded-xl flex items-center justify-center gap-2 mt-4 cursor-pointer shadow-[0_0_20px_rgba(47,233,61,0.2)]"
           >
-            {isLoading ? 'Creating Account...' : <>Complete Registration <ArrowRight className="h-4 w-4" /></>}
+            {isLoading ? 'Kreiranje Naloga...' : <>Završi Registraciju <ArrowRight className="h-4 w-4" /></>}
           </button>
         </form>
 
         <div className="text-center pt-4 border-t border-gray-800/60 text-xs text-gray-400 space-y-3">
           <div>
-            Already have an account?{' '}
+            Već imate kreiran nalog?{' '}
             <Link href="/login" className="text-[#2FE93D] font-semibold hover:underline">
-              Sign In &rarr;
+              Prijavite Se &rarr;
             </Link>
           </div>
           <div>
             <Link href="/" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white">
-              <MoveLeft className="h-3.5 w-3.5" /> Return to Home
+              <MoveLeft className="h-3.5 w-3.5" /> Povratak na Početnu
             </Link>
           </div>
         </div>
