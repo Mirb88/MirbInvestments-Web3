@@ -34,48 +34,45 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!db) {
-      setError('Database initialization error. Please try again later.');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      // 1. Kreiranje korisnika u Firebase Auth
+      // 1. Kreiranje korisnika u Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Ažuriranje Auth profila
+      // 2. Ažuriranje naziva profila
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, {
           displayName: fullName,
         });
       }
 
-      // 3. Siguran upis u Firestore sa provjerom sesije
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        fullName: fullName,
-        email: email,
-        role: 'investor',
-        createdAt: new Date().toISOString(),
-        status: 'active'
-      }, { merge: true });
+      // 3. Upis u Firestore ako je baza inicijalizovana
+      if (db) {
+        await setDoc(doc(db, 'users', user.uid), {
+          uid: user.uid,
+          fullName: fullName,
+          email: email,
+          role: 'investor',
+          createdAt: new Date().toISOString(),
+          status: 'active'
+        }, { merge: true });
+      }
 
-      setSuccessMsg('Account created successfully! Redirecting to secure login...');
+      setSuccessMsg('Investor profile created successfully! Redirecting to login...');
       setTimeout(() => router.push('/login'), 1500);
 
     } catch (err: any) {
       console.error('Registration error:', err);
       if (err.code === 'auth/email-already-in-use') {
-        setError('This email address is already registered.');
+        setError('This email address is already registered on MirbInvestments.');
       } else if (err.code === 'auth/invalid-email') {
         setError('Invalid email address format.');
       } else if (err.code === 'auth/weak-password') {
-        setError('Password is too weak.');
+        setError('Password should be at least 6 characters long.');
       } else {
-        setError(err.message || 'Permission denied or registration failed. Please try again.');
+        setError(err.message || 'Registration failed. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -99,7 +96,7 @@ export default function RegisterPage() {
             <UserPlus className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">Request Access</h1>
-          <p className="text-gray-400 text-xs">Create your live Firebase profile to join the Web3 network</p>
+          <p className="text-gray-400 text-xs">Create your official MirbInvestments investor account</p>
         </div>
 
         {error && (
