@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Mail, Lock, LogIn, ArrowRight, MoveLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
@@ -11,14 +11,30 @@ import { useToast } from '@/hooks/use-toast';
 import { ROUTES } from '@/lib/routes';
 
 export default function LoginPage() {
-  const authContext = useAuth() as any;
-  const router = useRouter();
-  const { toast } = useToast();
-  
+  const [isMounted, setIsMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const authContext = useAuth() as any;
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0D0D0D] text-white">
+        <div className="flex items-center gap-3">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2FE93D] border-t-transparent" />
+          <span className="text-sm font-semibold tracking-wider text-gray-400">Loading Secure Portal...</span>
+        </div>
+      </div>
+    );
+  }
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +57,6 @@ export default function LoginPage() {
         description: "Welcome back! Redirecting to ecosystem portal...",
       });
 
-      // Tvrdo ili meko preusmjeravanje na početnu stranicu (izbjegava 404)
       const targetRoute = ROUTES?.HOME || '/';
       window.location.href = targetRoute;
 
@@ -61,7 +76,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href={ROUTES?.HOME || '/'} className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30 shadow-[0_0_10px_rgba(47,233,61,0.2)]">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <span className="font-bold tracking-wider text-white">MirbInvestments</span>
