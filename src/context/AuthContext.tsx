@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             await currentUser.getIdToken(false);
           }
         } catch (err: any) {
-          setError(err.message || Greška pri verifikaciji sesije);
+          setError(err.message || "Greška pri verifikaciji sesije");
         } finally {
           setLoading(false);
         }
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await firebaseSignOut(auth);
       setUser(null);
     } catch (err: any) {
-      setError(err.message || Greška pri odjavi);
+      setError(err.message || "Greška pri odjavi");
     } finally {
       setLoading(false);
     }
