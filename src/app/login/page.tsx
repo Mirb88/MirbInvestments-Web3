@@ -5,6 +5,10 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
+// Onemogućavanje keširanja na nivou Next.js rute
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 export default function LoginPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [email, setEmail] = useState('');
@@ -35,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div suppressHydrationWarning={true} className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4">
       <div className="w-full max-w-md p-8 bg-[#141414] border border-[#2FE93D]/30 rounded-2xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-[#2FE93D] mb-6">MirbInvestments Login</h2>
         {error && <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm">{error}</div>}
