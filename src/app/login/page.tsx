@@ -1,13 +1,13 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import React, {
   useState,
   useEffect,
   useCallback,
   FormEvent,
   useRef,
+  ChangeEvent,
+  memo,
 } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,22 +24,24 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { FirebaseError } from 'firebase/app';
 
-export default function LoginPage() {
+export const dynamic = 'force-dynamic';
+
+const LoginPage: React.FC = () => {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Track component mount status for async cleanup
-  const isComponentMounted = useRef(true);
+  const isMounted = useRef<boolean>(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
-      isComponentMounted.current = false;
+      isMounted.current = false;
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -67,14 +69,16 @@ export default function LoginPage() {
 
       try {
         await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
-        if (!isComponentMounted.current) return;
+        if (!isMounted.current) return;
 
         setSuccessMsg('Prijava uspješna! Preusmjeravanje na portal...');
         timeoutRef.current = setTimeout(() => {
-          router.replace('/');
+          if (isMounted.current) {
+            router.replace('/');
+          }
         }, 800);
       } catch (rawErr) {
-        if (!isComponentMounted.current) return;
+        if (!isMounted.current) return;
 
         const err = rawErr as FirebaseError | Error;
         console.error('Login error:', err);
@@ -96,7 +100,7 @@ export default function LoginPage() {
           setError(err.message ?? 'Neočekivana greška. Pokušajte ponovo.');
         }
       } finally {
-        if (isComponentMounted.current) {
+        if (isMounted.current) {
           setIsLoading(false);
         }
       }
@@ -106,19 +110,21 @@ export default function LoginPage() {
 
   const isSubmitDisabled = isLoading || email.trim() === '' || password.trim() === '';
 
-  // Clear error when user starts typing again
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (error) setError(null);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     if (error) setError(null);
   };
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]">
+    <div
+      suppressHydrationWarning={true}
+      className="min-h-screen flex flex-col items-center justify-center bg-[#0D0D0D] px-4 py-12 text-[#EDF2F4]"
+    >
       <div className="absolute top-8 left-8 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2FE93D]/10 text-[#2FE93D] border border-[#2FE93D]/30 shadow-[0_0_10px_rgba(47,233,61,0.2)]">
@@ -239,4 +245,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default memo(LoginPage);
