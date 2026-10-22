@@ -1,20 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const [isMounted, setIsMounted] = (0, import('react').useState)(false);
-  (0, import('react').useEffect)(() => { setIsMounted(true); }, []);
-  if (!isMounted) return null;
-
+  const [isMounted, setIsMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +26,6 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Prisilno i pouzdano preusmjeravanje na početnu stranicu
       router.push('/');
       window.location.href = '/';
     } catch (err: any) {
