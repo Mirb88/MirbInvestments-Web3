@@ -1,74 +1,89 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { 
+  onAuthStateChanged, 
+  User, 
+  signInWithEmailAndPassword, 
+  signOut as firebaseSignOut 
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
-  user: { address?: string; isAuthenticated: boolean; role?: string } | null;
-  login: (address?: string) => void;
-  logout: () => void;
-  isLoading: boolean;
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+  logout: () => Promise<void>;
+  refreshSession: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  error: null,
+  logout: async () => {},
+  refreshSession: async () => {},
+});
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{ address?: string; isAuthenticated: boolean; role?: string } | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('mirb_auth_state') : null;
-      if (storedAuth) {
-        setUser(JSON.parse(storedAuth));
+    // Sovereign Firebase slušač stanja sa automatskim čišćenjem memorije
+    const unsubscribe = onAuthStateChanged(
+      auth, 
+      async (currentUser) => {
+        try {
+          setUser(currentUser);
+          setError(null);
+          if (currentUser) {
+            // Opcionalno osvježavanje tokena u pozadini za stabilnost
+            await currentUser.getIdToken(false);
+          }
+        } catch (err: any) {
+          setError(err.message || Greška pri verifikaciji sesije);
+        } finally {
+          setLoading(false);
+        }
+      },
+      (authError) => {
+        setError(authError.message);
+        setLoading(false);
       }
-    } catch (e) {
-      console.error('Failed to parse auth state', e);
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      setLoading(true);
+      await firebaseSignOut(auth);
+      setUser(null);
+    } catch (err: any) {
+      setError(err.message || Greška pri odjavi);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   }, []);
 
-  const login = (address?: string) => {
-    const authData = { address: address || '0x_elite_node', isAuthenticated: true, role: 'VIP_STRATEGIST' };
-    setUser(authData);
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('mirb_auth_state', JSON.stringify(authData));
+  const refreshSession = useCallback(async () => {
+    if (auth.currentUser) {
+      try {
+        await auth.currentUser.getIdToken(true); // Prisilni silent refresh tokena
+      } catch (err: any) {
+        setError(err.message);
       }
-    } catch (e) {
-      console.error('Failed to save auth state', e);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('mirb_auth_state');
-      }
-    } catch (e) {
-      console.error('Failed to remove auth state', e);
-    }
-  };
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, loading, error, logout, refreshSession }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    // Vraćamo bezbjedno lažno/inicijalno stanje umjesto da rušimo aplikaciju
-    return {
-      user: null,
-      login: () => {},
-      logout: () => {},
-      isLoading: true,
-    };
-  }
-  return context;
-}
+export const useAuth = () => useContext(AuthContext);
