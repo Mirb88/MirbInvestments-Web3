@@ -5,9 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
-// Onemogućavanje keširanja na nivou Next.js rute
 export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
 
 export default function LoginPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -29,11 +27,15 @@ export default function LoginPage() {
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      console.log("🔐 Pokrećem autentifikaciju za:", email);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("✅ Uspješna prijava:", userCredential.user.uid);
+      
       router.push('/');
       window.location.href = '/';
     } catch (err: any) {
-      setError(err.message || 'Greška pri prijavi.');
+      console.error("❌ Greška pri prijavi:", err);
+      setError(err.message || 'Greška pri prijavi. Provjerite podatke.');
       setLoading(false);
     }
   };
