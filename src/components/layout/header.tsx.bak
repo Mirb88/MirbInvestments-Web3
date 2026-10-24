@@ -42,7 +42,7 @@ import {
 } from '@/components/ui/sheet';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { usePortfolio } from '@/hooks/use-portfolio';
@@ -77,19 +77,25 @@ const navItems = [
 
 export function Header() {
   const pathname = usePathname();
-  const authContext = useAuth() as any;
-  const user = authContext?.user;
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const { user, signOut: contextSignOut, loading: authLoading } = useAuth();
 
   const { portfolio } = usePortfolio();
   const { unreadCount } = useMessages();
-  const router = useRouter();
-  const { toast } = useToast();
+
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  // Close mobile sheet when navigation changes
+  useEffect(() => {
+    setIsSheetOpen(false);
+  }, [pathname]);
 
   const handleSignOut = async () => {
     try {
-      if (authContext?.signOut) {
-        await authContext.signOut();
+      if (contextSignOut) {
+        await contextSignOut();
       } else {
         await firebaseSignOut(auth);
       }
@@ -107,19 +113,28 @@ export function Header() {
     if (user?.displayName) {
       return user.displayName.split(' ')[0];
     }
-    return user?.email ? user.email.split('@')[0] : 'Investor';
+    if (user?.email) {
+      return user.email.split('@')[0];
+    }
+    return 'Investor';
   };
-  
-  const usdtBalance = portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity || 0.00;
+
+  const usdtBalance =
+    portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity ?? 0;
+
+  // While auth state is loading, render nothing to avoid hydration mismatch
+  if (authLoading) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-white/10 bg-[#0D0D0D]/80 px-4 backdrop-blur-xl md:px-6">
       {/* Mobile Navigation Trigger */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             className="shrink-0 bg-black/40 border-white/10 hover:bg-white/10 text-white rounded-xl h-10 w-10 md:hidden"
             aria-label="Open navigation menu"
           >
@@ -178,10 +193,14 @@ export function Header() {
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="outline" asChild className="border-white/20 text-white hover:bg-white/10">
-                  <Link href={ROUTES.LOGIN || '/login'} onClick={() => setIsSheetOpen(false)}>Login</Link>
+                  <Link href={ROUTES.LOGIN || '/login'} onClick={() => setIsSheetOpen(false)}>
+                    Login
+                  </Link>
                 </Button>
                 <Button asChild className="bg-[#2FE93D] text-black font-bold hover:bg-[#28d336]">
-                  <Link href={ROUTES.REGISTER || '/register'} onClick={() => setIsSheetOpen(false)}>Sign Up</Link>
+                  <Link href={ROUTES.REGISTER || '/register'} onClick={() => setIsSheetOpen(false)}>
+                    Sign Up
+                  </Link>
                 </Button>
               </div>
             )}
@@ -191,10 +210,7 @@ export function Header() {
 
       {/* Desktop Navigation */}
       <nav className="hidden font-medium md:flex md:items-center md:gap-4 lg:gap-6">
-        <Link
-          href={ROUTES.HOME || '/'}
-          className="mr-2 transition-colors hover:opacity-80"
-        >
+        <Link href={ROUTES.HOME || '/'} className="mr-2 transition-colors hover:opacity-80">
           <div className="flex items-center gap-2.5">
             <MirbLogoInline />
             <span className="text-sm font-bold tracking-wide text-white">MirbInvestments™</span>
@@ -207,9 +223,7 @@ export function Header() {
               href={item.href}
               className={cn(
                 'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all hover:text-white whitespace-nowrap',
-                pathname === item.href
-                  ? 'bg-white/10 text-white font-semibold'
-                  : 'text-gray-400'
+                pathname === item.href ? 'bg-white/10 text-white font-semibold' : 'text-gray-400'
               )}
             >
               <item.icon className="h-3.5 w-3.5 text-[#2FE93D]" />
@@ -225,7 +239,7 @@ export function Header() {
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/60 shadow-inner">
               <DollarSign className="h-4 w-4 text-[#2FE93D]" />
-              <span className="font-bold text-sm text-white tracking-wide">{usdtBalance.toFixed(2)}</span>
+              <span className="font-bold text-sm text-white tracking-wide">{Number(usdtBalance).toFixed(2)}</span>
               <span className="text-xs font-medium text-gray-400">USDT</span>
             </div>
 
@@ -246,85 +260,36 @@ export function Header() {
                   <span className="sr-only">Toggle user menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-[#121212]/95 backdrop-blur-2xl border border-white/10 text-gray-200 rounded-xl shadow-2xl p-1.5">
+              <DropdownMenuContent
+                align="end"
+                className="w-56 bg-[#121212]/95 backdrop-blur-2xl border border-white/10 text-gray-200 rounded-xl shadow-2xl p-1.5"
+              >
                 <DropdownMenuLabel className="px-3 py-2 font-bold text-sm text-white tracking-wide border-b border-white/10 mb-1">
                   {getFirstName()}
                 </DropdownMenuLabel>
-                
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
+
+                <DropdownMenuItem
+                  asChild
+                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
+                >
                   <Link href={ROUTES.DASHBOARD || '/dashboard'} className="flex items-center gap-2.5">
                     <LayoutDashboard className="h-4 w-4 text-[#2FE93D]" />
                     Dashboard
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
+                <DropdownMenuItem
+                  asChild
+                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
+                >
                   <Link href={ROUTES.DEPOSIT || '/deposit'} className="flex items-center gap-2.5">
                     <ArrowDownToLine className="h-4 w-4 text-[#2FE93D]" />
                     Deposit
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.WITHDRAWALS || '/withdrawals'} className="flex items-center gap-2.5">
-                    <ArrowUpFromLine className="h-4 w-4 text-[#2FE93D]" />
-                    Withdrawals
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator className="bg-white/10 my-1" />
-
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.MESSAGES || '/messages'} className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2.5">
-                      <Mail className="h-4 w-4 text-[#2FE93D]" />
-                      My Messages
-                    </div>
-                    {unreadCount > 0 && (
-                      <Badge className="h-5 px-1.5 text-[10px] bg-[#2FE93D] text-black font-bold">{unreadCount}</Badge>
-                    )}
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.SETTINGS || '/settings'} className="flex items-center gap-2.5">
-                    <Settings className="h-4 w-4 text-[#2FE93D]" />
-                    My Account
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2">
-                  <Link href={ROUTES.SUPPORT || '/support'} className="flex items-center gap-2.5">
-                    <LifeBuoy className="h-4 w-4 text-[#2FE93D]" />
-                    Support
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator className="bg-white/10 my-1" />
-
                 <DropdownMenuItem
-                  onClick={handleSignOut}
-                  className="text-xs font-semibold tracking-wider text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg cursor-pointer my-0.5 py-2 flex items-center gap-2.5"
+                  asChild
+                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
                 >
-                  <LogOut className="h-4 w-4 text-red-400" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" asChild className="text-gray-300 hover:text-white hover:bg-white/10 text-sm font-semibold">
-              <Link href={ROUTES.LOGIN || '/login'}>Login</Link>
-            </Button>
-            <Button asChild className="bg-[#2FE93D] text-black font-bold hover:bg-[#28d336] text-sm shadow-[0_0_20px_rgba(47,233,61,0.2)]">
-              <Link href={ROUTES.REGISTER || '/register'}>Sign Up</Link>
-            </Button>
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-
-export default Header;
+                  <Link href={RO

@@ -23,7 +23,6 @@ import {
   Settings,
   Compass,
   ShieldCheck,
-  Mail,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -92,6 +91,12 @@ export function Header() {
     setIsSheetOpen(false);
   }, [pathname]);
 
+  // Ensure auth state is synchronized before rendering to avoid hydration mismatches
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const handleSignOut = async () => {
     try {
       if (contextSignOut) {
@@ -122,8 +127,8 @@ export function Header() {
   const usdtBalance =
     portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity ?? 0;
 
-  // While auth state is loading, render nothing to avoid hydration mismatch
-  if (authLoading) {
+  // While auth state is loading or component not mounted, render nothing to avoid hydration mismatch
+  if (authLoading || !isMounted) {
     return null;
   }
 
@@ -260,6 +265,7 @@ export function Header() {
                   <span className="sr-only">Toggle user menu</span>
                 </Button>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 align="end"
                 className="w-56 bg-[#121212]/95 backdrop-blur-2xl border border-white/10 text-gray-200 rounded-xl shadow-2xl p-1.5"
@@ -282,14 +288,7 @@ export function Header() {
                   asChild
                   className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
                 >
-                  <Link href={ROUTES.DEPOSIT || '/deposit'} className="flex items-center gap-2.5">
-                    <ArrowDownToLine className="h-4 w-4 text-[#2FE93D]" />
-                    Deposit
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  asChild
-                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
-                >
-                  <Link href={RO
+                  <Link href={ROUTES.SETTINGS || '/settings'} className="flex items-center gap-2.5">
+                    <Settings className="h-4 w-4 text-[#2FE93D]" />
+                    Settings
+                  </Link
