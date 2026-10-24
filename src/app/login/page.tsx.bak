@@ -12,8 +12,11 @@ import { useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
-  const [isMounted, setIsMounted] = (0, import('react').useState)(false);
-  (0, import('react').useEffect)(() => { setIsMounted(true); }, []);
+  // Ensure component is only rendered on the client to avoid hydration mismatches
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   if (!isMounted) return null;
 
   const [email, setEmail] = useState("");
@@ -59,7 +62,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div suppressHydrationWarning={true} className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4">
+    <div
+      suppressHydrationWarning={true}
+      className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4"
+    >
       <div className="w-full max-w-md p-8 bg-[#141414] border border-[#2FE93D]/30 rounded-2xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-[#2FE93D] mb-6">
           MirbInvestments Login
