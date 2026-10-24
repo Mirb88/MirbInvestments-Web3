@@ -41,7 +41,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { usePathname, useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn } } from '@/lib/utils';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -80,8 +80,7 @@ export function Header() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const { user } = useAuth(); // user is read immediately on client
-
+  const { user } = useAuth(); // may be null while unauthenticated
   const { portfolio } = usePortfolio();
   const { unreadCount } = useMessages();
 
@@ -93,7 +92,7 @@ export function Header() {
     setIsSheetOpen(false);
   }, [pathname]);
 
-  // Ensure component is mounted before rendering (prevents hydration mismatch)
+  // Prevent hydration mismatch
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -129,7 +128,6 @@ export function Header() {
   const usdtBalance: number =
     portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity ?? 0;
 
-  // Render nothing until client side mount to avoid hydration mismatches
   if (!isMounted) {
     return null;
   }
@@ -172,4 +170,124 @@ export function Header() {
                   href={item.href}
                   onClick={() => setIsSheetOpen(false)}
                   className={cn(
-                    'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-semibold tracking-wider uppercase transition
+                    'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-semibold tracking-wider uppercase transition-colors',
+                    pathname === item.href
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/70 hover:bg-white/5 hover:text-white',
+                  )}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </ScrollArea>
+        </SheetContent>
+      </Sheet>
+
+      {/* Desktop navigation */}
+      <div className="flex items-center gap-6">
+        <Link href={ROUTES.HOME ?? '/'} className="flex items-center gap-2">
+          <MirbLogoInline />
+          <span className="text-lg font-bold tracking-wider text-white">
+            MirbInvestments™
+          </span>
+        </Link>
+        <nav className="hidden space-x-4 md:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'group flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium transition-colors',
+                pathname === item.href
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/70 hover:bg-white/5 hover:text-white',
+              )}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      {/* Right side: messages badge, balance, user menu */}
+      <div className="flex items-center gap-4">
+        {/* Unread messages badge */}
+        {unreadCount > 0 && (
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={ROUTES.MESSAGES ?? '/messages'} className="relative">
+              <Badge
+                variant="destructive"
+                className="absolute -right-1 -top-1 h-5 w-5 rounded-full flex items-center justify-center text-xs"
+              >
+                {unreadCount}
+              </Badge>
+              <LifeBuoy className="h-5 w-5 text-white" />
+            </Link>
+          </Button>
+        )}
+
+        {/* USDT balance (visible when logged in) */}
+        {user && (
+          <div className="flex items-center gap-1 text-sm text-white/80">
+            <DollarSign className="h-4 w-4" />
+            <span>{usdtBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} USDT</span>
+          </div>
+        )}
+
+        {/* User dropdown */}
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center gap-2 rounded-full">
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={getFirstName()}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <UserCircle className="h-8 w-8 text-white/70" />
+                )}
+                <span className="hidden text-sm font-medium text-white md:inline">
+                  {getFirstName()}
+                </span>
+                <ChevronDown className="h-4 w-4 text-white/70" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 bg-[#1A1AA] border-white/10">
+              <DropdownMenuLabel className="flex flex-col gap-1">
+                <span className="font-medium text-white">{user.displayName || getFirstName()}</span>
+                <span className="text-xs text-white/60">{user.email}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-white/10" />
+              <DropdownMenuItem asChild>
+                <Link href={(ROUTES as any).PROFILE ?? '/profile'} className="flex items-center gap-2">
+                  <UserCircle className="h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={ROUTES.SETTINGS ?? '/settings'} className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-white/10" />
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button asChild variant="outline">
+            <Link href={ROUTES.LOGIN ?? '/login'}>Login</Link>
+          </Button>
+        )}
+      </div>
+    </header>
+  );
+}

@@ -41,7 +41,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { usePathname, useRouter } from 'next/navigation';
-import { cn } } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -257,7 +257,7 @@ export function Header() {
                 <ChevronDown className="h-4 w-4 text-white/70" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-[#1A1AA] border-white/10">
+            <DropdownMenuContent align="end" className="w-56 bg-[#1A1A1A] border-white/10">
               <DropdownMenuLabel className="flex flex-col gap-1">
                 <span className="font-medium text-white">{user.displayName || getFirstName()}</span>
                 <span className="text-xs text-white/60">{user.email}</span>
