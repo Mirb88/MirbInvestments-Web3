@@ -79,31 +79,25 @@ export function Header() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const { user, signOut: contextSignOut, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { portfolio } = usePortfolio();
   const { unreadCount } = useMessages();
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Close mobile sheet when navigation changes
   useEffect(() => {
     setIsSheetOpen(false);
   }, [pathname]);
 
-  // Ensure auth state is synchronized before rendering to avoid hydration mismatches
-  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const handleSignOut = async () => {
+  const handleSignOut = async (): Promise<void> => {
     try {
-      if (contextSignOut) {
-        await contextSignOut();
-      } else {
-        await firebaseSignOut(auth);
-      }
+      await firebaseSignOut(auth);
       toast({
         title: 'Logout Successful',
         description: 'You have been successfully signed out from MirbInvestments.',
@@ -114,7 +108,7 @@ export function Header() {
     }
   };
 
-  const getFirstName = () => {
+  const getFirstName = (): string => {
     if (user?.displayName) {
       return user.displayName.split(' ')[0];
     }
@@ -124,17 +118,15 @@ export function Header() {
     return 'Investor';
   };
 
-  const usdtBalance =
+  const usdtBalance: number =
     portfolio?.holdings?.find((h: any) => h.symbol?.toUpperCase() === 'USDT')?.quantity ?? 0;
 
-  // While auth state is loading or component not mounted, render nothing to avoid hydration mismatch
   if (authLoading || !isMounted) {
     return null;
   }
 
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-white/10 bg-[#0D0D0D]/80 px-4 backdrop-blur-xl md:px-6">
-      {/* Mobile Navigation Trigger */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button
@@ -191,104 +183,3 @@ export function Header() {
                   handleSignOut();
                   setIsSheetOpen(false);
                 }}
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" asChild className="border-white/20 text-white hover:bg-white/10">
-                  <Link href={ROUTES.LOGIN || '/login'} onClick={() => setIsSheetOpen(false)}>
-                    Login
-                  </Link>
-                </Button>
-                <Button asChild className="bg-[#2FE93D] text-black font-bold hover:bg-[#28d336]">
-                  <Link href={ROUTES.REGISTER || '/register'} onClick={() => setIsSheetOpen(false)}>
-                    Sign Up
-                  </Link>
-                </Button>
-              </div>
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
-
-      {/* Desktop Navigation */}
-      <nav className="hidden font-medium md:flex md:items-center md:gap-4 lg:gap-6">
-        <Link href={ROUTES.HOME || '/'} className="mr-2 transition-colors hover:opacity-80">
-          <div className="flex items-center gap-2.5">
-            <MirbLogoInline />
-            <span className="text-sm font-bold tracking-wide text-white">MirbInvestments™</span>
-          </div>
-        </Link>
-        <div className="flex items-center gap-1 lg:gap-2 overflow-x-auto scrollbar-none py-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all hover:text-white whitespace-nowrap',
-                pathname === item.href ? 'bg-white/10 text-white font-semibold' : 'text-gray-400'
-              )}
-            >
-              <item.icon className="h-3.5 w-3.5 text-[#2FE93D]" />
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
-
-      {/* Right Side */}
-      <div className="flex items-center gap-3 ml-auto">
-        {user ? (
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/60 shadow-inner">
-              <DollarSign className="h-4 w-4 text-[#2FE93D]" />
-              <span className="font-bold text-sm text-white tracking-wide">{Number(usdtBalance).toFixed(2)}</span>
-              <span className="text-xs font-medium text-gray-400">USDT</span>
-            </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative rounded-full h-11 w-11 ring-2 ring-[#2FE93D] shadow-[0_0_15px_rgba(47,233,61,0.25)] bg-black/40 hover:bg-black/60 p-0 overflow-hidden"
-                >
-                  {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 flex h-3 w-3 z-10">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2FE93D] opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#2FE93D]"></span>
-                    </span>
-                  )}
-                  <UserCircle className="h-6 w-6 text-[#2FE93D]" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent
-                align="end"
-                className="w-56 bg-[#121212]/95 backdrop-blur-2xl border border-white/10 text-gray-200 rounded-xl shadow-2xl p-1.5"
-              >
-                <DropdownMenuLabel className="px-3 py-2 font-bold text-sm text-white tracking-wide border-b border-white/10 mb-1">
-                  {getFirstName()}
-                </DropdownMenuLabel>
-
-                <DropdownMenuItem
-                  asChild
-                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
-                >
-                  <Link href={ROUTES.DASHBOARD || '/dashboard'} className="flex items-center gap-2.5">
-                    <LayoutDashboard className="h-4 w-4 text-[#2FE93D]" />
-                    Dashboard
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  asChild
-                  className="text-xs font-semibold tracking-wider text-gray-300 hover:text-white hover:bg-white/10 rounded-lg cursor-pointer my-0.5 py-2"
-                >
-                  <Link href={ROUTES.SETTINGS || '/settings'} className="flex items-center gap-2.5">
-                    <Settings className="h-4 w-4 text-[#2FE93D]" />
-                    Settings
-                  </Link
