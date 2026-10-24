@@ -1,56 +1,127 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  FormEvent,
+} from "react";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   User,
 } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
+function isFirebaseError(error: unknown): error is FirebaseError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in (error as Record<string, unknown>) &&
+    typeof (error as Record<string, unknown>).code === "string"
+  );
+}
+
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [authInitializing, setAuthInitializing] = useState(true);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [authInitializing, setAuthInitializing] = useState<boolean>(true);
   const router = useRouter();
+
+  // Prevent state updates after component unmount
+  const isMounted = useRef<boolean>(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   // Redirect if user is already authenticated
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) {
+      if (user && isMounted.current) {
         router.replace("/");
       }
-      setAuthInitializing(false);
+      if (isMounted.current) {
+        setAuthInitializing(false);
+      }
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  const handleLogin = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (loading) return;
 
-    try {
-      console.log("🔐 Pokrećem autentifikaciju za:", email);
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("✅ Uspješna prijava:", userCredential.user.uid);
-      router.replace("/");
-    } catch (err: any) {
-      console.error("❌ Greška pri prijavi:", err);
-      setError(err.message ?? "Greška pri prijavi. Provjerite podatke.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(true);
+      setError(null);
+
+      const trimmedEmail = email.trim();
+      const trimmedPassword = password;
+
+      if (!trimmedEmail || !trimmedPassword) {
+        if (isMounted.current) {
+          setError("Molimo unesite email i lozinku.");
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        console.log("🔐 Pokrećem autentifikaciju za:", trimmedEmail);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          trimmedEmail,
+          trimmedPassword
+        );
+        console.log("✅ Uspješna prijava:", userCredential.user.uid);
+        if (isMounted.current) {
+          router.replace("/");
+        }
+      } catch (err) {
+        console.error("❌ Greška pri prijavi:", err);
+        let message = "Greška pri prijavi. Provjerite podatke.";
+        if (isFirebaseError(err)) {
+          switch (err.code) {
+            case "auth/invalid-email":
+              message = "Neispravan format email adrese.";
+              break;
+            case "auth/user-disabled":
+              message = "Korisnički račun je onemogućen.";
+              break;
+            case "auth/user-not-found":
+            case "auth/wrong-password":
+              message = "Pogrešan email ili lozinka.";
+              break;
+            case "auth/too-many-requests":
+              message = "Previše pokušaja prijave. Pokušajte kasnije.";
+              break;
+            default:
+              message = err.message || message;
+          }
+        }
+        if (isMounted.current) {
+          setError(message);
+        }
+      } finally {
+        if (isMounted.current) {
+          setLoading(false);
+        }
+      }
+    },
+    // loading is not needed as a dependency because we guard against double submissions
+    [email, password, router]
+  );
 
   return (
     <div
@@ -61,8 +132,13 @@ export default function LoginPage() {
         <h2 className="text-3xl font-bold text-center text-[#2FE93D] mb-6">
           MirbInvestments Login
         </h2>
+
         {error && (
-          <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm">
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm"
+          >
             {error}
           </div>
         )}
@@ -74,6 +150,7 @@ export default function LoginPage() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <circle
                 className="opacity-25"
@@ -91,33 +168,45 @@ export default function LoginPage() {
             </svg>
           </div>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4" noValidate>
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-xs uppercase tracking-wider text-gray-400 mb-1"
+              >
                 Email
               </label>
               <input
+                id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
                 placeholder="admin@mirbinvestments.crypto"
+                autoComplete="email"
               />
             </div>
+
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-xs uppercase tracking-wider text-gray-400 mb-1"
+              >
                 Lozinka
               </label>
               <input
+                id="password"
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
                 placeholder="••••••••"
+                autoComplete="current-password"
               />
             </div>
+
             <button
               type="submit"
               disabled={loading}
