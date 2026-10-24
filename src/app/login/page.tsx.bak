@@ -23,6 +23,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authInitializing, setAuthInitializing] = useState(true);
   const router = useRouter();
 
   // Redirect if user is already authenticated
@@ -31,6 +32,8 @@ export default function LoginPage() {
       if (user) {
         router.replace("/");
       }
+      // Whether user exists or not, auth check is finished
+      setAuthInitializing(false);
     });
     return () => unsubscribe();
   }, [router]);
@@ -48,11 +51,7 @@ export default function LoginPage() {
         password
       );
       console.log("✅ Uspješna prijava:", userCredential.user.uid);
-
-      // Client‑side navigation
       router.replace("/");
-      // Fallback full page reload
-      window.location.href = "/";
     } catch (err: any) {
       console.error("❌ Greška pri prijavi:", err);
       setError(err.message ?? "Greška pri prijavi. Provjerite podatke.");
@@ -64,8 +63,34 @@ export default function LoginPage() {
   return (
     <div
       suppressHydrationWarning={true}
-      className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4"
+      className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4 relative"
     >
+      {/* Spinner overlay while Firebase Auth is initializing */}
+      {authInitializing && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+          <svg
+            className="animate-spin h-12 w-12 text-[#2FE93D]"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            />
+          </svg>
+        </div>
+      )}
+
       <div className="w-full max-w-md p-8 bg-[#141414] border border-[#2FE93D]/30 rounded-2xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-[#2FE93D] mb-6">
           MirbInvestments Login

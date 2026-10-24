@@ -12,13 +12,6 @@ import { useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
-  // Ensure component is only rendered on the client to avoid hydration mismatches
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return null;
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +25,6 @@ export default function LoginPage() {
       if (user) {
         router.replace("/");
       }
-      // Whether user exists or not, auth check is finished
       setAuthInitializing(false);
     });
     return () => unsubscribe();
@@ -63,35 +55,9 @@ export default function LoginPage() {
   return (
     <div
       suppressHydrationWarning={true}
-      className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4 relative"
+      className="flex min-h-screen items-center justify-center bg-[#0D0D0D] text-white p-4"
     >
-      {/* Spinner overlay while Firebase Auth is initializing */}
-      {authInitializing && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-          <svg
-            className="animate-spin h-12 w-12 text-[#2FE93D]"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            />
-          </svg>
-        </div>
-      )}
-
-      <div className="w-full max-w-md p-8 bg-[#141414] border border-[#2FE93D]/30 rounded-2xl shadow-xl">
+      <div className="w-full max-w-md p-8 bg-[#141414] border border-[#2FE93D]/30 rounded-2xl shadow-xl relative">
         <h2 className="text-3xl font-bold text-center text-[#2FE93D] mb-6">
           MirbInvestments Login
         </h2>
@@ -100,41 +66,67 @@ export default function LoginPage() {
             {error}
           </div>
         )}
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
-              placeholder="admin@mirbinvestments.crypto"
-            />
+
+        {authInitializing ? (
+          <div className="flex items-center justify-center h-48">
+            <svg
+              className="animate-spin h-12 w-12 text-[#2FE93D]"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              />
+            </svg>
           </div>
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
-              Lozinka
-            </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
-              placeholder="••••••••"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-[#2FE93D] text-black font-bold rounded-lg hover:bg-[#25c432] transition-all shadow-lg shadow-[#2FE93D]/20 disabled:opacity-50"
-          >
-            {loading ? "Prijavljivanje..." : "Prijavi se"}
-          </button>
-        </form>
+        ) : (
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
+                placeholder="admin@mirbinvestments.crypto"
+              />
+            </div>
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-gray-400 mb-1">
+                Lozinka
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-[#2FE93D] text-black font-bold rounded-lg hover:bg-[#25c432] transition-all shadow-lg shadow-[#2FE93D]/20 disabled:opacity-50"
+            >
+              {loading ? "Prijavljivanje..." : "Prijavi se"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
