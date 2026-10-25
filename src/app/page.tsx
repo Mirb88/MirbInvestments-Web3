@@ -7,21 +7,24 @@ export default function Home() {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D]">
+    <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D]">
       {/* Top Ticker Bar */}
-      <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-x-auto whitespace-nowrap text-xs text-[#8D99AE]">
-        <div className="max-w-7xl mx-auto flex justify-between items-center space-x-8">
-          <span className="flex items-center space-x-2">
-            <span className="text-[#2FE93D] font-bold">● LIVE MARKET</span>
-            <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> (+4.2%)</span>
-            <span>TRX: <strong className="text-[#EDF2F4]">$0.33</strong> (+1.8%)</span>
-            <span>LINK: <strong className="text-[#EDF2F4]">$18.90</strong> (+3.1%)</span>
-          </span>
-          <span className="text-[#2FE93D]">Sovereign Core v2026 Active</span>
+      <div className="bg-[#141414] border-b border-[#222222] py-2.5 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-6 animate-marquee">
+            <span className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
+              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">Live Market Pulse</span>
+            </span>
+            <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> <span className="text-[#2FE93D]">(+4.2%)</span></span>
+            <span>TRX: <strong className="text-[#EDF2F4]">$0.33</strong> <span className="text-[#2FE93D]">(+1.8%)</span></span>
+            <span>LINK: <strong className="text-[#EDF2F4]">$18.90</strong> <span className="text-[#2FE93D]">(+3.1%)</span></span>
+          </div>
+          <span className="hidden md:inline text-[#2FE93D] font-mono">Sovereign Core v2026</span>
         </div>
       </div>
 
-      {/* Navigation Header */}
+      {/* Navigation Header (Clean, Login-less Strategy) */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2FE93D] to-[#14532D] flex items-center justify-center font-black text-[#0D0D0D] text-xl shadow-[0_0_20px_rgba(47,233,61,0.3)]">
@@ -37,12 +40,9 @@ export default function Home() {
           <Link href="/academy" className="hover:text-[#2FE93D] transition-colors">Academy</Link>
           <Link href="/ai-insights" className="hover:text-[#2FE93D] transition-colors">AI Insights</Link>
         </div>
-        <div className="flex items-center space-x-4">
-          <Link href="/login" className="px-5 py-2.5 text-sm font-semibold text-[#EDF2F4] hover:text-[#2FE93D] transition-colors">
-            Login
-          </Link>
-          <Link href="/register" className="px-5 py-2.5 text-sm font-bold bg-[#2FE93D] text-[#0D0D0D] rounded-xl shadow-[0_0_25px_rgba(47,233,61,0.4)] hover:scale-105 transition-all">
-            Sign Up
+        <div>
+          <Link href="/crypto-shop" className="px-6 py-2.5 text-sm font-bold bg-[#2FE93D] text-[#0D0D0D] rounded-xl shadow-[0_0_25px_rgba(47,233,61,0.4)] hover:scale-105 transition-all inline-block">
+            Access Club
           </Link>
         </div>
       </nav>
@@ -71,7 +71,7 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href="/crypto-shop" className="w-full sm:w-auto px-8 py-4 bg-[#2FE93D] text-[#0D0D0D] font-extrabold rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.5)] hover:scale-105 transition-all flex items-center justify-center space-x-2">
-            <span>ACCESS CLUB</span>
+            <span>ENTER ACCESS CLUB</span>
             <span>→</span>
           </Link>
           <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 bg-[#1b1b1b] border border-[#333333] text-[#EDF2F4] font-bold rounded-2xl hover:border-[#2FE93D] transition-all">
