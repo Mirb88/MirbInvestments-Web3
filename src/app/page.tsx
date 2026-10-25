@@ -27,10 +27,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Navigation Header (Expanded Brand Space, No Top CTA) */}
+      {/* Navigation Header with Balanced Right-Side Neural Node */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3.5">
-          {/* 3D Immersive Custom SVG Logo */}
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)] relative group flex-shrink-0">
             <div className="absolute inset-0 rounded-2xl bg-[#2FE93D]/10 blur-sm group-hover:bg-[#2FE93D]/20 transition-all"></div>
             <svg className="w-6 h-6 text-[#2FE93D] relative z-10 drop-shadow-[0_0_8px_rgba(47,233,61,0.6)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,9 +53,15 @@ export default function Home() {
           <Link href="/academy" className="hover:text-[#2FE93D] transition-colors">Academy</Link>
           <Link href="/ai-insights" className="hover:text-[#2FE93D] transition-colors">AI Insights</Link>
         </div>
+
+        {/* Right-Side Professional Balanced Neural Node Badge */}
+        <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
+          <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-ping"></span>
+          <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase">NODE ACTIVE</span>
+        </div>
       </nav>
 
-      {/* Hero Section (Centred, Balanced & High-Impact) */}
+      {/* Hero Section */}
       <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
         <div className="absolute inset-0 -z-10 flex items-center justify-center opacity-20 blur-3xl pointer-events-none">
           <div className="w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-[#2FE93D] rounded-full"></div>
