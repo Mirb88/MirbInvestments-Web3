@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       
-      {/* Top Ticker Bar */}
+      {/* 1. REAL LIVE PULSE TICKER BAR */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
@@ -17,15 +17,17 @@ export default function Home() {
               <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
               <span className="text-[#2FE93D] font-bold uppercase tracking-wider">LIVE PULSE</span>
             </span>
-            <span>BTC: <strong className="text-[#EDF2F4]">$68,420</strong> <span className="text-[#2FE93D]">(+3.4%)</span></span>
-            <span>ETH: <strong className="text-[#EDF2F4]">$3,540</strong> <span className="text-[#2FE93D]">(+2.1%)</span></span>
-            <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> <span className="text-[#2FE93D]">(+4.2%)</span></span>
+            <span>BTC: <strong className="text-[#EDF2F4]">$80,685</strong> <span className="text-[#2FE93D]">(+1.2%)</span></span>
+            <span>ETH: <strong className="text-[#EDF2F4]">$2,370</strong> <span className="text-[#2FE93D]">(+0.8%)</span></span>
+            <span>SOL: <strong className="text-[#EDF2F4]">$111.50</strong> <span className="text-[#2FE93D]">(+2.0%)</span></span>
+            <span>TRX: <strong className="text-[#EDF2F4]">$0.28</strong> <span className="text-[#2FE93D]">(+0.2%)</span></span>
+            <span>LINK: <strong className="text-[#EDF2F4]">$18.90</strong> <span className="text-[#2FE93D]">(+1.4%)</span></span>
           </div>
           <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
       </div>
 
-      {/* Ultra Clean Sovereign Header (Samo MirbInvestments & Node Active) */}
+      {/* 2. ULTRA CLEAN SOVEREIGN HEADER */}
       <nav className="w-full px-4 sm:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3.5">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)] flex-shrink-0">
@@ -43,7 +45,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Samo Pulsirajući Node Active Badge */}
         <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
           <span className="w-2.5 h-2.5 rounded-full bg-[#2FE93D] animate-ping"></span>
           <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase font-bold">NODE ACTIVE</span>
