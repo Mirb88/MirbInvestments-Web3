@@ -8,40 +8,52 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D]">
-      {/* Top Ticker Bar */}
-      <div className="bg-[#141414] border-b border-[#222222] py-2.5 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
+      {/* Top Ticker Bar with Extended Cryptos */}
+      <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
             <span className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
-              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">Live Market Pulse</span>
+              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">LIVE PULSE</span>
             </span>
+            <span>BTC: <strong className="text-[#EDF2F4]">$68,420</strong> <span className="text-[#2FE93D]">(+3.4%)</span></span>
+            <span>ETH: <strong className="text-[#EDF2F4]">$3,540</strong> <span className="text-[#2FE93D]">(+2.1%)</span></span>
             <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> <span className="text-[#2FE93D]">(+4.2%)</span></span>
             <span>TRX: <strong className="text-[#EDF2F4]">$0.33</strong> <span className="text-[#2FE93D]">(+1.8%)</span></span>
             <span>LINK: <strong className="text-[#EDF2F4]">$18.90</strong> <span className="text-[#2FE93D]">(+3.1%)</span></span>
+            <span>ADA: <strong className="text-[#EDF2F4]">$0.58</strong> <span className="text-[#2FE93D]">(+2.5%)</span></span>
           </div>
-          <span className="hidden md:inline text-[#2FE93D] font-mono">Sovereign Core v2026</span>
+          <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
       </div>
 
-      {/* Navigation Header (Clean, Login-less Strategy) */}
+      {/* Navigation Header with 3D Styled Logo */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2FE93D] to-[#14532D] flex items-center justify-center font-black text-[#0D0D0D] text-xl shadow-[0_0_20px_rgba(47,233,61,0.3)]">
-            M
+          {/* 3D Immersive Custom SVG Logo */}
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)] relative group">
+            <div className="absolute inset-0 rounded-2xl bg-[#2FE93D]/10 blur-sm group-hover:bg-[#2FE93D]/20 transition-all"></div>
+            <svg className="w-6 h-6 text-[#2FE93D] relative z-10 drop-shadow-[0_0_8px_rgba(47,233,61,0.6)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
           </div>
-          <span className="text-xl font-extrabold tracking-wider bg-gradient-to-r from-[#EDF2F4] to-[#8D99AE] bg-clip-text text-transparent">
-            MirbInvestments
-          </span>
+          <div className="flex flex-col">
+            <span className="text-lg sm:text-xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
+              MirbInvestments
+            </span>
+            <span className="text-[10px] tracking-widest text-[#2FE93D] font-mono uppercase">Sovereign Web3</span>
+          </div>
         </div>
+
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-[#8D99AE]">
           <Link href="/crypto-shop" className="hover:text-[#2FE93D] transition-colors">Crypto Shop</Link>
           <Link href="/neural-diagnostics" className="hover:text-[#2FE93D] transition-colors">Neural Diagnostics</Link>
           <Link href="/academy" className="hover:text-[#2FE93D] transition-colors">Academy</Link>
           <Link href="/ai-insights" className="hover:text-[#2FE93D] transition-colors">AI Insights</Link>
         </div>
+
         <div>
-          <Link href="/crypto-shop" className="px-6 py-2.5 text-sm font-bold bg-[#2FE93D] text-[#0D0D0D] rounded-xl shadow-[0_0_25px_rgba(47,233,61,0.4)] hover:scale-105 transition-all inline-block">
+          <Link href="/crypto-shop" className="px-5 py-2 text-xs sm:text-sm font-bold bg-[#1b1b1b] text-[#2FE93D] border border-[#2FE93D]/40 rounded-xl shadow-[0_0_15px_rgba(47,233,61,0.2)] hover:bg-[#2FE93D] hover:text-[#0D0D0D] transition-all inline-block">
             Access Club
           </Link>
         </div>
