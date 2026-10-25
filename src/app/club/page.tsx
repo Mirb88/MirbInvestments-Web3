@@ -15,17 +15,18 @@ export default function EliteClubPage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans" suppressHydrationWarning={true}>
       
-      {/* 1. TOP SMART BAR SA RESPONSIVNOM NAVIGACIJOM */}
-      <div className="w-full bg-[#141414] border-b border-white/10 py-3 px-4 flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto text-xs gap-3">
-        <Link href="/" className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-300 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono whitespace-nowrap">
+      {/* 1. ELEGANTNO ZAGLAVLJE RAZVUČENO PO CIJELOJ ŠIRINI EKRANA */}
+      <div className="w-full bg-[#141414] border-b border-white/10 py-4 px-6 sm:px-12 flex justify-between items-center text-xs sm:text-sm">
+        <Link href="/" className="px-5 py-2.5 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-200 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono font-medium">
           <span>←</span> Return to Sovereign Core
         </Link>
-        <div className="flex items-center gap-3 font-mono">
-          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline whitespace-nowrap">
-            ⚡ Diagnostics
+        
+        <div className="flex items-center gap-4 font-mono">
+          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline font-bold flex items-center gap-1.5">
+            <span>⚡</span> Neural Diagnostics
           </Link>
-          <span className="text-zinc-500">|</span>
-          <span className="text-zinc-400 whitespace-nowrap">Club Portal</span>
+          <span className="text-zinc-600 hidden sm:inline">|</span>
+          <span className="text-zinc-400 hidden sm:inline font-semibold">Club Membership Portal</span>
         </div>
       </div>
 
@@ -38,7 +39,7 @@ export default function EliteClubPage() {
           <span className="text-xs font-mono uppercase tracking-widest text-[#2FE93D]">Exclusive Access Tier</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
           The MirbInvestments <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-[#2FE93D]">Club</span>
         </h1>
 
