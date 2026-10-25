@@ -15,17 +15,17 @@ export default function EliteClubPage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans" suppressHydrationWarning={true}>
       
-      {/* 1. TOP SMART BAR SA SNAŽNOM LOGIKOM POVRATKA */}
-      <div className="w-full bg-[#141414] border-b border-white/10 py-3 px-4 flex justify-between items-center max-w-7xl mx-auto text-xs">
-        <Link href="/" className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-300 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono">
+      {/* 1. TOP SMART BAR SA RESPONSIVNOM NAVIGACIJOM */}
+      <div className="w-full bg-[#141414] border-b border-white/10 py-3 px-4 flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto text-xs gap-3">
+        <Link href="/" className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-300 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono whitespace-nowrap">
           <span>←</span> Return to Sovereign Core
         </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline font-mono">
-            ⚡ Neural Diagnostics
+        <div className="flex items-center gap-3 font-mono">
+          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline whitespace-nowrap">
+            ⚡ Diagnostics
           </Link>
           <span className="text-zinc-500">|</span>
-          <span className="text-zinc-400 font-mono">Club Membership Portal</span>
+          <span className="text-zinc-400 whitespace-nowrap">Club Portal</span>
         </div>
       </div>
 
