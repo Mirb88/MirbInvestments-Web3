@@ -20,42 +20,35 @@ export default function Home() {
             <span>BTC: <strong className="text-[#EDF2F4]">$68,420</strong> <span className="text-[#2FE93D]">(+3.4%)</span></span>
             <span>ETH: <strong className="text-[#EDF2F4]">$3,540</strong> <span className="text-[#2FE93D]">(+2.1%)</span></span>
             <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> <span className="text-[#2FE93D]">(+4.2%)</span></span>
-            <span>TRX: <strong className="text-[#EDF2F4]">$0.33</strong> <span className="text-[#2FE93D]">(+1.8%)</span></span>
           </div>
           <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
       </div>
 
-      {/* Navigation Header */}
+      {/* Navigation Header - Responsive Fix */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
-        <div className="flex items-center space-x-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)]">
-            <svg className="w-6 h-6 text-[#2FE93D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_15px_rgba(47,233,61,0.25)] flex-shrink-0">
+            <svg className="w-5 h-5 text-[#2FE93D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
+            <span className="text-lg sm:text-xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
               MirbInvestments
             </span>
-            <span className="text-[10px] font-bold tracking-[0.25em] text-[#2FE93D] font-mono uppercase">
+            <span className="text-[9px] font-bold tracking-[0.2em] text-[#2FE93D] font-mono uppercase">
               SOVEREIGN WEB3
             </span>
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-[#8D99AE]">
-          <Link href="/club" className="hover:text-[#2FE93D] transition-colors">Club Tiers</Link>
-          <Link href="/neural-diagnostics" className="hover:text-[#2FE93D] transition-colors">Neural Diagnostics</Link>
-          <Link href="/academy" className="hover:text-[#2FE93D] transition-colors">Academy</Link>
-          <Link href="/login" className="hover:text-[#2FE93D] transition-colors">Login</Link>
-          <Link href="/register" className="hover:text-[#2FE93D] transition-colors text-[#2FE93D] font-bold">Sign Up</Link>
-        </div>
-
-        <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-ping"></span>
-          <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase">NODE ACTIVE</span>
+        {/* Navigation Links - Responsive Flex Wrap */}
+        <div className="flex items-center space-x-3 sm:space-x-6 text-xs sm:text-sm font-medium text-[#8D99AE]">
+          <Link href="/club" className="hover:text-[#2FE93D] transition-colors whitespace-nowrap">Club</Link>
+          <Link href="/neural-diagnostics" className="hidden sm:inline hover:text-[#2FE93D] transition-colors whitespace-nowrap">Diagnostics</Link>
+          <Link href="/login" className="hover:text-[#2FE93D] transition-colors whitespace-nowrap">Login</Link>
+          <Link href="/register" className="px-3 py-1.5 rounded-xl bg-[#2FE93D] text-black font-bold hover:bg-[#25b830] transition-all whitespace-nowrap">Sign Up</Link>
         </div>
       </nav>
 
@@ -78,7 +71,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
-          <Link href="/club" className="w-full sm:w-auto px-8 py-4 bg-[#2FE93D] text-[#0D0D0D] font-extrabold rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.5)] hover:scale-105 transition-all flex items-center justify-center space-x-2 text-base">
+          <Link href="/club" className="w-full sm:w-auto px-8 py-4 bg-[#2FE93D] text-[#0D0D0D] font-extrabold rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.5)] hover:scale-105 transition-all flex items-center justify-center space-x-2 text-base cursor-pointer">
             <span>ENTER ACCESS CLUB</span>
             <span>→</span>
           </Link>
