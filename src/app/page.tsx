@@ -8,6 +8,7 @@ export default function Home() {
 
   return (
     <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
+      
       {/* Top Ticker Bar */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -19,6 +20,7 @@ export default function Home() {
             <span>BTC: <strong className="text-[#EDF2F4]">$68,420</strong> <span className="text-[#2FE93D]">(+3.4%)</span></span>
             <span>ETH: <strong className="text-[#EDF2F4]">$3,540</strong> <span className="text-[#2FE93D]">(+2.1%)</span></span>
             <span>SOL: <strong className="text-[#EDF2F4]">$198.45</strong> <span className="text-[#2FE93D]">(+4.2%)</span></span>
+            <span>TRX: <strong className="text-[#EDF2F4]">$0.33</strong> <span className="text-[#2FE93D]">(+1.8%)</span></span>
           </div>
           <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
@@ -42,11 +44,13 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-[#8D99AE]">
           <Link href="/club" className="hover:text-[#2FE93D] transition-colors">Club Tiers</Link>
           <Link href="/neural-diagnostics" className="hover:text-[#2FE93D] transition-colors">Neural Diagnostics</Link>
+          <Link href="/academy" className="hover:text-[#2FE93D] transition-colors">Academy</Link>
           <Link href="/login" className="hover:text-[#2FE93D] transition-colors">Login</Link>
-          <Link href="/register" className="hover:text-[#2FE93D] transition-colors">Sign Up</Link>
+          <Link href="/register" className="hover:text-[#2FE93D] transition-colors text-[#2FE93D] font-bold">Sign Up</Link>
         </div>
 
         <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222]">
@@ -74,7 +78,6 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
-          {/* OVDJE JE KLJUČNA PROMJENA: Vodi direktno na /club stranicu */}
           <Link href="/club" className="w-full sm:w-auto px-8 py-4 bg-[#2FE93D] text-[#0D0D0D] font-extrabold rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.5)] hover:scale-105 transition-all flex items-center justify-center space-x-2 text-base">
             <span>ENTER ACCESS CLUB</span>
             <span>→</span>
@@ -82,6 +85,43 @@ export default function Home() {
           <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 bg-[#1b1b1b] border border-[#333333] text-[#EDF2F4] font-bold rounded-2xl hover:border-[#2FE93D] transition-all text-base">
             Explore Diagnostics
           </Link>
+        </div>
+      </section>
+
+      {/* Interactive Investment Goal Widget */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div className="p-6 sm:p-8 rounded-3xl bg-[#141414]/80 border border-[#222222] backdrop-blur-xl shadow-2xl relative overflow-hidden">
+          <div className="text-center mb-8">
+            <h3 className="text-xl sm:text-2xl font-black text-[#EDF2F4] mb-2">Not Sure Where to Start?</h3>
+            <p className="text-[#8D99AE] text-xs sm:text-sm">Let our AI find the perfect crypto bundle for your investment goals.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {['Long-term Growth', 'Fast Gains', 'Stability'].map((goal) => (
+              <button
+                key={goal}
+                onClick={() => setSelectedGoal(goal)}
+                className={`p-5 rounded-2xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
+                  selectedGoal === goal
+                    ? 'bg-[#2FE93D]/10 border-[#2FE93D] text-[#2FE93D] shadow-[0_0_15px_rgba(47,233,61,0.2)]'
+                    : 'bg-[#1b1b1b] border-[#2b2b2b] text-[#EDF2F4] hover:border-[#444]'
+                }`}
+              >
+                <span className="font-bold text-base sm:text-lg mb-2">{goal}</span>
+                <span className="text-xs text-[#8D99AE]">Select to configure tailored AI portfolio bundle.</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="text-center p-4 rounded-xl bg-[#0D0D0D] border border-[#222222]">
+            <p className="text-xs sm:text-sm text-[#8D99AE]">
+              {selectedGoal ? (
+                <span>Selected Strategy: <strong className="text-[#2FE93D]">{selectedGoal}</strong> — Ready for neural synchronization.</span>
+              ) : (
+                <span>Select a goal to get your instant recommendation.</span>
+              )}
+            </p>
+          </div>
         </div>
       </section>
 
