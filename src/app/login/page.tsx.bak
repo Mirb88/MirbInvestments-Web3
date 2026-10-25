@@ -59,9 +59,10 @@ export default function LoginPage() {
   }, [router]);
 
   const handleLogin = useCallback(
-    async (e: FormEvent) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (loading) return;
+
       setLoading(true);
       setError(null);
 
@@ -69,8 +70,10 @@ export default function LoginPage() {
       const trimmedPassword = password;
 
       if (!trimmedEmail || !trimmedPassword) {
-        setError("Molimo unesite email i lozinku.");
-        setLoading(false);
+        if (isMounted.current) {
+          setError("Molimo unesite email i lozinku.");
+          setLoading(false);
+        }
         return;
       }
 
@@ -89,7 +92,6 @@ export default function LoginPage() {
         console.error("❌ Greška pri prijavi:", err);
         let message = "Greška pri prijavi. Provjerite podatke.";
         if (isFirebaseError(err)) {
-          // Map common Firebase auth error codes to user‑friendly messages
           switch (err.code) {
             case "auth/invalid-email":
               message = "Neispravan format email adrese.";
@@ -117,7 +119,8 @@ export default function LoginPage() {
         }
       }
     },
-    [email, password, loading, router]
+    // loading is not needed as a dependency because we guard against double submissions
+    [email, password, router]
   );
 
   return (
@@ -133,6 +136,7 @@ export default function LoginPage() {
         {error && (
           <div
             role="alert"
+            aria-live="assertive"
             className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm"
           >
             {error}

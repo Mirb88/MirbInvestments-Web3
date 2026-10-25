@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useRef,
   FormEvent,
+  ChangeEvent,
 } from "react";
 import {
   signInWithEmailAndPassword,
@@ -27,7 +28,7 @@ function isFirebaseError(error: unknown): error is FirebaseError {
   );
 }
 
-export default function LoginPage() {
+export default function LoginPage(): React.JSX.Element {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -119,9 +120,18 @@ export default function LoginPage() {
         }
       }
     },
-    // loading is not needed as a dependency because we guard against double submissions
-    [email, password, router]
+    [email, password, router, loading]
   );
+
+  // Clear error when user starts typing again
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (error) setError(null);
+  };
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (error) setError(null);
+  };
 
   return (
     <div
@@ -181,7 +191,7 @@ export default function LoginPage() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
                 placeholder="admin@mirbinvestments.crypto"
                 autoComplete="email"
@@ -200,7 +210,7 @@ export default function LoginPage() {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 className="w-full px-4 py-3 bg-[#0D0D0D] border border-gray-800 rounded-lg focus:border-[#2FE93D] outline-none text-white transition-all"
                 placeholder="••••••••"
                 autoComplete="current-password"
