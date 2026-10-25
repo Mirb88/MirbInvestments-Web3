@@ -15,22 +15,39 @@ export default function EliteClubPage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans" suppressHydrationWarning={true}>
       
-      {/* 1. ELEGANTNO ZAGLAVLJE RAZVUČENO PO CIJELOJ ŠIRINI EKRANA */}
-      <div className="w-full bg-[#141414] border-b border-white/10 py-4 px-6 sm:px-12 flex justify-between items-center text-xs sm:text-sm">
-        <Link href="/" className="px-5 py-2.5 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-200 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono font-medium">
-          <span>←</span> Return to Sovereign Core
-        </Link>
-        
-        <div className="flex items-center gap-4 font-mono">
-          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline font-bold flex items-center gap-1.5">
-            <span>⚡</span> Neural Diagnostics
-          </Link>
-          <span className="text-zinc-600 hidden sm:inline">|</span>
-          <span className="text-zinc-400 hidden sm:inline font-semibold">Club Membership Portal</span>
+      {/* 1. REAL LIVE PULSE TICKER */}
+      <div className="bg-[#141414] border-b border-white/10 py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-zinc-400">
+        <div className="w-full px-4 flex justify-between items-center">
+          <div className="flex items-center space-x-6 animate-marquee">
+            <span className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
+              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">LIVE PULSE</span>
+            </span>
+            <span>BTC: <strong className="text-white">$80,685</strong> <span className="text-[#2FE93D]">(+1.2%)</span></span>
+            <span>ETH: <strong className="text-white">$2,370</strong> <span className="text-[#2FE93D]">(+0.8%)</span></span>
+            <span>SOL: <strong className="text-white">$111.50</strong> <span className="text-[#2FE93D]">(+2.0%)</span></span>
+            <span>TRX: <strong className="text-white">$0.28</strong> <span className="text-[#2FE93D]">(+0.2%)</span></span>
+          </div>
+          <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
       </div>
 
-      {/* 2. CLUB HERO SEKCIJA */}
+      {/* 2. FULL WIDTH HEADER WITH RETURN LOGIC */}
+      <div className="w-full bg-[#141414] border-b border-white/10 py-4 px-6 sm:px-12 flex justify-between items-center text-xs sm:text-sm">
+        <Link href="/" className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-200 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono font-medium">
+          <span>←</span> Return to Sovereign Core
+        </Link>
+        
+        <div className="flex items-center gap-3 font-mono">
+          <Link href="/neural-diagnostics" className="text-[#2FE93D] hover:underline font-bold flex items-center gap-1">
+            <span>⚡</span> Diagnostics
+          </Link>
+          <span className="text-zinc-600">|</span>
+          <span className="text-zinc-400 font-semibold">Club Portal</span>
+        </div>
+      </div>
+
+      {/* 3. CLUB HERO SEKCIJA */}
       <section className="relative py-16 px-4 text-center max-w-5xl mx-auto">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/10 via-transparent to-transparent blur-3xl"></div>
         
@@ -44,11 +61,11 @@ export default function EliteClubPage() {
         </h1>
 
         <p className="text-base sm:text-lg text-zinc-400 max-w-xl mx-auto mb-8">
-          Your ticket to the world of Elite Financial Intelligence. This isn't just a membership; it's a partnership in your success.
+          Your ticket to the world of Elite Financial Intelligence. Partnership in your decentralized success.
         </p>
       </section>
 
-      {/* 3. ČLANSKI PAKETI (MEMBERSHIP TIERS) */}
+      {/* 4. MEMBERSHIP TIERS */}
       <section className="py-12 px-4 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
@@ -102,7 +119,7 @@ export default function EliteClubPage() {
         </div>
       </section>
 
-      {/* 4. STRATEGIC CONVERGENCE & PLATINUM */}
+      {/* 5. STRATEGIC CONVERGENCE & PLATINUM */}
       <section className="py-16 px-4 max-w-5xl mx-auto space-y-8">
         
         {/* JAHORINA 2026 */}
