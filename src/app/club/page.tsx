@@ -28,7 +28,7 @@ export default function EliteClubPage() {
     setIsModalOpen(true);
   };
 
-  // Slanje u Firebase Firestore (supportRequests)
+  // Slanje u Firebase Firestore (supportRequests) sa sigurnosnom provjerom db instance
   const handleSubmitRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactInfo) return;
@@ -36,6 +36,10 @@ export default function EliteClubPage() {
     setIsSubmitting(true);
 
     try {
+      if (!db) {
+        throw new Error('Database not initialized');
+      }
+
       await addDoc(collection(db, 'supportRequests'), {
         userId: `guest_${Date.now()}`,
         email: contactInfo,
@@ -43,7 +47,7 @@ export default function EliteClubPage() {
         subject: `Membership Request: ${selectedTier?.name} (${selectedTier?.price})`,
         message: `Direct request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
         status: 'new',
-        createdAt: serverTimestamp() // Precizan datum i vrijeme iz Firebase servera
+        createdAt: serverTimestamp()
       });
 
       setIsModalOpen(false);
@@ -80,7 +84,7 @@ export default function EliteClubPage() {
             {/* Zatvori modal button */}
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-white text-xl font-bold p-2"
+              className="absolute top-4 right-4 text-zinc-400 hover:text-white text-xl font-bold p-2 cursor-pointer"
             >
               ✕
             </button>
