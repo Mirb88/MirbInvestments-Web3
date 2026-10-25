@@ -11,7 +11,7 @@ export default function Home() {
       
       {/* Top Ticker Bar */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
             <span className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
@@ -25,30 +25,28 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Navigation Header - Responsive Fix */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_15px_rgba(47,233,61,0.25)] flex-shrink-0">
-            <svg className="w-5 h-5 text-[#2FE93D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      {/* Ultra Clean Sovereign Header (Samo MirbInvestments & Node Active) */}
+      <nav className="w-full px-4 sm:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
+        <div className="flex items-center space-x-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)] flex-shrink-0">
+            <svg className="w-6 h-6 text-[#2FE93D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-lg sm:text-xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
+            <span className="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
               MirbInvestments
             </span>
-            <span className="text-[9px] font-bold tracking-[0.2em] text-[#2FE93D] font-mono uppercase">
+            <span className="text-[10px] font-bold tracking-[0.25em] text-[#2FE93D] font-mono uppercase">
               SOVEREIGN WEB3
             </span>
           </div>
         </div>
 
-        {/* Navigation Links - Responsive Flex Wrap */}
-        <div className="flex items-center space-x-3 sm:space-x-6 text-xs sm:text-sm font-medium text-[#8D99AE]">
-          <Link href="/club" className="hover:text-[#2FE93D] transition-colors whitespace-nowrap">Club</Link>
-          <Link href="/neural-diagnostics" className="hidden sm:inline hover:text-[#2FE93D] transition-colors whitespace-nowrap">Diagnostics</Link>
-          <Link href="/login" className="hover:text-[#2FE93D] transition-colors whitespace-nowrap">Login</Link>
-          <Link href="/register" className="px-3 py-1.5 rounded-xl bg-[#2FE93D] text-black font-bold hover:bg-[#25b830] transition-all whitespace-nowrap">Sign Up</Link>
+        {/* Samo Pulsirajući Node Active Badge */}
+        <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#2FE93D] animate-ping"></span>
+          <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase font-bold">NODE ACTIVE</span>
         </div>
       </nav>
 
