@@ -7,7 +7,7 @@ export default function Home() {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
+    <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       {/* Top Ticker Bar with Extended Cryptos */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
