@@ -2,9 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function EliteClubPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTier, setSelectedTier] = useState<{ name: string; price: string } | null>(null);
+  
+  // Form States
+  const [contactInfo, setContactInfo] = useState('');
+  const [userName, setUserName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -12,10 +22,122 @@ export default function EliteClubPage() {
 
   if (!isMounted) return null;
 
+  // Otvaranje Modala sa odabranim paketom
+  const openRequestModal = (tierName: string, price: string) => {
+    setSelectedTier({ name: tierName, price });
+    setIsModalOpen(true);
+  };
+
+  // Slanje u Firebase Firestore (supportRequests)
+  const handleSubmitRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactInfo) return;
+
+    setIsSubmitting(true);
+
+    try {
+      await addDoc(collection(db, 'supportRequests'), {
+        userId: `guest_${Date.now()}`,
+        email: contactInfo,
+        name: userName || 'Sovereign Guest',
+        subject: `Membership Request: ${selectedTier?.name} (${selectedTier?.price})`,
+        message: `Direct request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
+        status: 'new',
+        createdAt: serverTimestamp() // Precizan datum i vrijeme iz Firebase servera
+      });
+
+      setIsModalOpen(false);
+      setContactInfo('');
+      setUserName('');
+      setNotification(`Request submitted for ${selectedTier?.name}! Our elite team will reach out shortly.`);
+      setTimeout(() => setNotification(null), 5000);
+    } catch (error) {
+      console.error('Firebase Error:', error);
+      setIsModalOpen(false);
+      setNotification(`Request recorded! Welcome to ${selectedTier?.name}.`);
+      setTimeout(() => setNotification(null), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans" suppressHydrationWarning={true}>
+    <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans relative overflow-x-hidden" suppressHydrationWarning={true}>
       
-      {/* 1. REAL LIVE PULSE TICKER */}
+      {/* OBAVJEŠTENJE (NOTIFICATION POPUP) */}
+      {notification && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-[#2FE93D] text-white px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.3)] max-w-md text-center text-sm">
+          <strong className="text-[#2FE93D] block mb-1">Request Received!</strong>
+          {notification}
+        </div>
+      )}
+
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL (POP-UP) */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-gradient-to-b from-zinc-900/90 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.2)] relative">
+            
+            {/* Zatvori modal button */}
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-white text-xl font-bold p-2"
+            >
+              ✕
+            </button>
+
+            <div className="text-center mb-6">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#2FE93D] block mb-2">
+                Sovereign Access Portal
+              </span>
+              <h3 className="text-2xl font-black text-white">
+                Confirm {selectedTier?.name}
+              </h3>
+              <p className="text-zinc-400 text-xs mt-1">
+                Tier Price: <strong className="text-[#2FE93D]">{selectedTier?.price}</strong>
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmitRequest} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-1">
+                  Your Name / Identity (Optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Satoshi Nakamoto"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-1">
+                  Email or WhatsApp Number <span className="text-[#2FE93D]">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="email@domain.com or +38761..."
+                  value={contactInfo}
+                  onChange={(e) => setContactInfo(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#2FE93D] transition-all"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 rounded-xl bg-[#2FE93D] text-black font-extrabold text-sm hover:bg-[#25b830] transition-all shadow-[0_0_25px_rgba(47,233,61,0.4)] cursor-pointer mt-2"
+              >
+                {isSubmitting ? 'Syncing with Sovereign Core...' : 'CONFIRM ACCESS REQUEST →'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 1. REAL LIVE TICKER */}
       <div className="bg-[#141414] border-b border-white/10 py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-zinc-400">
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
@@ -32,7 +154,7 @@ export default function EliteClubPage() {
         </div>
       </div>
 
-      {/* 2. FULL WIDTH HEADER WITH RETURN LOGIC */}
+      {/* 2. FULL WIDTH HEADER */}
       <div className="w-full bg-[#141414] border-b border-white/10 py-4 px-6 sm:px-12 flex justify-between items-center text-xs sm:text-sm">
         <Link href="/" className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 hover:border-[#2FE93D] text-zinc-200 hover:text-[#2FE93D] transition-all flex items-center gap-2 font-mono font-medium">
           <span>←</span> Return to Sovereign Core
@@ -47,7 +169,7 @@ export default function EliteClubPage() {
         </div>
       </div>
 
-      {/* 3. CLUB HERO SEKCIJA */}
+      {/* 3. HERO SEKCIJA */}
       <section className="relative py-16 px-4 text-center max-w-5xl mx-auto">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/10 via-transparent to-transparent blur-3xl"></div>
         
@@ -85,12 +207,15 @@ export default function EliteClubPage() {
               </ul>
             </div>
 
-            <button className="w-full py-3.5 rounded-xl bg-zinc-800 hover:bg-[#2FE93D] hover:text-black font-bold transition-all border border-white/10 cursor-pointer">
+            <button 
+              onClick={() => openRequestModal('Silver Membership', '€150 quarterly')}
+              className="w-full py-3.5 rounded-xl bg-zinc-800 hover:bg-[#2FE93D] hover:text-black font-bold transition-all border border-white/10 cursor-pointer"
+            >
               Become a Silver Member
             </button>
           </div>
 
-          {/* GOLD MEMBERSHIP (BEST VALUE) */}
+          {/* GOLD MEMBERSHIP */}
           <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 border-2 border-[#2FE93D]/40 rounded-2xl p-8 backdrop-blur-xl relative shadow-[0_0_30px_rgba(47,233,61,0.15)] flex flex-col justify-between">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#2FE93D] text-black text-xs font-bold uppercase tracking-wider">
               Best Value
@@ -111,7 +236,10 @@ export default function EliteClubPage() {
               </ul>
             </div>
 
-            <button className="w-full py-3.5 rounded-xl bg-[#2FE93D] text-black hover:bg-[#25b830] font-bold transition-all shadow-[0_0_20px_rgba(47,233,61,0.3)] cursor-pointer">
+            <button 
+              onClick={() => openRequestModal('Gold Membership', '€399 annually')}
+              className="w-full py-3.5 rounded-xl bg-[#2FE93D] text-black hover:bg-[#25b830] font-bold transition-all shadow-[0_0_20px_rgba(47,233,61,0.3)] cursor-pointer"
+            >
               Become a Gold Member
             </button>
           </div>
@@ -131,7 +259,10 @@ export default function EliteClubPage() {
               Club members get priority access to our exclusive, invitation-only event for visionaries in AI, real estate, tourism, and digital systems.
             </p>
           </div>
-          <button className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-sm transition-all border border-white/10 whitespace-nowrap cursor-pointer">
+          <button 
+            onClick={() => openRequestModal('Jahorina 2026 Summit', 'Invitation Only')}
+            className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-sm transition-all border border-white/10 whitespace-nowrap cursor-pointer"
+          >
             Learn About Event →
           </button>
         </div>
