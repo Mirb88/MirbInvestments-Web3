@@ -99,10 +99,10 @@ export default function EliteClubPage() {
                 Sovereign Access Portal
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
-                {selectedTier?.name.includes('Summit') ? 'Jahorina 2026: Strategic Convergence Interest' : `Confirm ${selectedTier?.name}`}
+                {selectedTier?.name.includes('Strategic Convergence') ? 'Jahorina 2026: Strategic Convergence Interest' : `Confirm ${selectedTier?.name}`}
               </h3>
               <p className="text-zinc-400 text-xs mt-2">
-                {selectedTier?.name.includes('Summit') 
+                {selectedTier?.name.includes('Strategic Convergence') 
                   ? 'Potvrdite interesovanje za primanje ekskluzivnih informacija i brifinga u vezi samita.' 
                   : `Tier Price: ${selectedTier?.price}`}
               </p>
