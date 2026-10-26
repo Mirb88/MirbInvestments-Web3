@@ -42,7 +42,7 @@ export default function EliteClubPage() {
         userId: `guest_${Date.now()}`,
         email: contactInfo,
         name: userName || 'Sovereign Guest',
-        subject: `Membership Request: ${selectedTier?.name} (${selectedTier?.price})`,
+        subject: `Access Request: ${selectedTier?.name} (${selectedTier?.price})`,
         message: `Direct request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
         status: 'new',
         createdAt: serverTimestamp()
@@ -173,7 +173,7 @@ export default function EliteClubPage() {
         </div>
       </div>
 
-      {/* 3. CLUB HERO SEKCIJA SA INTEGRISANIM 3D NEON VIDEO EFEKTOM */}
+      {/* 3. CLUB HERO SEKCIJA SA 3D NEON VIDEO EFEKTOM */}
       <section className="relative py-16 px-4 text-center max-w-5xl mx-auto">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl"></div>
         
@@ -190,7 +190,7 @@ export default function EliteClubPage() {
           Your ticket to the world of Elite Financial Intelligence. Partnership in your decentralized success.
         </p>
 
-        {/* 3D NEON VIDEO NA KLUB STRANICI */}
+        {/* 3D NEON VIDEO SA OKVIROM */}
         <div className="my-8 relative max-w-xl mx-auto rounded-3xl overflow-hidden border border-[#2FE93D]/40 shadow-[0_0_40px_rgba(47,233,61,0.2)] bg-zinc-950">
           <div className="absolute inset-0 bg-[#2FE93D]/10 animate-pulse pointer-events-none"></div>
           <video 
@@ -207,15 +207,15 @@ export default function EliteClubPage() {
         </div>
       </section>
 
-      {/* 4. MEMBERSHIP TIERS */}
+      {/* 4. PRISTUPNE KARTICE (ACCESS CARDS) */}
       <section className="py-12 px-4 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          {/* SILVER MEMBERSHIP */}
+          {/* SREBRNA PRISTUPNA KARTICA */}
           <div className="bg-zinc-900/40 border border-white/10 rounded-2xl p-8 backdrop-blur-xl hover:border-[#2FE93D]/50 transition-all flex flex-col justify-between">
             <div>
-              <div className="text-zinc-400 font-mono text-sm uppercase tracking-wider mb-2">Standard Access</div>
-              <h3 className="text-2xl font-bold mb-2">Silver Membership</h3>
+              <div className="text-zinc-400 font-mono text-sm uppercase tracking-wider mb-2">Standard Access Card</div>
+              <h3 className="text-2xl font-bold mb-2">Silver Access Card</h3>
               <div className="text-4xl font-extrabold text-[#2FE93D] mb-6">€150 <span className="text-sm font-normal text-zinc-400">/ quarterly</span></div>
               <p className="text-zinc-400 text-sm mb-6">The perfect entry into the world of elite financial benefits.</p>
               
@@ -228,14 +228,14 @@ export default function EliteClubPage() {
             </div>
 
             <button 
-              onClick={() => openRequestModal('Silver Membership', '€150 quarterly')}
+              onClick={() => openRequestModal('Silver Access Card', '€150 quarterly')}
               className="w-full py-3.5 rounded-xl bg-zinc-800 hover:bg-[#2FE93D] hover:text-black font-bold transition-all border border-white/10 cursor-pointer"
             >
-              Become a Silver Member
+              Request Silver Card
             </button>
           </div>
 
-          {/* GOLD MEMBERSHIP */}
+          {/* ZLATNA PRISTUPNA KARTICA */}
           <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 border-2 border-[#2FE93D]/40 rounded-2xl p-8 backdrop-blur-xl relative shadow-[0_0_30px_rgba(47,233,61,0.15)] flex flex-col justify-between">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#2FE93D] text-black text-xs font-bold uppercase tracking-wider">
               Best Value
@@ -243,12 +243,12 @@ export default function EliteClubPage() {
 
             <div>
               <div className="text-[#2FE93D] font-mono text-sm uppercase tracking-wider mb-2">Elite Sovereign Tier</div>
-              <h3 className="text-2xl font-bold mb-2">Gold Membership</h3>
+              <h3 className="text-2xl font-bold mb-2">Gold Sovereign Card</h3>
               <div className="text-4xl font-extrabold text-white mb-6">€399 <span className="text-sm font-normal text-zinc-400">/ annually</span></div>
-              <p className="text-zinc-400 text-sm mb-6">Unlock the full potential with our most popular package.</p>
+              <p className="text-zinc-400 text-sm mb-6">Unlock the full potential with our most popular card tier.</p>
               
               <ul className="space-y-4 mb-8 text-sm text-zinc-200">
-                <li className="flex items-center gap-3 text-[#2FE93D]">✓ All benefits of Silver membership</li>
+                <li className="flex items-center gap-3 text-[#2FE93D]">✓ All benefits of Silver tier</li>
                 <li className="flex items-center gap-3">✅ No-Fee Cross-Chain Exchange</li>
                 <li className="flex items-center gap-3">✅ Direct 24/7 support via WhatsApp</li>
                 <li className="flex items-center gap-3">✅ Priority invitations to exclusive online & live events</li>
@@ -257,10 +257,10 @@ export default function EliteClubPage() {
             </div>
 
             <button 
-              onClick={() => openRequestModal('Gold Membership', '€399 annually')}
+              onClick={() => openRequestModal('Gold Sovereign Card', '€399 annually')}
               className="w-full py-3.5 rounded-xl bg-[#2FE93D] text-black hover:bg-[#25b830] font-bold transition-all shadow-[0_0_20px_rgba(47,233,61,0.3)] cursor-pointer"
             >
-              Become a Gold Member
+              Request Gold Card
             </button>
           </div>
 
@@ -276,7 +276,7 @@ export default function EliteClubPage() {
             <div className="text-amber-400 font-mono text-xs uppercase tracking-widest mb-1">Exclusive Summit</div>
             <h3 className="text-2xl font-bold mb-2">Jahorina 2026: The Strategic Convergence</h3>
             <p className="text-zinc-400 text-sm max-w-xl">
-              Club members get priority access to our exclusive, invitation-only event for visionaries in AI, real estate, tourism, and digital systems.
+              Card holders get priority access to our exclusive, invitation-only event for visionaries in AI, real estate, tourism, and digital systems.
             </p>
           </div>
           <button 
