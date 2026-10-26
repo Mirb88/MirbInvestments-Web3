@@ -1,26 +1,71 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const [cryptoPrices, setCryptoPrices] = useState({
+    btc: '80,685',
+    eth: '2,370',
+    sol: '111.50',
+    trx: '0.28',
+    arb: '0.55',
+    pol: '0.38',
+    avax: '28.40',
+    link: '14.20'
+  });
+
+  // CoinGecko Live Ticker Sync Effect (Extended Portfolio)
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,tron,arbitrum,matic-network,avalanche-2,chainlink&vs_currencies=usd'
+        );
+        const data = await response.json();
+        
+        if (data && data.bitcoin) {
+          setCryptoPrices({
+            btc: data.bitcoin?.usd ? data.bitcoin.usd.toLocaleString() : '80,685',
+            eth: data.ethereum?.usd ? data.ethereum.usd.toLocaleString() : '2,370',
+            sol: data.solana?.usd ? data.solana.usd.toLocaleString() : '111.50',
+            trx: data.tron?.usd ? data.tron.usd.toLocaleString() : '0.28',
+            arb: data.arbitrum?.usd ? data.arbitrum.usd.toLocaleString() : '0.55',
+            pol: data['matic-network']?.usd ? data['matic-network'].usd.toLocaleString() : '0.38',
+            avax: data['avalanche-2']?.usd ? data['avalanche-2'].usd.toLocaleString() : '28.40',
+            link: data.chainlink?.usd ? data.chainlink.usd.toLocaleString() : '14.20'
+          });
+        }
+      } catch (error) {
+        console.error('Live Pulse Ticker Sync Error (Using Sovereign Fallback):', error);
+      }
+    };
+
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 30000); // Osvježavanje svakih 30 sekundi
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
+    <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       
-      {/* 1. REAL LIVE PULSE TICKER BAR */}
+      {/* 1. REAL LIVE PULSE TICKER BAR SA COINGECKO PROŠIRENIM PODACIMA */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
             <span className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-[#2FE93D] inline-block animate-pulse"></span>
-              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">LIVE PULSE</span>
+              <span className="text-[#2FE93D] font-bold uppercase tracking-wider">LIVE PULSE (COINGECKO)</span>
             </span>
-            <span>BTC: <strong className="text-[#EDF2F4]">$80,685</strong> <span className="text-[#2FE93D]">(+1.2%)</span></span>
-            <span>ETH: <strong className="text-[#EDF2F4]">$2,370</strong> <span className="text-[#2FE93D]">(+0.8%)</span></span>
-            <span>SOL: <strong className="text-[#EDF2F4]">$111.50</strong> <span className="text-[#2FE93D]">(+2.0%)</span></span>
-            <span>TRX: <strong className="text-[#EDF2F4]">$0.28</strong> <span className="text-[#2FE93D]">(+0.2%)</span></span>
+            <span>BTC: <strong className="text-[#EDF2F4]">${cryptoPrices.btc}</strong></span>
+            <span>ETH: <strong className="text-[#EDF2F4]">${cryptoPrices.eth}</strong></span>
+            <span>SOL: <strong className="text-[#EDF2F4]">${cryptoPrices.sol}</strong></span>
+            <span>TRX: <strong className="text-[#EDF2F4]">${cryptoPrices.trx}</strong></span>
+            <span>ARB: <strong className="text-[#EDF2F4]">${cryptoPrices.arb}</strong></span>
+            <span>POL: <strong className="text-[#EDF2F4]">${cryptoPrices.pol}</strong></span>
+            <span>AVAX: <strong className="text-[#EDF2F4]">${cryptoPrices.avax}</strong></span>
+            <span>LINK: <strong className="text-[#EDF2F4]">${cryptoPrices.link}</strong></span>
           </div>
           <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
@@ -44,9 +89,14 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#2FE93D] animate-ping"></span>
-          <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase font-bold">NODE ACTIVE</span>
+        <div className="flex items-center space-x-3">
+          <Link href="/club" className="px-4 py-2 rounded-xl bg-[#1b1b1b] border border-[#2FE93D]/30 hover:border-[#2FE93D] text-xs font-mono font-bold text-[#2FE93D] transition-all">
+            Access Club →
+          </Link>
+          <div className="hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2FE93D] animate-ping"></span>
+            <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase font-bold">NODE ACTIVE</span>
+          </div>
         </div>
       </nav>
 
