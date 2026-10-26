@@ -9,7 +9,6 @@ export default function EliteClubPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState<{ name: string; price: string } | null>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
   
   // Form States
   const [contactInfo, setContactInfo] = useState('');
@@ -24,8 +23,6 @@ export default function EliteClubPage() {
   if (!isMounted) return null;
 
   const openRequestModal = (tierName: string, price: string) => {
-    // Bilježimo tačnu poziciju skrola da modal izroni u visini korisničkog pogleda za svako dugme
-    setScrollPosition(window.scrollY);
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
   };
@@ -86,12 +83,9 @@ export default function EliteClubPage() {
         </div>
       )}
 
-      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL DINAMIČKI POZICIONIRAN NA TAČNU VISINU SKROLA */}
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL - FIXED CENTRIRANJE NA EKRANU */}
       {isModalOpen && (
-        <div 
-          className="absolute inset-x-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
-          style={{ top: `${scrollPosition}px`, minHeight: '100vh' }}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
           <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative my-auto">
             
             <button 
