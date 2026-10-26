@@ -24,6 +24,7 @@ export default function EliteClubPage() {
   if (!isMounted) return null;
 
   const openRequestModal = (tierName: string, price: string) => {
+    // Bilježimo tačnu poziciju skrola da modal izroni u visini korisničkog pogleda za svako dugme
     setScrollPosition(window.scrollY);
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
@@ -40,12 +41,14 @@ export default function EliteClubPage() {
         throw new Error('Database not initialized');
       }
 
+      const isJahorina = selectedTier?.name.includes('Strategic Convergence');
+
       await addDoc(collection(db, 'supportRequests'), {
         userId: `guest_${Date.now()}`,
         email: contactInfo,
         name: userName || 'Sovereign Guest',
-        subject: `Interest Request: ${selectedTier?.name} (${selectedTier?.price})`,
-        message: `Direct interest request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
+        subject: isJahorina ? `Interest Request: Jahorina 2026` : `Access Request: ${selectedTier?.name} (${selectedTier?.price})`,
+        message: `Direct request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
         status: 'new',
         createdAt: serverTimestamp()
       });
@@ -53,12 +56,16 @@ export default function EliteClubPage() {
       setIsModalOpen(false);
       setContactInfo('');
       setUserName('');
-      setNotification(`Interest registered for ${selectedTier?.name}! Our elite team will reach out with all details.`);
+      setNotification(
+        isJahorina 
+          ? `Interest registered for Jahorina 2026! Our elite team will reach out with all details.` 
+          : `Request submitted for ${selectedTier?.name}! Our elite team will reach out shortly.`
+      );
       setTimeout(() => setNotification(null), 5000);
     } catch (error) {
       console.error('Firebase Error:', error);
       setIsModalOpen(false);
-      setNotification(`Interest recorded for ${selectedTier?.name}!`);
+      setNotification(`Request recorded successfully!`);
       setTimeout(() => setNotification(null), 5000);
     } finally {
       setIsSubmitting(false);
@@ -79,7 +86,7 @@ export default function EliteClubPage() {
         </div>
       )}
 
-      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL DINAMIČKI POZICIONIRAN */}
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL DINAMIČKI POZICIONIRAN NA TAČNU VISINU SKROLA */}
       {isModalOpen && (
         <div 
           className="absolute inset-x-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
