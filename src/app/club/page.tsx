@@ -22,13 +22,11 @@ export default function EliteClubPage() {
 
   if (!isMounted) return null;
 
-  // Otvaranje Modala sa odabranim paketom
   const openRequestModal = (tierName: string, price: string) => {
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
   };
 
-  // Slanje u Firebase Firestore (supportRequests) sa sigurnosnom provjerom db instance
   const handleSubmitRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactInfo) return;
@@ -68,20 +66,22 @@ export default function EliteClubPage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-white selection:bg-[#2FE93D] selection:text-black font-sans relative overflow-x-hidden" suppressHydrationWarning={true}>
       
-      {/* OBAVJEŠTENJE (NOTIFICATION POPUP) */}
+      {/* SAVRŠENO CENTRIRANO OBAVJEŠTENJE U FOKUSU EKRANA */}
       {notification && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-[#2FE93D] text-white px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.3)] max-w-md text-center text-sm">
-          <strong className="text-[#2FE93D] block mb-1">Request Received!</strong>
-          {notification}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-zinc-900 border-2 border-[#2FE93D] text-white px-8 py-6 rounded-3xl shadow-[0_0_50px_rgba(47,233,61,0.4)] max-w-md text-center">
+            <div className="text-3xl mb-2">⚡</div>
+            <strong className="text-[#2FE93D] block text-lg mb-2 font-black">Request Received!</strong>
+            <p className="text-zinc-300 text-sm">{notification}</p>
+          </div>
         </div>
       )}
 
-      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL (POP-UP) */}
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-gradient-to-b from-zinc-900/90 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.2)] relative">
+          <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative">
             
-            {/* Zatvori modal button */}
             <button 
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-zinc-400 hover:text-white text-xl font-bold p-2 cursor-pointer"
@@ -173,9 +173,9 @@ export default function EliteClubPage() {
         </div>
       </div>
 
-      {/* 3. HERO SEKCIJA */}
+      {/* 3. CLUB HERO SEKCIJA SA INTEGRISANIM 3D NEON VIDEO EFEKTOM */}
       <section className="relative py-16 px-4 text-center max-w-5xl mx-auto">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/10 via-transparent to-transparent blur-3xl"></div>
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl"></div>
         
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-900/80 border border-[#2FE93D]/30 mb-6 backdrop-blur-md">
           <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-pulse"></span>
@@ -189,6 +189,22 @@ export default function EliteClubPage() {
         <p className="text-base sm:text-lg text-zinc-400 max-w-xl mx-auto mb-8">
           Your ticket to the world of Elite Financial Intelligence. Partnership in your decentralized success.
         </p>
+
+        {/* 3D NEON VIDEO NA KLUB STRANICI */}
+        <div className="my-8 relative max-w-xl mx-auto rounded-3xl overflow-hidden border border-[#2FE93D]/40 shadow-[0_0_40px_rgba(47,233,61,0.2)] bg-zinc-950">
+          <div className="absolute inset-0 bg-[#2FE93D]/10 animate-pulse pointer-events-none"></div>
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            preload="auto"
+            className="w-full h-auto object-cover opacity-95"
+          >
+            <source src="/hero-visual.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </section>
 
       {/* 4. MEMBERSHIP TIERS */}
