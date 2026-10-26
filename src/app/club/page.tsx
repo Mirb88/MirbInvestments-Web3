@@ -24,7 +24,6 @@ export default function EliteClubPage() {
   if (!isMounted) return null;
 
   const openRequestModal = (tierName: string, price: string) => {
-    // Bilježimo tačnu poziciju skrola da modal izroni u visini korisčevog pogleda
     setScrollPosition(window.scrollY);
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
@@ -99,12 +98,12 @@ export default function EliteClubPage() {
               <span className="text-xs font-mono uppercase tracking-widest text-[#2FE93D] block mb-2">
                 Sovereign Access Portal
               </span>
-              <h3 className="text-2xl font-black text-white leading-tight">
-                {selectedTier?.name.includes('Summit') ? 'Jahorina 2026: Strategic Convergence' : `Confirm ${selectedTier?.name}`}
+              <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                {selectedTier?.name.includes('Summit') ? 'Jahorina 2026: Strategic Convergence Interest' : `Confirm ${selectedTier?.name}`}
               </h3>
               <p className="text-zinc-400 text-xs mt-2">
                 {selectedTier?.name.includes('Summit') 
-                  ? 'Confirm your interest to receive direct event details and briefing.' 
+                  ? 'Potvrdite interesovanje za primanje ekskluzivnih informacija i brifinga u vezi samita.' 
                   : `Tier Price: ${selectedTier?.price}`}
               </p>
             </div>
@@ -288,7 +287,7 @@ export default function EliteClubPage() {
             </p>
           </div>
           <button 
-            onClick={() => openRequestModal('Jahorina 2026 Strategic Convergence', 'Invitation Only')}
+            onClick={() => openRequestModal('Jahorina 2026: Strategic Convergence Interest', 'Invitation Only')}
             className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-sm transition-all border border-white/10 whitespace-nowrap cursor-pointer"
           >
             Learn About Event →
