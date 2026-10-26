@@ -24,7 +24,7 @@ export default function EliteClubPage() {
   if (!isMounted) return null;
 
   const openRequestModal = (tierName: string, price: string) => {
-    // Uzimamo tačnu trenutnu poziciju skrola i osiguravamo da je modal centriran u vidnom polju
+    // Bilježimo tačnu poziciju skrola da modal izroni u visini korisničkog pogleda za svako dugme
     setScrollPosition(window.scrollY);
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
@@ -86,13 +86,13 @@ export default function EliteClubPage() {
         </div>
       )}
 
-      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL - ABSOLUTE SA TAČNIM SKROLOM I UNUTRAŠNJIM MARGINAMA */}
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL DINAMIČKI POZICIONIRAN NA TAČNU VISINU SKROLA */}
       {isModalOpen && (
         <div 
-          className="absolute inset-x-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn"
+          className="absolute inset-x-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
           style={{ top: `${scrollPosition}px`, minHeight: '100vh' }}
         >
-          <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative my-12">
+          <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative my-auto">
             
             <button 
               onClick={() => setIsModalOpen(false)}
