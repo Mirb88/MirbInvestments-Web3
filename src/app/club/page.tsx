@@ -9,6 +9,7 @@ export default function EliteClubPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState<{ name: string; price: string } | null>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   
   // Form States
   const [contactInfo, setContactInfo] = useState('');
@@ -23,6 +24,8 @@ export default function EliteClubPage() {
   if (!isMounted) return null;
 
   const openRequestModal = (tierName: string, price: string) => {
+    // Bilježimo tačnu poziciju skrola da modal izroni u visini korisčevog pogleda
+    setScrollPosition(window.scrollY);
     setSelectedTier({ name: tierName, price });
     setIsModalOpen(true);
   };
@@ -42,8 +45,8 @@ export default function EliteClubPage() {
         userId: `guest_${Date.now()}`,
         email: contactInfo,
         name: userName || 'Sovereign Guest',
-        subject: `Access Request: ${selectedTier?.name} (${selectedTier?.price})`,
-        message: `Direct request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
+        subject: `Interest Request: ${selectedTier?.name} (${selectedTier?.price})`,
+        message: `Direct interest request for ${selectedTier?.name} (${selectedTier?.price}). Contact: ${contactInfo}`,
         status: 'new',
         createdAt: serverTimestamp()
       });
@@ -51,12 +54,12 @@ export default function EliteClubPage() {
       setIsModalOpen(false);
       setContactInfo('');
       setUserName('');
-      setNotification(`Request submitted for ${selectedTier?.name}! Our elite team will reach out shortly.`);
+      setNotification(`Interest registered for ${selectedTier?.name}! Our elite team will reach out with all details.`);
       setTimeout(() => setNotification(null), 5000);
     } catch (error) {
       console.error('Firebase Error:', error);
       setIsModalOpen(false);
-      setNotification(`Request recorded! Welcome to ${selectedTier?.name}.`);
+      setNotification(`Interest recorded for ${selectedTier?.name}!`);
       setTimeout(() => setNotification(null), 5000);
     } finally {
       setIsSubmitting(false);
@@ -77,10 +80,13 @@ export default function EliteClubPage() {
         </div>
       )}
 
-      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL */}
+      {/* LUKSUZNI STAKLENI SOVEREIGN MODAL DINAMIČKI POZICIONIRAN */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative">
+        <div 
+          className="absolute inset-x-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
+          style={{ top: `${scrollPosition}px`, minHeight: '100vh' }}
+        >
+          <div className="bg-gradient-to-b from-zinc-900/95 to-black border-2 border-[#2FE93D]/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[0_0_50px_rgba(47,233,61,0.25)] relative my-auto">
             
             <button 
               onClick={() => setIsModalOpen(false)}
@@ -93,11 +99,13 @@ export default function EliteClubPage() {
               <span className="text-xs font-mono uppercase tracking-widest text-[#2FE93D] block mb-2">
                 Sovereign Access Portal
               </span>
-              <h3 className="text-2xl font-black text-white">
-                Confirm {selectedTier?.name}
+              <h3 className="text-2xl font-black text-white leading-tight">
+                {selectedTier?.name.includes('Summit') ? 'Jahorina 2026: Strategic Convergence' : `Confirm ${selectedTier?.name}`}
               </h3>
-              <p className="text-zinc-400 text-xs mt-1">
-                Tier Price: <strong className="text-[#2FE93D]">{selectedTier?.price}</strong>
+              <p className="text-zinc-400 text-xs mt-2">
+                {selectedTier?.name.includes('Summit') 
+                  ? 'Confirm your interest to receive direct event details and briefing.' 
+                  : `Tier Price: ${selectedTier?.price}`}
               </p>
             </div>
 
@@ -280,7 +288,7 @@ export default function EliteClubPage() {
             </p>
           </div>
           <button 
-            onClick={() => openRequestModal('Jahorina 2026 Summit', 'Invitation Only')}
+            onClick={() => openRequestModal('Jahorina 2026 Strategic Convergence', 'Invitation Only')}
             className="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-sm transition-all border border-white/10 whitespace-nowrap cursor-pointer"
           >
             Learn About Event →
