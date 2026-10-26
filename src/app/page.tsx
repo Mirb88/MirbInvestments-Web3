@@ -93,10 +93,6 @@ export default function Home() {
           <Link href="/club" className="px-4 py-2 rounded-xl bg-[#1b1b1b] border border-[#2FE93D]/30 hover:border-[#2FE93D] text-xs font-mono font-bold text-[#2FE93D] transition-all">
             Access Club →
           </Link>
-          <div className="hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-[#141414] border border-[#222222] shadow-inner">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2FE93D] animate-ping"></span>
-            <span className="text-[11px] font-mono text-[#8D99AE] tracking-wider uppercase font-bold">NODE ACTIVE</span>
-          </div>
         </div>
       </nav>
 
@@ -125,8 +121,8 @@ export default function Home() {
             <span>ENTER ACCESS CLUB</span>
             <span>→</span>
           </Link>
-          <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 bg-[#1b1b1b] border border-[#333333] text-[#EDF2F4] font-bold rounded-2xl hover:border-[#2FE93D] transition-all text-base">
-            Explore Diagnostics
+          <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#141414] border border-[#222222] hover:border-[#2FE93D] text-[#EDF2F4] font-bold text-center transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer">
+            <span>Explore Diagnostics</span>
           </Link>
         </div>
       </section>
