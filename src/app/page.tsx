@@ -50,10 +50,10 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section sa 3D Neon Video komponentom */}
+      {/* Hero Section */}
       <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        {/* Pozadinski neonski sjaj za vizuelni kontinuitet */}
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl animate-pulse"></div>
+        {/* Pozadinski neonski sjaj garantuje svjetlost čak i ako video pauzira */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/20 via-transparent to-transparent blur-3xl animate-pulse"></div>
 
         <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-[#1b1b1b] border border-[#2FE93D]/30 mb-8 backdrop-blur-md mx-auto">
           <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-pulse"></span>
@@ -71,15 +71,16 @@ export default function Home() {
           Elevating Luxury Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Purposeful Blockchain Innovation.
         </p>
 
-        {/* 3D NEON VIDEO CONTAINER SA GITHUB HERO-VISUAL.MP4 */}
-        <div className="my-8 relative max-w-2xl mx-auto rounded-3xl overflow-hidden border border-[#2FE93D]/40 shadow-[0_0_40px_rgba(47,233,61,0.2)] bg-zinc-950">
-          <div className="absolute inset-0 bg-[#2FE93D]/10 animate-pulse pointer-events-none"></div>
+        {/* 3D NEON VIDEO CONTAINER SA ROBUSNIM PARAMETRIMA */}
+        <div className="my-8 relative max-w-2xl mx-auto rounded-3xl overflow-hidden border-2 border-[#2FE93D]/50 shadow-[0_0_50px_rgba(47,233,61,0.3)] bg-zinc-950">
+          <div className="absolute inset-0 bg-[#2FE93D]/15 animate-pulse pointer-events-none"></div>
           <video 
             autoPlay 
             muted 
             loop 
             playsInline 
-            className="w-full h-auto object-cover opacity-95"
+            preload="auto"
+            className="w-full h-auto object-cover block relative z-10"
           >
             <source src="/hero-visual.mp4" type="video/mp4" />
             Your browser does not support the video tag.
