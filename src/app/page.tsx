@@ -21,7 +21,6 @@ export default function Home() {
             <span>ETH: <strong className="text-[#EDF2F4]">$2,370</strong> <span className="text-[#2FE93D]">(+0.8%)</span></span>
             <span>SOL: <strong className="text-[#EDF2F4]">$111.50</strong> <span className="text-[#2FE93D]">(+2.0%)</span></span>
             <span>TRX: <strong className="text-[#EDF2F4]">$0.28</strong> <span className="text-[#2FE93D]">(+0.2%)</span></span>
-            <span>LINK: <strong className="text-[#EDF2F4]">$18.90</strong> <span className="text-[#2FE93D]">(+1.4%)</span></span>
           </div>
           <span className="hidden md:inline text-[#2FE93D] font-mono pl-4">Sovereign Core v2026</span>
         </div>
@@ -51,8 +50,11 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section sa 3D Neon Video komponentom */}
       <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+        {/* Pozadinski neonski sjaj za vizuelni kontinuitet */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl animate-pulse"></div>
+
         <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-[#1b1b1b] border border-[#2FE93D]/30 mb-8 backdrop-blur-md mx-auto">
           <span className="w-2 h-2 rounded-full bg-[#2FE93D] animate-pulse"></span>
           <span className="text-xs font-bold tracking-widest text-[#2FE93D] uppercase">POWERED BY NEURAL INTELLIGENCE</span>
@@ -65,11 +67,26 @@ export default function Home() {
           </span>
         </h1>
 
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#8D99AE] mb-10 leading-relaxed">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#8D99AE] mb-8 leading-relaxed">
           Elevating Luxury Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Purposeful Blockchain Innovation.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
+        {/* 3D NEON VIDEO CONTAINER SA GITHUB HERO-VISUAL.MP4 */}
+        <div className="my-8 relative max-w-2xl mx-auto rounded-3xl overflow-hidden border border-[#2FE93D]/40 shadow-[0_0_40px_rgba(47,233,61,0.2)] bg-zinc-950">
+          <div className="absolute inset-0 bg-[#2FE93D]/10 animate-pulse pointer-events-none"></div>
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="w-full h-auto object-cover opacity-95"
+          >
+            <source src="/hero-visual.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none mt-8">
           <Link href="/club" className="w-full sm:w-auto px-8 py-4 bg-[#2FE93D] text-[#0D0D0D] font-extrabold rounded-2xl shadow-[0_0_30px_rgba(47,233,61,0.5)] hover:scale-105 transition-all flex items-center justify-center space-x-2 text-base cursor-pointer">
             <span>ENTER ACCESS CLUB</span>
             <span>→</span>
