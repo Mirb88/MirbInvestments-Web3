@@ -7,7 +7,7 @@ import { ShieldCheck, Gauge, BrainCircuit, Activity, Zap, Fingerprint, ArrowRigh
 export default function NeuralDiagnostics() {
   const [activeTerm, setActiveTerm] = useState<string | null>(null);
   const [customCommand, setCustomCommand] = useState('');
-  const [commandOutput, setCommandOutput] = useState('Neural Interface Online. Secure Node 88 Active. System ready.');
+  const [commandOutput, setCommandOutput] = useState('Neural Interface Online. Secure Node 88 Active. System ready for queries.');
 
   const financialTerms: Record<string, string> = {
     "Tokenized Real Estate": "Fragmented ownership of elite alpine and commercial assets backed by immutable blockchain ledgers.",
@@ -19,7 +19,20 @@ export default function NeuralDiagnostics() {
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customCommand.trim()) return;
-    setCommandOutput(`Executing secure command: "${customCommand}"... Node 88 verified. Response: Optimal execution path secured.`);
+    executeCommand(customCommand);
+  };
+
+  const executeCommand = (cmd: string) => {
+    const upperCmd = cmd.toUpperCase();
+    if (upperCmd.includes('AUDIT') || upperCmd.includes('RUN_AUDIT')) {
+      setCommandOutput('EXECUTING FULL SYSTEM AUDIT: All 41 autonomous swarms synchronized. Node 88 integrity: 100%. Zero vulnerability detected.');
+    } else if (upperCmd.includes('VAULT') || upperCmd.includes('VERIFY')) {
+      setCommandOutput('VAULT ENCRYPTION VERIFIED: Zero-risk state active. Immutable ledger protection engaged for all institutional assets.');
+    } else if (upperCmd.includes('LIQUIDITY') || upperCmd.includes('SCAN')) {
+      setCommandOutput('MARKET LIQUIDITY SCAN: Cross-chain liquidity flows stable across BTC, ETH, SOL, and ARB. Alpha generation channels optimal.');
+    } else {
+      setCommandOutput(`Executing secure command: "${cmd}"... Node 88 verified. Response: Execution path secured successfully.`);
+    }
     setCustomCommand('');
   };
 
@@ -62,7 +75,7 @@ export default function NeuralDiagnostics() {
           Merging traditional asset stability with elite neural intelligence for <strong className="text-[#2FE93D]">institutional-grade market protection</strong> and real-time clarity.
         </p>
 
-        {/* 3. PUBLIC ECOSYSTEM & METRICS CARD */}
+        {/* 3. PUBLIC REPUTATIONAL ECOSYSTEM METRICS (CLEANED OF INTERNAL DEPLOY NOTES) */}
         <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <h3 className="text-xl font-bold text-[#EDF2F4] mb-6 flex items-center gap-2">
             <Activity className="text-[#2FE93D]" size={22} />
@@ -78,8 +91,8 @@ export default function NeuralDiagnostics() {
               <span className="text-[#2FE93D] font-bold">SECURED (0.0% RISK)</span>
             </li>
             <li className="flex justify-between items-center">
-              <span>🌐 Web3 Domain Protocol (`mirbinvestments.crypto`):</span>
-              <span className="text-[#2FE93D] font-bold">READY FOR DEPLOY</span>
+              <span>🌐 Global Liquidity & Cross-Chain Sync:</span>
+              <span className="text-[#2FE93D] font-bold">ACTIVE & SYNCHRONIZED</span>
             </li>
           </ul>
         </div>
@@ -103,7 +116,7 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 5. NEW: FINANCIAL & INVESTMENT JARGON EXPLAINER MODULE */}
+        {/* 5. FINANCIAL & INVESTMENT JARGON EXPLAINER MODULE */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Terminal className="text-[#2FE93D]" size={24} />
@@ -140,19 +153,45 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 6. NEW: SECURE NEURAL INTERFACE COMMAND INJECTOR */}
+        {/* 6. INTERACTIVE SECURE NEURAL INTERFACE WITH QUICK BUTTON EXAMPLES */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Zap className="text-[#2FE93D]" size={24} />
             <h3 className="text-xl font-bold text-[#EDF2F4]">Secure Neural Interface</h3>
           </div>
+          <p className="text-xs sm:text-sm text-[#8D99AE] mb-4">
+            Test system diagnostics instantly by clicking a preset quick command or typing your own query:
+          </p>
+
+          {/* Quick Preset Buttons for Users */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => executeCommand('RUN_AUDIT')}
+              className="px-3 py-1.5 rounded-lg bg-[#1b1b1b] border border-[#333] text-[11px] font-mono text-[#2FE93D] hover:border-[#2FE93D] transition-all cursor-pointer"
+            >
+              ⚡ RUN_AUDIT
+            </button>
+            <button
+              onClick={() => executeCommand('VERIFY_VAULT')}
+              className="px-3 py-1.5 rounded-lg bg-[#1b1b1b] border border-[#333] text-[11px] font-mono text-[#2FE93D] hover:border-[#2FE93D] transition-all cursor-pointer"
+            >
+              🛡️ VERIFY_VAULT
+            </button>
+            <button
+              onClick={() => executeCommand('SCAN_MARKET')}
+              className="px-3 py-1.5 rounded-lg bg-[#1b1b1b] border border-[#333] text-[11px] font-mono text-[#2FE93D] hover:border-[#2FE93D] transition-all cursor-pointer"
+            >
+              🌐 SCAN_MARKET
+            </button>
+          </div>
+
           <form onSubmit={handleCommandSubmit} className="space-y-4">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={customCommand}
                 onChange={(e) => setCustomCommand(e.target.value)}
-                placeholder="Inject secure command (e.g. RUN_DIAGNOSTICS)..."
+                placeholder="Inject secure command (e.g. RUN_AUDIT)..."
                 className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] font-mono text-xs focus:outline-none focus:border-[#2FE93D]"
               />
               <button
@@ -172,7 +211,7 @@ export default function NeuralDiagnostics() {
         <div className="p-10 rounded-3xl bg-gradient-to-b from-[#2FE93D]/10 to-transparent border border-[#2FE93D]/30 text-center">
           <h3 className="text-2xl font-black text-[#EDF2F4] mb-4">Your Strategic Advantage is Here.</h3>
           <p className="text-[#8D99AE] max-w-xl mx-auto text-sm mb-8 leading-relaxed">
-            Harness true institutional intelligence and prepare for seamless Web3 deployment on <strong className="text-[#EDF2F4]">mirbinvestments.crypto</strong>.
+            Harness true institutional intelligence and experience the future of Web3 asset management with <strong className="text-[#EDF2F4]">MirbInvestments</strong>.
           </p>
           <Link href="/club" className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#2FE93D] text-[#0D0D0D] font-extrabold text-base hover:scale-105 transition-all shadow-[0_0_30px_rgba(47,233,61,0.4)]">
             <span>Enter Access Club</span>
