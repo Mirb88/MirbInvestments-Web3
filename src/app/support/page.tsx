@@ -89,7 +89,7 @@ export default function SupportPage() {
         <div className="text-center mb-16">
           <div className="w-16 h-16 rounded-full bg-[#1b1b1b] border border-[#2FE93D]/40 flex items-center justify-center mx-auto mb-6 shadow-[0_0_25px_rgba(47,233,61,0.25)]">
             <svg className="w-8 h-8 text-[#2FE93D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636l3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-[#EDF2F4] tracking-tight mb-4">
@@ -190,7 +190,7 @@ export default function SupportPage() {
           </div>
         </section>
 
-        {/* DIRECT CONTACT OPTIONS (WHATSAPP INTEGRATION) */}
+        {/* DIRECT CONTACT OPTIONS (CLEAN INSTITUTIONAL BUTTON WITHOUT PHONE NUMBER) */}
         <section className="p-8 rounded-3xl bg-[#141414] border border-[#222222] text-left">
           <h2 className="text-xl font-black text-[#EDF2F4] mb-2">Direct Contact Options</h2>
           <p className="text-xs text-[#8D99AE] mb-8">For direct inquiries or time-sensitive matters, use our priority channels.</p>
@@ -199,16 +199,16 @@ export default function SupportPage() {
             <div className="p-6 rounded-2xl bg-[#0D0D0D] border border-[#222222]">
               <div className="flex items-center space-x-3 mb-3">
                 <span className="text-[#2FE93D] text-lg">💬</span>
-                <h3 className="font-bold text-sm text-[#EDF2F4]">WhatsApp Priority Channel</h3>
+                <h3 className="font-bold text-sm text-[#EDF2F4]">Priority Routing Channel</h3>
               </div>
-              <p className="text-xs text-[#8D99AE] mb-3">For quick chats, direct routing, and instant assistance.</p>
+              <p className="text-xs text-[#8D99AE] mb-3">For fast-track inquiries, direct routing, and instant assistance.</p>
               <a 
                 href="https://wa.me/387603527846" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-block px-4 py-2.5 rounded-xl bg-[#2FE93D] text-[#0D0D0D] text-xs font-mono font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(47,233,61,0.3)]"
+                className="inline-block px-5 py-2.5 rounded-xl bg-[#2FE93D] text-[#0D0D0D] text-xs font-mono font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(47,233,61,0.3)]"
               >
-                Chat on WhatsApp (+387 60 352 7846)
+                Open Priority Channel
               </a>
             </div>
 
