@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Standardni produkcijski izvoz prilagođen Vercel serverima
+  // Standardna konfiguracija za dinamički rad i Vercel sinhronizaciju
 };
 
 export default nextConfig;
