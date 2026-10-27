@@ -12,24 +12,20 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   {
-    question: "What is the primary benefit of being a MirbInvestments Club member?",
-    answer: "Club members gain priority access to AI-driven market intelligence, exclusive real estate tokenization opportunities, tailored portfolio allocations, and institutional-grade risk management protocols."
+    question: "How do decentralized digital passes and asset allocations operate?",
+    answer: "Verified ecosystem participants receive immutable Web3 NFT passes (backed by initiatives like financeinvestment.nft) granting decentralized access rights, automated yield distribution, and customized asset tiering."
   },
   {
-    question: "Do I receive a physical card and an NFT as a Club member?",
-    answer: "Yes, verified tier members receive an immutable Web3 NFT pass that grants decentralized access rights, along with option eligibility for customized physical membership cards."
+    question: "How does tokenized asset exchange and liquidity routing work?",
+    answer: "Our ecosystem provides seamless, low-friction cross-chain execution across major networks (BTC, ETH, SOL, TRX, ARB, POL) with direct neural liquidity analysis to ensure optimal execution rates."
   },
   {
-    question: "How does the 'Crypto Shop' and Exchange functionality work?",
-    answer: "Our ecosystem provides seamless, low-friction exchange execution across major chains (BTC, ETH, SOL, TRX, ARB, POL) with direct neural liquidity analysis to ensure optimal rates."
-  },
-  {
-    question: "Is my capital safe with MirbInvestments?",
-    answer: "Security is built into our core foundation. We enforce strict multi-layer vault encryption, automated schema guards, and zero-trust protocol standards across all asset pathways."
+    question: "Is my capital secure within the MirbInvestments ecosystem?",
+    answer: "Security is built into our core foundation. We enforce multi-layer vault encryption, automated schema guards, and zero-trust protocol standards across all asset pathways."
   },
   {
     question: "How long does a support inquiry analysis take?",
-    answer: "Our hybrid intelligence swarm evaluates support requests in real time. Critical priority cases receive responses within executive timeframes."
+    answer: "Our hybrid intelligence framework combines expert human oversight with advanced AI analytics in real time. Inquiries are evaluated immediately, with priority routing ensuring rapid and precise executive responses."
   }
 ];
 
@@ -57,7 +53,7 @@ export default function SupportPage() {
           status: 'pending'
         });
       }
-      setStatusMsg('Your support request has been securely dispatched. Our elite team will respond shortly.');
+      setStatusMsg('Your support request has been securely dispatched. Our synergistic team will respond shortly.');
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (err) {
       console.error('Support submission error:', err);
@@ -97,17 +93,17 @@ export default function SupportPage() {
             </svg>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-[#EDF2F4] tracking-tight mb-4">
-            MirbInvestments <span className="bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">Elite Support</span>
+            MirbInvestments <span className="bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">Support & Neural Assistance</span>
           </h1>
           <p className="text-[#8D99AE] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Our support desk is an extension of our philosophy. Here, your inquiries are analyzed by our synergistic team of seasoned experts and advanced AI to ensure you receive precise and purposeful responses.
+            Our support desk is an extension of our philosophy. Here, your inquiries are analyzed by our synergistic team of seasoned experts and advanced AI (Human + AI Synergy) to ensure you receive precise and purposeful responses promptly.
           </p>
         </div>
 
         {/* SUBMIT REQUEST FORM */}
         <section className="p-6 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl mb-16">
           <h2 className="text-xl font-black text-[#EDF2F4] mb-2">Submit a Support Request</h2>
-          <p className="text-xs text-[#8D99AE] mb-8">Direct priority routing to our executive support team.</p>
+          <p className="text-xs text-[#8D99AE] mb-8">Your inquiry will be analyzed by our synergistic team of seasoned experts and advanced AI to ensure you receive a precise and purposeful response.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -140,7 +136,7 @@ export default function SupportPage() {
                 type="text"
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                placeholder="e.g. Inquiry regarding Club Membership"
+                placeholder="e.g. Issue with my deposit"
                 className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] text-xs font-mono focus:outline-none focus:border-[#2FE93D]"
               />
             </div>
@@ -152,7 +148,7 @@ export default function SupportPage() {
                 required
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                placeholder="Please describe your inquiry in detail..."
+                placeholder="Please describe your issue in detail..."
                 className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] text-xs font-mono focus:outline-none focus:border-[#2FE93D] resize-none"
               ></textarea>
             </div>
@@ -194,7 +190,7 @@ export default function SupportPage() {
           </div>
         </section>
 
-        {/* DIRECT CONTACT OPTIONS */}
+        {/* DIRECT CONTACT OPTIONS (WHATSAPP INTEGRATION) */}
         <section className="p-8 rounded-3xl bg-[#141414] border border-[#222222] text-left">
           <h2 className="text-xl font-black text-[#EDF2F4] mb-2">Direct Contact Options</h2>
           <p className="text-xs text-[#8D99AE] mb-8">For direct inquiries or time-sensitive matters, use our priority channels.</p>
@@ -202,24 +198,29 @@ export default function SupportPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="p-6 rounded-2xl bg-[#0D0D0D] border border-[#222222]">
               <div className="flex items-center space-x-3 mb-3">
-                <span className="text-[#2FE93D] text-lg">✉</span>
-                <h3 className="font-bold text-sm text-[#EDF2F4]">Email Support</h3>
+                <span className="text-[#2FE93D] text-lg">💬</span>
+                <h3 className="font-bold text-sm text-[#EDF2F4]">WhatsApp Priority Channel</h3>
               </div>
-              <p className="text-xs text-[#8D99AE] mb-3">Our primary channel for executive inquiries.</p>
-              <a href="mailto:support@mirb.investments" className="text-xs font-mono font-bold text-[#2FE93D] hover:underline">
-                support@mirb.investments
+              <p className="text-xs text-[#8D99AE] mb-3">For quick chats, direct routing, and instant assistance.</p>
+              <a 
+                href="https://wa.me/387603527846" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2.5 rounded-xl bg-[#2FE93D] text-[#0D0D0D] text-xs font-mono font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(47,233,61,0.3)]"
+              >
+                Chat on WhatsApp (+387 60 352 7846)
               </a>
             </div>
 
             <div className="p-6 rounded-2xl bg-[#0D0D0D] border border-[#222222]">
               <div className="flex items-center space-x-3 mb-3">
-                <span className="text-[#2FE93D] text-lg">💬</span>
-                <h3 className="font-bold text-sm text-[#EDF2F4]">Direct Messaging</h3>
+                <span className="text-[#2FE93D] text-lg">🛡️</span>
+                <h3 className="font-bold text-sm text-[#EDF2F4]">Executive Dispatch</h3>
               </div>
-              <p className="text-xs text-[#8D99AE] mb-3">For priority members and instant response routing.</p>
-              <a href="mailto:support@mirb.investments" className="inline-block px-4 py-2 rounded-xl bg-[#1b1b1b] border border-[#333] text-xs font-mono text-[#EDF2F4] hover:border-[#2FE93D]">
-                Priority Channel Active
-              </a>
+              <p className="text-xs text-[#8D99AE] mb-3">Human + AI Synergy routing active for all inquiries.</p>
+              <span className="text-xs font-mono text-[#2FE93D] font-bold">
+                Status: Operational (0.0% Risk)
+              </span>
             </div>
           </div>
         </section>
