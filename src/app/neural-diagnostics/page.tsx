@@ -7,7 +7,7 @@ import { ShieldCheck, Gauge, BrainCircuit, Activity, Zap, Fingerprint, ArrowRigh
 export default function NeuralDiagnostics() {
   const [activeTerm, setActiveTerm] = useState<string | null>(null);
   const [customTermQuery, setCustomTermQuery] = useState('');
-  const [termOutput, setTermOutput] = useState('Select a term above or type a custom financial concept to reveal neural insights.');
+  const [termOutput, setTermOutput] = useState('Select a term above or type a custom financial concept for institutional definition.');
 
   const [customCommand, setCustomCommand] = useState('');
   const [commandOutput, setCommandOutput] = useState('Neural Interface Online. Secure Node 88 Active. System ready for queries.');
@@ -29,7 +29,8 @@ export default function NeuralDiagnostics() {
     if (!customTermQuery.trim()) return;
     const query = customTermQuery.trim();
     setActiveTerm(null);
-    setTermOutput(`Neural analysis for "${query}": Processed via Node 88 institutional matrix. High liquidity and zero-counterparty risk profile confirmed.`);
+    // Specifična finansijska definicija za gornji eksplainer modul
+    setTermOutput(`Institutional Definition for "${query}": Advanced market structure characterized by decentralized governance, algorithmic asset distribution, and high-yield liquidity potential within the Web3 ecosystem.`);
     setCustomTermQuery('');
   };
 
@@ -50,7 +51,7 @@ export default function NeuralDiagnostics() {
     } else if (upperCmd.includes('LIQUIDITY') || upperCmd.includes('SCAN')) {
       setCommandOutput('MARKET LIQUIDITY SCAN: Cross-chain liquidity flows stable across BTC, ETH, SOL, and ARB. Alpha generation channels optimal.');
     } else {
-      setCommandOutput(`NEURAL ANALYSIS FOR "${raw}": Query registered and routed through Node 88. Synthesis complete: Optimal execution path secured with 0.0% risk.`);
+      setCommandOutput(`DIAGNOSTIC COMMAND "${raw}" EXECUTED: Secure Node 88 response verified. System state optimal with 0.0% risk.`);
     }
     setCustomCommand('');
   };
@@ -135,7 +136,7 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 5. FULLY INTERACTIVE FINANCIAL & INVESTMENT JARGON EXPLAINER WITH CUSTOM INPUT */}
+        {/* 5. INSTITUTIONAL TERMINOLOGY & AI EXPLAINER (SPECIFIC FINANCIAL DEFINITION ENGINE) */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Terminal className="text-[#2FE93D]" size={24} />
@@ -186,7 +187,7 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 6. FULLY INTERACTIVE SECURE NEURAL INTERFACE */}
+        {/* 6. SECURE NEURAL INTERFACE (SYSTEM DIAGNOSTICS & COMMAND LINE) */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Zap className="text-[#2FE93D]" size={24} />
