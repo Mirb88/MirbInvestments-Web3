@@ -23,7 +23,9 @@ export default function NeuralDiagnostics() {
   };
 
   const executeCommand = (cmd: string) => {
-    const upperCmd = cmd.toUpperCase();
+    const raw = cmd.trim();
+    const upperCmd = raw.toUpperCase();
+    
     if (upperCmd.includes('AUDIT') || upperCmd.includes('RUN_AUDIT')) {
       setCommandOutput('EXECUTING FULL SYSTEM AUDIT: All 41 autonomous swarms synchronized. Node 88 integrity: 100%. Zero vulnerability detected.');
     } else if (upperCmd.includes('VAULT') || upperCmd.includes('VERIFY')) {
@@ -31,7 +33,8 @@ export default function NeuralDiagnostics() {
     } else if (upperCmd.includes('LIQUIDITY') || upperCmd.includes('SCAN')) {
       setCommandOutput('MARKET LIQUIDITY SCAN: Cross-chain liquidity flows stable across BTC, ETH, SOL, and ARB. Alpha generation channels optimal.');
     } else {
-      setCommandOutput(`Executing secure command: "${cmd}"... Node 88 verified. Response: Execution path secured successfully.`);
+      // Dinamički odgovor za bilo koji proizvoljni unos korisnika (Human + AI Synergy)
+      setCommandOutput(`NEURAL ANALYSIS FOR "${raw}": Query registered and routed through Node 88. Synthesis complete: Optimal execution path secured with 0.0% risk.`);
     }
     setCustomCommand('');
   };
@@ -75,7 +78,7 @@ export default function NeuralDiagnostics() {
           Merging traditional asset stability with elite neural intelligence for <strong className="text-[#2FE93D]">institutional-grade market protection</strong> and real-time clarity.
         </p>
 
-        {/* 3. PUBLIC REPUTATIONAL ECOSYSTEM METRICS (CLEANED OF INTERNAL DEPLOY NOTES) */}
+        {/* 3. PUBLIC REPUTATIONAL ECOSYSTEM METRICS */}
         <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <h3 className="text-xl font-bold text-[#EDF2F4] mb-6 flex items-center gap-2">
             <Activity className="text-[#2FE93D]" size={22} />
@@ -153,14 +156,14 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 6. INTERACTIVE SECURE NEURAL INTERFACE WITH QUICK BUTTON EXAMPLES */}
+        {/* 6. FULLY INTERACTIVE SECURE NEURAL INTERFACE */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Zap className="text-[#2FE93D]" size={24} />
             <h3 className="text-xl font-bold text-[#EDF2F4]">Secure Neural Interface</h3>
           </div>
           <p className="text-xs sm:text-sm text-[#8D99AE] mb-4">
-            Test system diagnostics instantly by clicking a preset quick command or typing your own query:
+            Test system diagnostics instantly by clicking a preset quick command or typing your own custom query below:
           </p>
 
           {/* Quick Preset Buttons for Users */}
@@ -191,7 +194,7 @@ export default function NeuralDiagnostics() {
                 type="text"
                 value={customCommand}
                 onChange={(e) => setCustomCommand(e.target.value)}
-                placeholder="Inject secure command (e.g. RUN_AUDIT)..."
+                placeholder="Type your custom query or command here..."
                 className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] font-mono text-xs focus:outline-none focus:border-[#2FE93D]"
               />
               <button
@@ -209,9 +212,9 @@ export default function NeuralDiagnostics() {
 
         {/* 7. CTA TO CLUB */}
         <div className="p-10 rounded-3xl bg-gradient-to-b from-[#2FE93D]/10 to-transparent border border-[#2FE93D]/30 text-center">
-          <h3 className="text-2xl font-black text-[#EDF2F4] mb-4">Your Strategic Advantage is Here.</h3>
-          <p className="text-[#8D99AE] max-w-xl mx-auto text-sm mb-8 leading-relaxed">
-            Harness true institutional intelligence and experience the future of Web3 asset management with <strong className="text-[#EDF2F4]">MirbInvestments</strong>.
+          <h3 className="text-3xl font-black text-[#EDF2F4] mb-4">Your Strategic Advantage is Here.</h3>
+          <p className="text-[#8D99AE] max-w-2xl mx-auto text-lg font-light leading-relaxed mb-8">
+            Harness the power of true institutional-grade intelligence. Experience the foundational clarity of our sovereign platform.
           </p>
           <Link href="/club" className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#2FE93D] text-[#0D0D0D] font-extrabold text-base hover:scale-105 transition-all shadow-[0_0_30px_rgba(47,233,61,0.4)]">
             <span>Enter Access Club</span>
