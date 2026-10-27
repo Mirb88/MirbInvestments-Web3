@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { subscribeToNewsletter } from '@/services/newsletter';
 
 export default function Home() {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [cryptoPrices, setCryptoPrices] = useState({
     btc: '80,685',
@@ -50,11 +52,26 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newsletterEmail.trim()) return;
-    setNewsletterStatus('Secure channel established. Institutional dispatch activated.');
-    setNewsletterEmail('');
+    if (!newsletterEmail.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setNewsletterStatus(null);
+
+    try {
+      const result = await subscribeToNewsletter({ email: newsletterEmail });
+      if (result.success) {
+        setNewsletterStatus('Secure channel established. Email successfully synchronized with Firestore vault.');
+        setNewsletterEmail('');
+      } else {
+        setNewsletterStatus(result.error || 'Subscription failed. Please try again.');
+      }
+    } catch (err: any) {
+      setNewsletterStatus('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -174,7 +191,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. INSTITUTIONAL INTELLIGENCE DISPATCH (CLEANED OF INTERNAL TERMS) */}
+      {/* 5. INSTITUTIONAL INTELLIGENCE DISPATCH (CONNECTED TO FIRESTORE) */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
         <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl">
           <h3 className="text-xl font-bold text-[#EDF2F4] mb-2">Institutional Intelligence Dispatch</h3>
@@ -188,13 +205,15 @@ export default function Home() {
               onChange={(e) => setNewsletterEmail(e.target.value)}
               placeholder="Enter your institutional email..."
               required
+              disabled={isSubmitting}
               className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] text-xs font-mono focus:outline-none focus:border-[#2FE93D]"
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-xs hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
+              disabled={isSubmitting}
+              className="px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-xs hover:scale-105 transition-all cursor-pointer whitespace-nowrap disabled:opacity-50"
             >
-              Subscribe
+              {isSubmitting ? 'Syncing...' : 'Subscribe'}
             </button>
           </form>
           {newsletterStatus && (
