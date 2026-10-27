@@ -62,7 +62,7 @@ export default function Home() {
     try {
       const result = await subscribeToNewsletter({ email: newsletterEmail });
       if (result.success) {
-        setNewsletterStatus('Secure channel established. Email successfully synchronized with Firestore vault.');
+        setNewsletterStatus('Secure channel established. Executive dispatch successfully synchronized.');
         setNewsletterEmail('');
       } else {
         setNewsletterStatus(result.error || 'Subscription failed. Please try again.');
@@ -191,7 +191,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. INSTITUTIONAL INTELLIGENCE DISPATCH (CONNECTED TO FIRESTORE) */}
+      {/* 5. INSTITUTIONAL INTELLIGENCE DISPATCH */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
         <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl">
           <h3 className="text-xl font-bold text-[#EDF2F4] mb-2">Institutional Intelligence Dispatch</h3>
