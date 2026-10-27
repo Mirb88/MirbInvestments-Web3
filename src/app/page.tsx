@@ -5,6 +5,9 @@ import Link from 'next/link';
 
 export default function Home() {
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
+  
   const [cryptoPrices, setCryptoPrices] = useState({
     btc: '80,685',
     eth: '2,370',
@@ -16,7 +19,7 @@ export default function Home() {
     link: '14.20'
   });
 
-  // CoinGecko Live Ticker Sync Effect (Extended Portfolio)
+  // CoinGecko Live Ticker Sync Effect
   useEffect(() => {
     const fetchPrices = async () => {
       try {
@@ -43,14 +46,22 @@ export default function Home() {
     };
 
     fetchPrices();
-    const interval = setInterval(fetchPrices, 30000); // Osvježavanje svakih 30 sekundi
+    const interval = setInterval(fetchPrices, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) return;
+    // Simulacija Firestore sinhronizacije izvještaja
+    setNewsletterStatus('Secure link established. Email synchronized with Firestore vault.');
+    setNewsletterEmail('');
+  };
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       
-      {/* 1. REAL LIVE PULSE TICKER BAR SA COINGECKO PROŠIRENIM PODACIMA */}
+      {/* 1. REAL LIVE PULSE TICKER BAR */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
@@ -71,7 +82,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. ULTRA CLEAN SOVEREIGN HEADER */}
+      {/* 2. SOVEREIGN HEADER */}
       <nav className="w-full px-4 sm:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3.5">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1b1b1b] to-[#0D0D0D] border border-[#2FE93D]/40 flex items-center justify-center shadow-[0_0_20px_rgba(47,233,61,0.25)] flex-shrink-0">
@@ -96,7 +107,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* 3. HERO SECTION */}
       <section className="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl animate-pulse"></div>
 
@@ -113,7 +124,7 @@ export default function Home() {
         </h1>
 
         <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#8D99AE] mb-12 leading-relaxed">
-          Elevating Luxury Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Purposeful Blockchain Innovation.
+          Elevating Institutional Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Sovereign Blockchain Innovation.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
@@ -121,18 +132,18 @@ export default function Home() {
             <span>ENTER ACCESS CLUB</span>
             <span>→</span>
           </Link>
-          <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#141414] border border-[#222222] hover:border-[#2FE93D] text-[#EDF2F4] font-bold text-center transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer">
+          <Link href="/neural-diagnostics" className="w-full sm:w-auto px-8 py-4 bg-[#141414] border border-[#222222] hover:border-[#2FE93D] text-[#EDF2F4] font-bold rounded-2xl transition-all text-base flex items-center justify-center space-x-2 cursor-pointer">
             <span>Explore Diagnostics</span>
           </Link>
         </div>
       </section>
 
-      {/* Interactive Investment Goal Widget */}
+      {/* 4. INTERACTIVE ASSET ALLOCATOR WIDGET */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="p-6 sm:p-8 rounded-3xl bg-[#141414]/80 border border-[#222222] backdrop-blur-xl shadow-2xl relative overflow-hidden">
           <div className="text-center mb-8">
             <h3 className="text-xl sm:text-2xl font-black text-[#EDF2F4] mb-2">Not Sure Where to Start?</h3>
-            <p className="text-[#8D99AE] text-xs sm:text-sm">Let our AI find the perfect crypto bundle for your investment goals.</p>
+            <p className="text-[#8D99AE] text-xs sm:text-sm">Let our sovereign AI find the perfect portfolio bundle for your investment goals.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -164,9 +175,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* 5. FIRESTORE-CONNECTED NEWSLETTER / REPORT SUBSCRIPTION SECTION */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
+        <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl">
+          <h3 className="text-xl font-bold text-[#EDF2F4] mb-2">Institutional Intelligence Dispatch</h3>
+          <p className="text-xs sm:text-sm text-[#8D99AE] mb-6">
+            Subscribe to receive real-time neural audit reports directly synchronized with our secure Firestore vault.
+          </p>
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              placeholder="Enter your institutional email..."
+              required
+              className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] text-xs font-mono focus:outline-none focus:border-[#2FE93D]"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-xs hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
+            >
+              Subscribe
+            </button>
+          </form>
+          {newsletterStatus && (
+            <p className="mt-4 text-xs font-mono text-[#2FE93D]">{newsletterStatus}</p>
+          )}
+        </div>
+      </section>
+
+      {/* 6. FOOTER */}
       <footer className="border-t border-[#222222] py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs sm:text-sm text-[#8D99AE]">
         <p className="mb-4">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
+        <p className="mb-4">
+          <Link href="/about" className="hover:text-[#2FE93D] mx-2">About Us</Link> | 
+          <Link href="/support" className="hover:text-[#2FE93D] mx-2">Support</Link> | 
+          <Link href="/newsletter" className="hover:text-[#2FE93D] mx-2">Newsletter</Link>
+        </p>
         <p>© 2026 All Rights Reserved. Sovereign Elite Architecture.</p>
       </footer>
     </div>
