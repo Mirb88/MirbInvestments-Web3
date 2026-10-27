@@ -21,7 +21,6 @@ export default function Home() {
     link: '14.20'
   });
 
-  // CoinGecko Live Ticker Sync Effect
   useEffect(() => {
     const fetchPrices = async () => {
       try {
@@ -135,12 +134,12 @@ export default function Home() {
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-[#EDF2F4] mb-6 leading-tight">
           MirbInvestments<br />
           <span className="bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
-            The Apex of Human-AI Synergy
+            The Architecture of Truth
           </span>
         </h1>
 
         <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#8D99AE] mb-12 leading-relaxed">
-          Elevating Institutional Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Sovereign Blockchain Innovation.
+          Where Wisdom Meets Precision in the Age of Neural Intelligence. Elevating Institutional Assets through <strong className="text-[#EDF2F4]">Neural Diagnostics</strong> and Sovereign Blockchain Innovation.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
@@ -222,14 +221,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. CLEAN FOOTER (ABOUT US & SUPPORT) */}
+      {/* 6. EXACT REQUESTED FOOTER */}
       <footer className="border-t border-[#222222] py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs sm:text-sm text-[#8D99AE]">
         <p className="mb-4">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
         <p className="mb-4">
           <Link href="/about" className="hover:text-[#2FE93D] mx-2">About Us</Link> | 
           <Link href="/support" className="hover:text-[#2FE93D] mx-2">Support</Link>
         </p>
-        <p>© 2026 All Rights Reserved. Sovereign Elite Architecture.</p>
+        <p>© 2026 All Rights Reserved. Sovereign Elite Architecture</p>
       </footer>
     </div>
   );
