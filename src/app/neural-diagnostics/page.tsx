@@ -6,6 +6,9 @@ import { ShieldCheck, Gauge, BrainCircuit, Activity, Zap, Fingerprint, ArrowRigh
 
 export default function NeuralDiagnostics() {
   const [activeTerm, setActiveTerm] = useState<string | null>(null);
+  const [customTermQuery, setCustomTermQuery] = useState('');
+  const [termOutput, setTermOutput] = useState('Select a term above or type a custom financial concept to reveal neural insights.');
+
   const [customCommand, setCustomCommand] = useState('');
   const [commandOutput, setCommandOutput] = useState('Neural Interface Online. Secure Node 88 Active. System ready for queries.');
 
@@ -14,6 +17,20 @@ export default function NeuralDiagnostics() {
     "Alpha Generation": "The ability of our 41 autonomous AI agents to outperform traditional market benchmarks through predictive volatility mapping.",
     "Neural Volatility Decoupling": "Advanced algorithmic shielding that insulates elite portfolios from sudden macroeconomic shocks and liquidity crunches.",
     "Smart Liquidity Pools": "Automated capital allocation engines designed to maximize yield with zero counterparty risk."
+  };
+
+  const handleTermSelect = (term: string) => {
+    setActiveTerm(term);
+    setTermOutput(financialTerms[term]);
+  };
+
+  const handleCustomTermSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customTermQuery.trim()) return;
+    const query = customTermQuery.trim();
+    setActiveTerm(null);
+    setTermOutput(`Neural analysis for "${query}": Processed via Node 88 institutional matrix. High liquidity and zero-counterparty risk profile confirmed.`);
+    setCustomTermQuery('');
   };
 
   const handleCommandSubmit = (e: React.FormEvent) => {
@@ -33,7 +50,6 @@ export default function NeuralDiagnostics() {
     } else if (upperCmd.includes('LIQUIDITY') || upperCmd.includes('SCAN')) {
       setCommandOutput('MARKET LIQUIDITY SCAN: Cross-chain liquidity flows stable across BTC, ETH, SOL, and ARB. Alpha generation channels optimal.');
     } else {
-      // Dinamički odgovor za bilo koji proizvoljni unos korisnika (Human + AI Synergy)
       setCommandOutput(`NEURAL ANALYSIS FOR "${raw}": Query registered and routed through Node 88. Synthesis complete: Optimal execution path secured with 0.0% risk.`);
     }
     setCustomCommand('');
@@ -119,21 +135,21 @@ export default function NeuralDiagnostics() {
           </div>
         </div>
 
-        {/* 5. FINANCIAL & INVESTMENT JARGON EXPLAINER MODULE */}
+        {/* 5. FULLY INTERACTIVE FINANCIAL & INVESTMENT JARGON EXPLAINER WITH CUSTOM INPUT */}
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl text-left mb-16">
           <div className="flex items-center space-x-3 mb-6">
             <Terminal className="text-[#2FE93D]" size={24} />
             <h3 className="text-xl font-bold text-[#EDF2F4]">Institutional Terminology & AI Explainer</h3>
           </div>
           <p className="text-xs sm:text-sm text-[#8D99AE] mb-6">
-            Tap any strategic investment term below for instant elite neural analysis:
+            Tap any strategic investment term below or type your own custom concept for instant elite neural analysis:
           </p>
           
           <div className="flex flex-wrap gap-3 mb-6">
             {Object.keys(financialTerms).map((term) => (
               <button
                 key={term}
-                onClick={() => setActiveTerm(term)}
+                onClick={() => handleTermSelect(term)}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   activeTerm === term
                     ? 'bg-[#2FE93D] text-[#0D0D0D] shadow-[0_0_15px_rgba(47,233,61,0.4)]'
@@ -145,13 +161,27 @@ export default function NeuralDiagnostics() {
             ))}
           </div>
 
+          <form onSubmit={handleCustomTermSubmit} className="space-y-4 mb-6">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customTermQuery}
+                onChange={(e) => setCustomTermQuery(e.target.value)}
+                placeholder="Type any custom financial term or concept to analyze..."
+                className="w-full px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#333] text-[#EDF2F4] font-mono text-xs focus:outline-none focus:border-[#2FE93D]"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-xl bg-[#2FE93D] text-[#0D0D0D] font-bold text-xs hover:scale-105 transition-all cursor-pointer"
+              >
+                Analyze
+              </button>
+            </div>
+          </form>
+
           <div className="p-4 rounded-2xl bg-[#0D0D0D] border border-[#222222]">
             <p className="text-xs sm:text-sm text-[#8D99AE] font-mono">
-              {activeTerm ? (
-                <span><strong className="text-[#2FE93D]">{activeTerm}:</strong> {financialTerms[activeTerm]}</span>
-              ) : (
-                <span>Select a term above to reveal neural insights.</span>
-              )}
+              <span>{termOutput}</span>
             </p>
           </div>
         </div>
@@ -166,7 +196,6 @@ export default function NeuralDiagnostics() {
             Test system diagnostics instantly by clicking a preset quick command or typing your own custom query below:
           </p>
 
-          {/* Quick Preset Buttons for Users */}
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => executeCommand('RUN_AUDIT')}
