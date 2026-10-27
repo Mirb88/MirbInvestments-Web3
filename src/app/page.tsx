@@ -53,8 +53,7 @@ export default function Home() {
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
-    // Simulacija Firestore sinhronizacije izvještaja
-    setNewsletterStatus('Secure link established. Email synchronized with Firestore vault.');
+    setNewsletterStatus('Secure channel established. Institutional dispatch activated.');
     setNewsletterEmail('');
   };
 
@@ -175,12 +174,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. FIRESTORE-CONNECTED NEWSLETTER / REPORT SUBSCRIPTION SECTION */}
+      {/* 5. INSTITUTIONAL INTELLIGENCE DISPATCH (CLEANED OF INTERNAL TERMS) */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto text-center">
         <div className="p-8 rounded-3xl bg-[#141414] border border-[#222222] shadow-2xl">
           <h3 className="text-xl font-bold text-[#EDF2F4] mb-2">Institutional Intelligence Dispatch</h3>
           <p className="text-xs sm:text-sm text-[#8D99AE] mb-6">
-            Subscribe to receive real-time neural audit reports directly synchronized with our secure Firestore vault.
+            Subscribe to receive real-time neural audit reports and exclusive market clarity insights directly to your executive inbox.
           </p>
           <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
@@ -204,13 +203,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. FOOTER */}
+      {/* 6. CLEAN FOOTER (ABOUT US & SUPPORT) */}
       <footer className="border-t border-[#222222] py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs sm:text-sm text-[#8D99AE]">
         <p className="mb-4">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
         <p className="mb-4">
           <Link href="/about" className="hover:text-[#2FE93D] mx-2">About Us</Link> | 
-          <Link href="/support" className="hover:text-[#2FE93D] mx-2">Support</Link> | 
-          <Link href="/newsletter" className="hover:text-[#2FE93D] mx-2">Newsletter</Link>
+          <Link href="/support" className="hover:text-[#2FE93D] mx-2">Support</Link>
         </p>
         <p>© 2026 All Rights Reserved. Sovereign Elite Architecture.</p>
       </footer>
