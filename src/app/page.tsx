@@ -47,6 +47,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       
+      {/* 1. LIVE PULSE TICKER */}
       <div className="bg-[#141414] border-b border-[#222222] py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-[#8D99AE]">
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6 animate-marquee">
@@ -63,6 +64,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* 2. HEADER */}
       <nav className="w-full px-4 sm:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
         <div className="flex items-center space-x-3.5">
           <span className="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-[#EDF2F4] via-[#8D99AE] to-[#2FE93D] bg-clip-text text-transparent">
@@ -76,6 +78,7 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* HERO SECTION */}
       <section className="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2FE93D]/15 via-transparent to-transparent blur-3xl animate-pulse"></div>
         <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-[#1b1b1b] border border-[#2FE93D]/30 mb-8 backdrop-blur-md mx-auto">
@@ -102,6 +105,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* INTERACTIVE INVESTMENT GOAL WIDGET */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="p-6 sm:p-8 rounded-3xl bg-[#141414]/80 border border-[#222222] backdrop-blur-xl shadow-2xl relative overflow-hidden">
           <div className="text-center mb-8">
@@ -124,13 +128,31 @@ export default function Home() {
               </button>
             ))}
           </div>
+          <div className="text-center p-4 rounded-xl bg-[#0D0D0D] border border-[#222222]">
+            <p className="text-xs sm:text-sm text-[#8D99AE]">
+              {selectedGoal ? (
+                <span>Selected Strategy: <strong className="text-[#2FE93D]">{selectedGoal}</strong> — Ready for neural synchronization.</span>
+              ) : (
+                <span>Select a goal to get your instant recommendation.</span>
+              )}
+            </p>
+          </div>
         </div>
       </section>
 
+      {/* FOOTER SA DIREKTNIM LINKOVIMA KA SVIH 5 STRANICA */}
       <footer className="border-t border-[#222222] py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs sm:text-sm text-[#8D99AE]">
-        <p className="mb-4">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
+        <div className="flex flex-wrap justify-center gap-6 mb-6 font-mono">
+          <Link href="/" className="hover:text-[#2FE93D] transition-colors">Home Core</Link>
+          <Link href="/about" className="hover:text-[#2FE93D] transition-colors">About Us</Link>
+          <Link href="/club" className="hover:text-[#2FE93D] transition-colors">Access Club</Link>
+          <Link href="/neural-diagnostics" className="hover:text-[#2FE93D] transition-colors">Neural Diagnostics</Link>
+          <Link href="/support" className="hover:text-[#2FE93D] transition-colors">Support Center</Link>
+        </div>
+        <p className="mb-2">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
         <p>© 2026 All Rights Reserved. Sovereign Elite Architecture.</p>
       </footer>
+
     </div>
   );
 }
