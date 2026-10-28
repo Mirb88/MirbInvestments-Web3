@@ -1,7 +1,12 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Standardna konfiguracija za potpunu funkcionalnost i Vercel sinhronizaciju
+  output: 'export',
+  swcMinify: false,
+  images: {
+    unoptimized: true,
+  },
+  trailingSlash: true,
 };
 
 export default nextConfig;
