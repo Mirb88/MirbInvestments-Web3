@@ -65,7 +65,7 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
+    <div suppressHydrationWarning={true} className="min-h-screen bg-[#0D0D0D] text-[#EDF2F4] font-sans selection:bg-[#2FE93D] selection:text-[#0D0D0D] overflow-x-hidden">
       
       {/* NAVIGACIJA */}
       <nav className="w-full px-4 sm:px-8 h-20 flex items-center justify-between border-b border-[#222222]">
