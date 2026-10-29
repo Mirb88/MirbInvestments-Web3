@@ -108,4 +108,5 @@ export default function Home() {
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="p-6 sm:p-8 rounded-3xl bg-[#141414]/80 border border-[#222222] backdrop-blur-xl shadow-2xl relative overflow-hidden">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-black text-[#EDF2F
+            <h3 className="text-2xl font-black text-[#EDF2F4] mb-2">Not Sure Where to Start?</h3>
+            <p className="text-[#8
