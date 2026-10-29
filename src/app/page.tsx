@@ -139,4 +139,5 @@ export default function Home() {
           <Link href="/neural-diagnostics" className="hover:text-[#2FE93D]">Neural Diagnostics</Link>
           <Link href="/support" className="hover:text-[#2FE93D]">Support Center</Link>
         </div>
-        <p className="mb-2">MirbInvestments™. Simplified Crypto.
+        <p className="mb-2">MirbInvestments™. Simplified Crypto. Smarter Investing.</p>
+        <
